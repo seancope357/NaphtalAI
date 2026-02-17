@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
-import { createClient, Session } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { useCallback, useState } from "react";
+
 import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
 import DocumentViewer from "@/components/layout/DocumentViewer";
@@ -22,23 +21,6 @@ import {
 
 
 export default function Home() {
-  const [session, setSession] = useState<Session | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        router.push('/signin');
-      } else {
-        setSession(session);
-      }
-    });
-  }, [router]);
-
-  if (!session) {
-    return null; // or a loading spinner
-  }
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [sidebarsCollapsed, setSidebarsCollapsed] = useState({
     left: false,
