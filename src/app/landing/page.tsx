@@ -355,7 +355,7 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50"
         style={{ borderBottom: `1px solid ${GB2}`, background: `rgba(5,9,17,0.85)`, backdropFilter: "blur(18px)" }}
       >
-        <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
           {/* Logo */}
           <Link href="/landing" className="flex items-center gap-3 group">
             <div className="w-8 h-8 shrink-0">
@@ -410,7 +410,7 @@ export default function LandingPage() {
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden p-2 rounded-md"
+            className="md:hidden p-2.5 rounded-md"
             style={{ color: MUTED }}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
@@ -429,7 +429,7 @@ export default function LandingPage() {
               transition={{ duration: 0.25 }}
               style={{ overflow: "hidden", background: CARD, borderBottom: `1px solid ${GB2}` }}
             >
-              <div className="px-6 py-4 flex flex-col gap-4">
+              <div className="px-6 py-5 flex flex-col gap-5">
                 {NAV_LINKS.map((l) => (
                   <a
                     key={l.label}
@@ -444,7 +444,7 @@ export default function LandingPage() {
                 <hr style={{ borderColor: GB2 }} />
                 <Link
                   href="/canvas"
-                  className="text-sm px-5 py-2.5 rounded-md font-medium text-center"
+                  className="text-sm px-6 py-3 rounded-md font-medium text-center"
                   style={{ background: G, color: "#000" }}
                   onClick={() => setMobileOpen(false)}
                 >
@@ -458,7 +458,7 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden"
+        className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden"
         style={{ background: `radial-gradient(ellipse 90% 80% at 50% 10%, rgba(201,162,39,0.06) 0%, ${BG} 65%)` }}
       >
         <GridBackground />
@@ -476,7 +476,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase"
+            className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold tracking-widest uppercase"
             style={{ background: GD, color: G, border: `1px solid ${GB2}` }}
           >
             <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: G }} />
@@ -488,7 +488,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight"
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight mt-6"
             style={{ fontFamily: "var(--font-display, Spectral, serif)", color: TEXT }}
           >
             Illuminate the Craft.{" "}
@@ -517,7 +517,7 @@ export default function LandingPage() {
           >
             <Link
               href="/canvas"
-              className="group flex items-center gap-2 px-7 py-3.5 rounded-md font-semibold text-base transition-all"
+              className="group flex items-center gap-2 px-8 py-4 rounded-md font-semibold text-base transition-all"
               style={{ background: G, color: "#000" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = GB)}
               onMouseLeave={(e) => (e.currentTarget.style.background = G)}
@@ -527,7 +527,7 @@ export default function LandingPage() {
             </Link>
             <a
               href="#features"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-md font-medium text-base transition-all"
+              className="flex items-center gap-2 px-8 py-4 rounded-md font-medium text-base transition-all"
               style={{ border: `1px solid ${GB2}`, color: TEXT }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = G; e.currentTarget.style.color = G; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = GB2; e.currentTarget.style.color = TEXT; }}
@@ -541,7 +541,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.75 }}
-            className="flex items-center gap-6 text-xs"
+            className="flex items-center gap-8 text-xs"
             style={{ color: MUTED2 }}
           >
             <span className="flex items-center gap-1.5">
@@ -561,7 +561,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 mt-16 mb-8"
+          className="relative z-10 mt-20 mb-8"
         >
           <div className="relative">
             {/* Glow ring behind symbol */}
@@ -582,7 +582,7 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           style={{ color: MUTED2 }}
         >
           <span className="text-xs tracking-widest uppercase">Explore</span>
@@ -598,7 +598,7 @@ export default function LandingPage() {
       {/* ── Problem / Solution ── */}
       <Section
         id="problem"
-        className="py-24 px-6 max-w-7xl mx-auto"
+        className="py-28 px-6 max-w-7xl mx-auto"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Problem */}
@@ -608,13 +608,13 @@ export default function LandingPage() {
             </motion.div>
             <motion.h2
               variants={fadeUp}
-              className="mt-6 text-3xl sm:text-4xl font-bold leading-tight"
+              className="mt-8 text-3xl sm:text-4xl font-bold leading-tight"
               style={{ fontFamily: "var(--font-display, Spectral, serif)" }}
             >
               Freemasonic knowledge is vast,{" "}
               <span style={{ color: MUTED }}>fragmented, and difficult to navigate.</span>
             </motion.h2>
-            <div className="mt-8 space-y-5">
+            <div className="mt-10 space-y-5">
               {[
                 {
                   title: "Archives scattered across centuries",
@@ -655,12 +655,12 @@ export default function LandingPage() {
             />
             <Pill>The NaphtalAI Solution</Pill>
             <h3
-              className="mt-5 text-2xl font-bold leading-snug"
+              className="mt-6 text-2xl font-bold leading-snug"
               style={{ fontFamily: "var(--font-display, Spectral, serif)" }}
             >
               One unified intelligence layer for all your Masonic research
             </h3>
-            <div className="mt-7 space-y-5">
+            <div className="mt-8 space-y-5">
               {[
                 {
                   icon: <Upload size={16} />,
@@ -699,11 +699,11 @@ export default function LandingPage() {
       {/* ── Features ── */}
       <section
         id="features"
-        className="py-24"
+        className="py-28"
         style={{ background: `linear-gradient(to bottom, ${BG}, ${CARD} 50%, ${BG})` }}
       >
         <Section className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <motion.div variants={fadeUp} className="flex justify-center">
               <Pill>Platform Features</Pill>
             </motion.div>
@@ -731,7 +731,7 @@ export default function LandingPage() {
               <motion.div
                 key={i}
                 variants={fadeUp}
-                className="group relative rounded-xl p-7 transition-all duration-300 overflow-hidden"
+                className="group relative rounded-xl p-8 transition-all duration-300 overflow-hidden"
                 style={{ background: BG, border: `1px solid ${GB2}` }}
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = G)}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = GB2)}
@@ -744,7 +744,7 @@ export default function LandingPage() {
                 />
 
                 {/* Tag */}
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between mb-6">
                   <div
                     className="w-11 h-11 rounded-lg flex items-center justify-center"
                     style={{ background: GD, border: `1px solid ${GB2}`, color: G }}
@@ -775,8 +775,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── How It Works ── */}
-      <Section id="how-it-works" className="py-24 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
+      <Section id="how-it-works" className="py-28 max-w-7xl mx-auto px-6">
+        <div className="text-center mb-20">
           <motion.div variants={fadeUp} className="flex justify-center">
             <Pill>How It Works</Pill>
           </motion.div>
@@ -789,7 +789,7 @@ export default function LandingPage() {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative">
           {/* Connector line (desktop) */}
           <div
             className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px"
@@ -816,7 +816,7 @@ export default function LandingPage() {
 
               <div>
                 <h3
-                  className="font-semibold text-base mb-2"
+                  className="font-semibold text-base mb-2.5"
                   style={{ fontFamily: "var(--font-display, Spectral, serif)", color: TEXT }}
                 >
                   {s.title}
@@ -833,11 +833,11 @@ export default function LandingPage() {
       {/* ── Use Cases ── */}
       <section
         id="use-cases"
-        className="py-24"
+        className="py-28"
         style={{ background: `linear-gradient(to bottom, ${BG}, ${CARD2} 50%, ${BG})` }}
       >
         <Section className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <motion.div variants={fadeUp} className="flex justify-center">
               <Pill>Who It's For</Pill>
             </motion.div>
@@ -857,7 +857,7 @@ export default function LandingPage() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {USE_CASES.map((uc, i) => (
               <motion.div
                 key={i}
@@ -866,9 +866,9 @@ export default function LandingPage() {
                 style={{ border: `1px solid ${GB2}`, background: BG }}
               >
                 {/* Card header */}
-                <div className="px-7 pt-7 pb-5" style={{ borderBottom: `1px solid ${GB2}` }}>
+                <div className="px-8 pt-8 pb-6" style={{ borderBottom: `1px solid ${GB2}` }}>
                   <div
-                    className="w-11 h-11 rounded-lg flex items-center justify-center mb-4"
+                    className="w-11 h-11 rounded-lg flex items-center justify-center mb-5"
                     style={{ background: GD, border: `1px solid ${GB2}`, color: G }}
                   >
                     {uc.icon}
@@ -877,17 +877,17 @@ export default function LandingPage() {
                     {uc.audience}
                   </span>
                   <h3
-                    className="mt-2 text-xl font-bold leading-snug"
+                    className="mt-3 text-xl font-bold leading-snug"
                     style={{ fontFamily: "var(--font-display, Spectral, serif)", color: TEXT }}
                   >
                     {uc.title}
                   </h3>
                 </div>
-                <div className="px-7 pt-5 pb-7">
-                  <p className="text-sm leading-relaxed mb-5" style={{ color: MUTED }}>
+                <div className="px-8 pt-6 pb-8">
+                  <p className="text-sm leading-relaxed mb-6" style={{ color: MUTED }}>
                     {uc.desc}
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {uc.points.map((pt, j) => (
                       <li key={j} className="flex items-start gap-2.5 text-sm" style={{ color: MUTED }}>
                         <CheckCircle size={14} className="mt-0.5 shrink-0" style={{ color: G }} />
@@ -903,8 +903,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── Testimonials ── */}
-      <Section id="testimonials" className="py-24 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-14">
+      <Section id="testimonials" className="py-28 max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
           <motion.div variants={fadeUp} className="flex justify-center">
             <Pill>Early Voices</Pill>
           </motion.div>
@@ -917,12 +917,12 @@ export default function LandingPage() {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {TESTIMONIALS.map((t, i) => (
             <motion.div
               key={i}
               variants={fadeUp}
-              className="rounded-xl p-7 flex flex-col gap-5 relative overflow-hidden"
+              className="rounded-xl p-8 flex flex-col gap-6 relative overflow-hidden"
               style={{ background: CARD, border: `1px solid ${GB2}` }}
             >
               {/* Large quote mark */}
@@ -945,7 +945,7 @@ export default function LandingPage() {
                 "{t.quote}"
               </p>
 
-              <div className="flex items-center gap-3 pt-2" style={{ borderTop: `1px solid ${GB2}` }}>
+              <div className="flex items-center gap-4 pt-3" style={{ borderTop: `1px solid ${GB2}` }}>
                 <div
                   className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
                   style={{ background: GD, border: `1px solid ${GB2}`, color: G }}
@@ -964,7 +964,7 @@ export default function LandingPage() {
 
       {/* ── Mission ── */}
       <section
-        className="py-28 relative overflow-hidden"
+        className="py-32 relative overflow-hidden"
         style={{ background: CARD }}
       >
         <div
@@ -980,24 +980,24 @@ export default function LandingPage() {
           </motion.div>
           <motion.h2
             variants={fadeUp}
-            className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-bold leading-snug"
+            className="mt-8 text-3xl sm:text-4xl lg:text-5xl font-bold leading-snug"
             style={{ fontFamily: "var(--font-display, Spectral, serif)" }}
           >
             Preserving Masonic knowledge for the generations ahead
           </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="mt-6 text-lg leading-relaxed"
+            className="mt-8 text-lg leading-relaxed"
             style={{ color: MUTED }}
           >
             Centuries of Masonic knowledge—ritual texts, lodge histories, philosophical treatises, and correspondence—risk being lost to time, fragmentation, and inaccessibility. NaphtalAI exists to apply the most powerful analytical tools of our age to the preservation and exploration of this legacy, placing deep research capability in the hands of every brother, scholar, and seeker.
           </motion.p>
-          <motion.div variants={fadeUp} className="mt-10">
+          <motion.div variants={fadeUp} className="mt-12">
             <div className="w-16 h-px mx-auto" style={{ background: G }} />
           </motion.div>
           <motion.blockquote
             variants={fadeUp}
-            className="mt-8 text-xl italic font-medium"
+            className="mt-10 text-xl italic font-medium"
             style={{ fontFamily: "var(--font-display, Spectral, serif)", color: G }}
           >
             "Lux e Tenebris"
@@ -1010,15 +1010,15 @@ export default function LandingPage() {
 
       {/* ── Stats Banner ── */}
       <section style={{ background: BG, borderTop: `1px solid ${GB2}`, borderBottom: `1px solid ${GB2}` }}>
-        <Section className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <Section className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 text-center">
             {[
               { value: "6+", label: "Core Research Modules" },
               { value: "50", label: "Step Undo/Redo History" },
               { value: "6", label: "Supported File Formats" },
               { value: "100%", label: "Local-First Privacy" },
             ].map((s, i) => (
-              <motion.div key={i} variants={fadeUp} className="flex flex-col gap-1">
+              <motion.div key={i} variants={fadeUp} className="flex flex-col gap-2">
                 <span className="text-4xl font-bold" style={{ fontFamily: "var(--font-display, Spectral, serif)", color: G }}>
                   {s.value}
                 </span>
@@ -1030,8 +1030,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <Section id="faq" className="py-24 max-w-3xl mx-auto px-6">
-        <div className="text-center mb-14">
+      <Section id="faq" className="py-28 max-w-3xl mx-auto px-6">
+        <div className="text-center mb-16">
           <motion.div variants={fadeUp} className="flex justify-center">
             <Pill>FAQ</Pill>
           </motion.div>
@@ -1053,7 +1053,7 @@ export default function LandingPage() {
 
       {/* ── CTA Banner ── */}
       <section
-        className="py-24 relative overflow-hidden"
+        className="py-28 relative overflow-hidden"
         style={{ background: CARD, borderTop: `1px solid ${GB2}` }}
       >
         <div
@@ -1069,14 +1069,14 @@ export default function LandingPage() {
           </motion.div>
           <motion.h2
             variants={fadeUp}
-            className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-bold"
+            className="mt-8 text-3xl sm:text-4xl lg:text-5xl font-bold"
             style={{ fontFamily: "var(--font-display, Spectral, serif)" }}
           >
             Begin your research today
           </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="mt-4 text-lg"
+            className="mt-6 text-lg"
             style={{ color: MUTED }}
           >
             NaphtalAI is available now. No subscription, no data exposure—just bring your documents and your API key.
@@ -1086,14 +1086,14 @@ export default function LandingPage() {
           <motion.form
             variants={fadeUp}
             onSubmit={(e) => e.preventDefault()}
-            className="mt-10 flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto"
+            className="mt-12 flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
           >
             <input
               type="email"
               placeholder="Enter your email for updates"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-md text-sm outline-none transition-all"
+              className="flex-1 px-5 py-3.5 rounded-md text-sm outline-none transition-all"
               style={{
                 background: BG,
                 border: `1px solid ${GB2}`,
@@ -1105,7 +1105,7 @@ export default function LandingPage() {
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-md font-semibold text-sm transition-all"
+              className="px-7 py-3.5 rounded-md font-semibold text-sm transition-all"
               style={{ background: G, color: "#000" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = GB)}
               onMouseLeave={(e) => (e.currentTarget.style.background = G)}
@@ -1114,10 +1114,10 @@ export default function LandingPage() {
             </button>
           </motion.form>
 
-          <motion.div variants={fadeUp} className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+          <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row gap-5 justify-center">
             <Link
               href="/canvas"
-              className="group flex items-center justify-center gap-2 px-8 py-3.5 rounded-md font-semibold text-base transition-all"
+              className="group flex items-center justify-center gap-2 px-9 py-4 rounded-md font-semibold text-base transition-all"
               style={{ background: G, color: "#000" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = GB)}
               onMouseLeave={(e) => (e.currentTarget.style.background = G)}
@@ -1127,7 +1127,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/login"
-              className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-md font-medium text-base transition-all"
+              className="flex items-center justify-center gap-2 px-9 py-4 rounded-md font-medium text-base transition-all"
               style={{ border: `1px solid ${GB2}`, color: TEXT }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = G; e.currentTarget.style.color = G; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = GB2; e.currentTarget.style.color = TEXT; }}
@@ -1139,7 +1139,7 @@ export default function LandingPage() {
           {/* Trust badges */}
           <motion.div
             variants={fadeUp}
-            className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs"
+            className="mt-12 flex flex-wrap items-center justify-center gap-8 text-xs"
             style={{ color: MUTED2 }}
           >
             <span className="flex items-center gap-1.5">
@@ -1157,8 +1157,8 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{ background: BG, borderTop: `1px solid ${GB2}` }}>
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
             {/* Brand */}
             <div className="md:col-span-2">
               <Link href="/landing" className="flex items-center gap-3">
@@ -1170,18 +1170,18 @@ export default function LandingPage() {
                   Naphtal<span style={{ color: G }}>AI</span>
                 </span>
               </Link>
-              <p className="mt-4 text-sm leading-relaxed max-w-xs" style={{ color: MUTED }}>
+              <p className="mt-5 text-sm leading-relaxed max-w-xs" style={{ color: MUTED }}>
                 An AI-powered research engine for Freemasonic scholarship. Illuminate centuries of knowledge through entity extraction, symbolic analysis, and visual connection mapping.
               </p>
-              <p className="mt-4 text-xs italic" style={{ color: MUTED2, fontFamily: "var(--font-display, Spectral, serif)" }}>
+              <p className="mt-5 text-xs italic" style={{ color: MUTED2, fontFamily: "var(--font-display, Spectral, serif)" }}>
                 "Lux e Tenebris"
               </p>
             </div>
 
             {/* Platform */}
             <div>
-              <h4 className="text-sm font-semibold mb-4 tracking-wide" style={{ color: TEXT }}>Platform</h4>
-              <ul className="space-y-3">
+              <h4 className="text-sm font-semibold mb-5 tracking-wide" style={{ color: TEXT }}>Platform</h4>
+              <ul className="space-y-4">
                 {[
                   { label: "The Trestleboard", href: "/canvas" },
                   { label: "The Archives", href: "/canvas" },
@@ -1202,8 +1202,8 @@ export default function LandingPage() {
 
             {/* Legal */}
             <div>
-              <h4 className="text-sm font-semibold mb-4 tracking-wide" style={{ color: TEXT }}>Legal & Support</h4>
-              <ul className="space-y-3">
+              <h4 className="text-sm font-semibold mb-5 tracking-wide" style={{ color: TEXT }}>Legal & Support</h4>
+              <ul className="space-y-4">
                 {[
                   { label: "Privacy Policy", href: "#" },
                   { label: "Terms of Service", href: "#" },
@@ -1225,7 +1225,7 @@ export default function LandingPage() {
 
           {/* Bottom bar */}
           <div
-            className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
+            className="mt-16 pt-10 flex flex-col sm:flex-row items-center justify-between gap-5 text-xs"
             style={{ borderTop: `1px solid ${GB2}`, color: MUTED2 }}
           >
             <span>&copy; {new Date().getFullYear()} NaphtalAI. All rights reserved.</span>
