@@ -71,12 +71,7 @@ const config: Config = {
   			sans: ['var(--font-sans)'],
   			serif: ['var(--font-serif)'],
   			mono: ['var(--font-mono)'],
-  		},
-        boxShadow: {
-          'neumo-flat': 'var(--neumo-dark-shadow) 6px 6px 12px, var(--neumo-light-shadow) -6px -6px 12px',
-          'neumo-concave': 'inset var(--neumo-dark-shadow) 6px 6px 12px, inset var(--neumo-light-shadow) -6px -6px 12px',
-          'neumo-convex': 'var(--neumo-dark-shadow) 3px 3px 6px, var(--neumo-light-shadow) -3px -3px 6px',
-        }
+  		}
   	}
   },
   plugins: [tailwindcssAnimate],

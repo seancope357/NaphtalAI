@@ -57,12 +57,6 @@
     --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.30);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
-
-    /* Simple Neumorphism Light Theme (for debugging) */
-    --neumo-bg: #e0e0e0; /* A light grey background color */
-    --neumo-light-shadow: #ffffff; /* For highlights */
-    --neumo-dark-shadow: #a3b1c6; /* For shadows */
-  }
   }
 
   .dark {
@@ -98,30 +92,6 @@
     --sidebar-accent-foreground: oklch(0.9239 0.0190 83.0636);
     --sidebar-border: oklch(0.3795 0.0181 57.1280);
     --sidebar-ring: oklch(0.7264 0.0581 66.6967);
-
-    /* Simple Neumorphism Dark Theme (for debugging) */
-    --neumo-bg: #212121; /* A dark grey background color */
-    --neumo-light-shadow: #2c2c2c; /* For highlights */
-    --neumo-dark-shadow: #1a1a1a; /* For shadows */
-    --font-sans: Libre Baskerville, serif;
-    --font-serif: Lora, serif;
-    --font-mono: IBM Plex Mono, monospace;
-    --radius: 0.25rem;
-    --shadow-x: 2px;
-    --shadow-y: 3px;
-    --shadow-blur: 5px;
-    --shadow-spread: 0px;
-    --shadow-opacity: 0.12;
-    --shadow-color: hsl(28 13% 20%);
-    --shadow-2xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-    --shadow-xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-    --shadow-sm: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-    --shadow: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-    --shadow-md: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 2px 4px -1px hsl(28 13% 20% / 0.12);
-    --shadow-lg: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 4px 6px -1px hsl(28 13% 20% / 0.12);
-    --shadow-xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 8px 10px -1px hsl(28 13% 20% / 0.12);
-    --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.30);
-  }
     --font-sans: Libre Baskerville, serif;
     --font-serif: Lora, serif;
     --font-mono: IBM Plex Mono, monospace;

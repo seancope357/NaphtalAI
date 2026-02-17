@@ -148,9 +148,9 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   const selectedNodeData = getNodesByIds(selectedNodes);
 
   return (
-    <div className="h-full flex flex-col bg-neumo-bg border-l border-border/50 shadow-neumo-flat">
+    <div className="h-full flex flex-col bg-sidebar border-l border-sidebar-border">
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-border/50">
+      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <Eye className="w-5 h-5 text-revelation-gold" />
@@ -176,7 +176,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
                     placeholder="Tell us what you think..."
                     className="min-h-[140px]"
                   />
-                  <Button variant="neumo" onClick={handleFeedbackSubmit} className="w-full">Submit</Button>
+                  <Button onClick={handleFeedbackSubmit} className="w-full">Submit</Button>
                 </div>
               </DialogContent>
             </Dialog>
@@ -209,7 +209,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
                 <Label htmlFor="anthropic-key">Anthropic API Key</Label>
                 <Input id="anthropic-key" type="password" value={anthropicKey} onChange={(e) => setAnthropicKey(e.target.value)} />
               </div>
-              <Button variant="neumo" onClick={() => {
+              <Button onClick={() => {
                 setApiKeys(openAIKey, anthropicKey);
                 toast({ title: "API keys saved", description: "Your API keys have been saved locally." });
                 setShowSettings(false);
@@ -221,7 +221,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="px-6 py-5 border-b border-border/50 bg-muted/30">
+        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/30">
           <h3 className="text-sm font-medium mb-3">AI Provider</h3>
           <div className="flex gap-2.5">
             <Button
@@ -252,7 +252,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Context Display */}
       {selectedNodes.length > 0 && (
-        <div className="px-6 py-5 border-b border-border/50 bg-muted/20">
+        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/20">
           <div className="flex items-center gap-2 mb-2.5">
             <Link2 className="w-4 h-4 text-primary" />
             <span className="text-xs font-medium">Context ({selectedNodes.length} nodes)</span>
@@ -273,11 +273,11 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       )}
 
       {/* Quick Actions */}
-      <div className="px-6 py-5 border-b border-border/50">
+      <div className="px-6 py-5 border-b border-sidebar-border">
         <p className="text-xs text-muted-foreground mb-3">Quick Actions</p>
         <div className="grid grid-cols-2 gap-3">
           <Button
-            variant="neumo"
+            variant="outline"
             size="sm"
             className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("extract_entities")}
@@ -287,7 +287,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             Extract Entities
           </Button>
           <Button
-            variant="neumo"
+            variant="outline"
             size="sm"
             className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("connect")}
@@ -297,7 +297,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             Find Connections
           </Button>
           <Button
-            variant="neumo"
+            variant="outline"
             size="sm"
             className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("analyze_symbol")}
@@ -307,7 +307,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             Analyze Symbol
           </Button>
           <Button
-            variant="neumo"
+            variant="outline"
             size="sm"
             className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("chat")}
@@ -350,7 +350,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="px-5 py-5 border-t border-border/50">
+      <div className="px-5 py-5 border-t border-sidebar-border">
         <div className="relative">
           <Textarea
             value={input}
@@ -365,7 +365,6 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             disabled={isLoading}
           />
           <Button
-            variant="neumo"
             size="icon"
             className="absolute bottom-3 right-3 h-8 w-8"
             onClick={handleSendMessage}
