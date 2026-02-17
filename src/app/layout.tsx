@@ -25,8 +25,14 @@ export const metadata: Metadata = {
   keywords: ["NaphtalAI", "Freemasonry", "Research", "AI", "Visual Connections", "Canvas", "Knowledge Graph"],
   authors: [{ name: "NaphtalAI Team" }],
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/logo.svg" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
   },
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "NaphtalAI — Freemasonic Research Engine",
     description: "Discover hidden connections in historical documents",
