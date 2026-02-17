@@ -136,9 +136,9 @@ export default function ArchivesSidebar({
   );
 
   return (
-    <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
+    <div className="h-full flex flex-col bg-neumo-bg border-r border-border/50 shadow-neumo-flat">
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
+      <div className="px-6 pt-6 pb-5 border-b border-border/50">
         <div className="flex items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-2.5">
             <Archive className="w-5 h-5 text-revelation-gold" />
@@ -160,16 +160,16 @@ export default function ArchivesSidebar({
 
         {/* Tab Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-10">
-            <TabsTrigger value="files" className="text-xs">
+          <TabsList className="grid w-full grid-cols-3 h-11 bg-neumo-bg shadow-neumo-flat">
+            <TabsTrigger value="files" className="text-xs bg-neumo-bg shadow-neumo-convex hover:shadow-neumo-concave">
               <FolderOpen className="w-3 h-3 mr-1.5" />
               Files
             </TabsTrigger>
-            <TabsTrigger value="entities" className="text-xs">
+            <TabsTrigger value="entities" className="text-xs bg-neumo-bg shadow-neumo-convex hover:shadow-neumo-concave">
               <Hash className="w-3 h-3 mr-1.5" />
               Entities
             </TabsTrigger>
-            <TabsTrigger value="search" className="text-xs">
+            <TabsTrigger value="search" className="text-xs bg-neumo-bg shadow-neumo-convex hover:shadow-neumo-concave">
               <GitBranch className="w-3 h-3 mr-1.5" />
               Graph
             </TabsTrigger>
@@ -184,14 +184,14 @@ export default function ArchivesSidebar({
           <TabsContent value="files" className="h-full m-0 data-[state=inactive]:hidden">
             <div className="h-full flex flex-col">
               {/* Search */}
-              <div className="px-5 py-4 border-b border-sidebar-border">
+              <div className="px-5 py-4 border-b border-border/50">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     placeholder="Search files..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-9 text-sm bg-sidebar-accent/50"
+                    className="pl-9 h-9 text-sm bg-neumo-bg shadow-neumo-concave"
                   />
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function ArchivesSidebar({
                   "flex flex-col items-center justify-center gap-2",
                   isDragging
                     ? "border-revelation-gold bg-revelation-gold/10"
-                    : "border-border hover:border-primary/50"
+                    : "border-border/50 hover:border-primary/60 bg-neumo-bg"
                 )}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
@@ -253,9 +253,9 @@ export default function ArchivesSidebar({
                         onDragStart={(e) => handleDragStart(e, file)}
                         className={cn(
                           "group flex items-start gap-4 p-4 rounded-lg",
-                          "bg-card/50 border border-border/50",
+                          "bg-neumo-bg shadow-neumo-flat",
                           "cursor-grab active:cursor-grabbing",
-                          "hover:bg-card hover:border-primary/30 transition-all",
+                          "hover:shadow-neumo-concave transition-all",
                           "cursor-pointer"
                         )}
                       >
@@ -291,7 +291,7 @@ export default function ArchivesSidebar({
 
                         {/* Delete Button */}
                         <Button
-                          variant="ghost"
+                          variant="neumo"
                           size="icon"
                           className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
                           onClick={(e) => {
@@ -308,7 +308,7 @@ export default function ArchivesSidebar({
               </ScrollArea>
 
               {/* Stats Footer */}
-              <div className="px-6 py-4 border-t border-sidebar-border">
+              <div className="px-6 py-4 border-t border-border/50">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{files.length} files</span>
                   <span>
