@@ -138,7 +138,7 @@ export default function ArchivesSidebar({
   return (
     <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
       {/* Header */}
-      <div className="px-5 pt-5 pb-4 border-b border-sidebar-border">
+      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-2.5">
             <Archive className="w-5 h-5 text-revelation-gold" />
@@ -148,19 +148,19 @@ export default function ArchivesSidebar({
           </div>
           <Link
             href="/landing"
-            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="p-2.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
             title="Back to Home"
           >
             <Home className="w-4 h-4" />
           </Link>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">
+        <p className="text-xs text-muted-foreground mb-5">
           Research materials & entities
         </p>
 
         {/* Tab Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-9">
+          <TabsList className="grid w-full grid-cols-3 h-10">
             <TabsTrigger value="files" className="text-xs">
               <FolderOpen className="w-3 h-3 mr-1.5" />
               Files
@@ -184,7 +184,7 @@ export default function ArchivesSidebar({
           <TabsContent value="files" className="h-full m-0 data-[state=inactive]:hidden">
             <div className="h-full flex flex-col">
               {/* Search */}
-              <div className="px-4 py-3 border-b border-sidebar-border">
+              <div className="px-5 py-4 border-b border-sidebar-border">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -199,7 +199,7 @@ export default function ArchivesSidebar({
               {/* Upload Zone */}
               <div
                 className={cn(
-                  "m-4 p-5 border-2 border-dashed rounded-lg transition-colors",
+                  "m-5 p-6 border-2 border-dashed rounded-lg transition-colors",
                   "flex flex-col items-center justify-center gap-2",
                   isDragging
                     ? "border-revelation-gold bg-revelation-gold/10"
@@ -235,12 +235,12 @@ export default function ArchivesSidebar({
               {/* File List */}
               <ScrollArea className="flex-1 px-4">
                 {filteredFiles.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <FolderOpen className="w-10 h-10 text-muted-foreground/50 mb-3" />
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <FolderOpen className="w-10 h-10 text-muted-foreground/50 mb-4" />
                     <p className="text-sm text-muted-foreground">
                       {files.length === 0 ? "No files uploaded" : "No matching files"}
                     </p>
-                    <p className="text-xs text-muted-foreground/70 mt-1.5">
+                    <p className="text-xs text-muted-foreground/70 mt-2">
                       Double-click files to view
                     </p>
                   </div>
@@ -252,7 +252,7 @@ export default function ArchivesSidebar({
                         draggable
                         onDragStart={(e) => handleDragStart(e, file)}
                         className={cn(
-                          "group flex items-start gap-3 p-3 rounded-lg",
+                          "group flex items-start gap-4 p-4 rounded-lg",
                           "bg-card/50 border border-border/50",
                           "cursor-grab active:cursor-grabbing",
                           "hover:bg-card hover:border-primary/30 transition-all",
@@ -279,7 +279,7 @@ export default function ArchivesSidebar({
                           <p className="text-xs font-medium text-card-foreground truncate">
                             {file.name}
                           </p>
-                          <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-3 mt-2">
                             <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5 uppercase">
                               {file.type}
                             </Badge>
@@ -308,7 +308,7 @@ export default function ArchivesSidebar({
               </ScrollArea>
 
               {/* Stats Footer */}
-              <div className="px-5 py-3 border-t border-sidebar-border">
+              <div className="px-6 py-4 border-t border-sidebar-border">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{files.length} files</span>
                   <span>

@@ -169,7 +169,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
                 <DialogHeader>
                   <DialogTitle>Beta Feedback</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4 pt-2">
+                <div className="space-y-5 pt-3">
                   <Textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
@@ -183,7 +183,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9"
+              className="h-9 w-9 mr-1"
               onClick={() => setShowSettings(!showSettings)}
             >
               <Settings className="w-4 h-4 text-muted-foreground" />
@@ -200,7 +200,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             <DialogHeader>
               <DialogTitle>Settings</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
                 <Label htmlFor="openai-key">OpenAI API Key</Label>
                 <Input id="openai-key" type="password" value={openAIKey} onChange={(e) => setOpenAIKey(e.target.value)} />
