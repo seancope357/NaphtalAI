@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useState, useEffect } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
+import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
   const [email, setEmail] = useState("");
@@ -38,23 +39,20 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative py-20 text-center md:py-32">
-      <div
-        className="absolute inset-0 bg-center bg-cover"
-        style={{ backgroundImage: "url('/placeholder.svg')" }}
-      />
-      <div className="absolute inset-0 bg-background/80" />
+    <section className="relative flex items-center justify-center min-h-screen text-center">
       <div className="container relative">
-        <h1 className="text-4xl font-bold md:text-6xl">Your AI-Powered Freemasonic Research and Design Tool</h1>
-        <p className="mt-4 text-lg md:text-xl text-muted-foreground">
-          Unlock the secrets of Freemasonry with our AI-powered research and
-          design tool. Explore vast knowledge bases, generate unique designs,
-          and connect with a community of like-minded individuals.
+        <h1 className="text-6xl font-bold md:text-8xl">
+          Ask Anything. <br />
+          Discover <span className="text-primary">Everything.</span>
+        </h1>
+        <p className="max-w-2xl mx-auto mt-4 text-lg md:text-xl text-muted-foreground">
+          The most comprehensive research platform for Freemasonry. Court
+          documents, flight logs, and depositions — indexed, connected, and searchable.
         </p>
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="lg" className="mt-8">
-              Start Free Trial
+            <Button variant="outline" size="lg" className="mt-8">
+              Dive into the Files
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -86,6 +84,11 @@ export default function Hero() {
             </div>
           </DialogContent>
         </Dialog>
+        <div className="mt-8">
+          <a href="#" className="flex items-center justify-center text-muted-foreground hover:text-foreground">
+            See under the hood <ArrowDown className="w-4 h-4 ml-2" />
+          </a>
+        </div>
       </div>
     </section>
   );

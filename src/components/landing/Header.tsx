@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
 import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Header() {
@@ -11,25 +10,17 @@ export default function Header() {
           NaphtalAI
         </Link>
         <nav className="hidden space-x-4 md:flex">
-          <Link href="#features" className="text-muted-foreground hover:text-foreground">
-            Features
+          <Link href="#" className="text-muted-foreground hover:text-foreground">
+            Home
           </Link>
-          <Link href="#testimonials" className="text-muted-foreground hover:text-foreground">
-            Testimonials
+          <Link href="#" className="text-muted-foreground hover:text-foreground">
+            About
           </Link>
-          <Link href="#pricing" className="text-muted-foreground hover:text-foreground">
-            Pricing
-          </Link>
-          <Link href="#faq" className="text-muted-foreground hover:text-foreground">
-            FAQ
+          <Link href="/login" className="text-muted-foreground hover:text-foreground">
+            Sign In
           </Link>
         </nav>
-        <div className="flex items-center space-x-4">
-          <Button asChild>
-            <Link href="/login">Sign In</Link>
-          </Button>
-          <ModeToggle />
-        </div>
+        <ModeToggle />
       </div>
     </header>
   );
