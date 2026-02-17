@@ -20,7 +20,9 @@ import {
   FolderOpen,
   Hash,
   GitBranch,
+  Home,
 } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { FileItem, FileType } from "@/types";
 import { useViewerStore } from "@/stores/viewerStore";
@@ -142,11 +144,20 @@ export default function ArchivesSidebar({
     <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
       {/* Header */}
       <div className="p-4 border-b border-sidebar-border">
-        <div className="flex items-center gap-2 mb-1">
-          <Archive className="w-5 h-5 text-revelation-gold" />
-          <h2 className="font-display font-semibold text-sidebar-foreground">
-            The Archives
-          </h2>
+        <div className="flex items-center justify-between gap-2 mb-1">
+          <div className="flex items-center gap-2">
+            <Archive className="w-5 h-5 text-revelation-gold" />
+            <h2 className="font-display font-semibold text-sidebar-foreground">
+              The Archives
+            </h2>
+          </div>
+          <Link
+            href="/landing"
+            className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            title="Back to Home"
+          >
+            <Home className="w-4 h-4" />
+          </Link>
         </div>
         <p className="text-xs text-muted-foreground mb-3">
           Research materials & entities
