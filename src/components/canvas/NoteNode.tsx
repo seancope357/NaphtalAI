@@ -49,7 +49,7 @@ function NoteNode({ data, selected }: NodeProps) {
   return (
     <div
       className={cn(
-        "border rounded-lg shadow-lg min-w-[180px] max-w-[240px]",
+        "border rounded-lg shadow-lg min-w-[180px] max-w-[240px] p-1",
         noteColor.bg,
         noteColor.border,
         "transition-all duration-200",
@@ -82,12 +82,12 @@ function NoteNode({ data, selected }: NodeProps) {
       />
 
       {/* Header */}
-      <div className={cn("flex items-center justify-between px-3 py-1.5 rounded-t-lg", noteColor.accent)}>
-        <div className="flex items-center gap-2">
+      <div className={cn("flex items-center justify-between px-4 py-2 rounded-t-lg", noteColor.accent)}>
+        <div className="flex items-center gap-2.5">
           <StickyNote className="w-4 h-4 text-background" />
           <span className="text-xs text-background font-medium">{isEditing ? 'Edit Note' : nodeData.label}</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <Button
             variant="ghost"
             size="icon"
@@ -121,33 +121,33 @@ function NoteNode({ data, selected }: NodeProps) {
       </div>
 
       {/* Content */}
-      <div className="p-3">
+      <div className="p-4">
         {isEditing ? (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Input
               value={editLabel}
               onChange={(e) => setEditLabel(e.target.value)}
               placeholder="Note title..."
-              className="h-8 text-sm bg-background/50"
+              className="h-9 text-sm bg-background/50"
             />
             <Textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               placeholder="Write your note..."
-              className="min-h-[80px] text-sm bg-background/50"
+              className="min-h-[100px] text-sm bg-background/50"
               autoFocus
             />
             <Button
               size="sm"
               onClick={handleSaveContent}
-              className="w-full h-7"
+              className="w-full h-8"
             >
-              <Check className="w-3 h-3 mr-1" />
+              <Check className="w-3 h-3 mr-1.5" />
               Save
             </Button>
           </div>
         ) : (
-          <div className="text-sm text-card-foreground whitespace-pre-wrap min-h-[40px]">
+          <div className="text-sm text-card-foreground whitespace-pre-wrap min-h-[60px]">
             {nodeData.content || (
               <span className="text-muted-foreground italic">
                 Click edit to add content...
@@ -159,7 +159,7 @@ function NoteNode({ data, selected }: NodeProps) {
 
       {/* Date */}
       {nodeData.metadata.date && (
-        <div className="px-3 py-1 border-t border-border/50 text-[10px] text-muted-foreground font-mono">
+        <div className="px-4 py-2 border-t border-border/50 text-[10px] text-muted-foreground font-mono">
           {new Date(nodeData.metadata.date).toLocaleDateString()}
         </div>
       )}
