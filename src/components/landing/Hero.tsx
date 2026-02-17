@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import { ArrowDown } from "lucide-react";
@@ -11,16 +11,13 @@ export default function Hero() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const [supabase, setSupabase] = useState<any>(null);
-
-  useEffect(() => {
-    setSupabase(
-      createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
-    );
-  }, []);
+  const supabaseRef = useRef(
+    createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  );
+  const supabase = supabaseRef.current;
 
   const handleSignUp = async () => {
     await supabase.auth.signUp({
