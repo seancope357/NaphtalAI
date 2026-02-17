@@ -18,9 +18,14 @@ import {
   Hash,
   Loader2,
   AlertCircle,
+  MessageCircleQuestion,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import type { ChatMessage } from "@/types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface OverseerSidebarProps {
   onAnalyze: (mode: string, nodeIds?: string[]) => Promise<void>;
@@ -35,11 +40,16 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
     contextNodeIds,
     aiProvider,
     setAIProvider,
+    setApiKeys,
   } = useChatStore();
   
   const { selectedNodes, getNodesByIds } = useCanvasStore();
   const [input, setInput] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [openAIKey, setOpenAIKey] = useState("");
+  const [anthropicKey, setAnthropicKey] = useState("");
+  const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,7 +78,8 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       }));
 
       // Call the AI analysis
-      await onAnalyze("chat", selectedNodes);
+      const { openAIKey, anthropicKey } = useChatStore.getState();
+      await onAnalyze("chat", selectedNodes, aiProvider, openAIKey, anthropicKey);
     } catch (error) {
       console.error("Error sending message:", error);
       addMessage({
@@ -80,6 +91,28 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
     }
   };
 
+  const handleFeedbackSubmit = async () => {
+    if (!feedback.trim()) return;
+
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ feedback }),
+      });
+
+      if (response.ok) {
+        toast({ title: "Feedback submitted", description: "Thank you for your feedback!" });
+        setFeedback("");
+      } else {
+        toast({ variant: "destructive", title: "Error", description: "Failed to submit feedback." });
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast({ variant: "destructive", title: "Error", description: "An unexpected error occurred." });
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -88,6 +121,14 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   };
 
   const handleQuickAction = async (action: string) => {
+    if (action === 'connect' && selectedNodes.length < 2) {
+      addMessage({
+        role: "assistant",
+        content: "Please select at least two nodes on the canvas to find connections.",
+      });
+      return;
+    }
+
     if (selectedNodes.length === 0) {
       addMessage({
         role: "assistant",
@@ -117,6 +158,27 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               NaphtalAI
             </h2>
           </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MessageCircleQuestion className="w-4 h-4 text-muted-foreground" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Beta Feedback</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <Textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder="Tell us what you think..."
+                  className="min-h-[120px]"
+                />
+                <Button onClick={handleFeedbackSubmit} className="w-full">Submit</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
           <Button
             variant="ghost"
             size="icon"
@@ -129,6 +191,30 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         <p className="text-xs text-muted-foreground">
           AI-powered analysis and discovery
         </p>
+
+        {/* Settings Dialog */}
+        <Dialog open={showSettings} onOpenChange={setShowSettings}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Settings</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="openai-key">OpenAI API Key</Label>
+                <Input id="openai-key" type="password" value={openAIKey} onChange={(e) => setOpenAIKey(e.target.value)} />
+              </div>
+              <div>
+                <Label htmlFor="anthropic-key">Anthropic API Key</Label>
+                <Input id="anthropic-key" type="password" value={anthropicKey} onChange={(e) => setAnthropicKey(e.target.value)} />
+              </div>
+              <Button onClick={() => {
+                setApiKeys(openAIKey, anthropicKey);
+                toast({ title: "API keys saved", description: "Your API keys have been saved locally." });
+                setShowSettings(false);
+              }}>Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Settings Panel */}
@@ -193,7 +279,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             size="sm"
             className="h-8 text-xs justify-start"
             onClick={() => handleQuickAction("extract_entities")}
-            disabled={isLoading || selectedNodes.length === 0}
+            disabled={isLoading}
           >
             <Hash className="w-3 h-3 mr-1" />
             Extract Entities
@@ -203,7 +289,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             size="sm"
             className="h-8 text-xs justify-start"
             onClick={() => handleQuickAction("connect")}
-            disabled={isLoading || selectedNodes.length < 2}
+            disabled={isLoading}
           >
             <Link2 className="w-3 h-3 mr-1" />
             Find Connections
@@ -213,7 +299,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             size="sm"
             className="h-8 text-xs justify-start"
             onClick={() => handleQuickAction("analyze_symbol")}
-            disabled={isLoading || selectedNodes.length === 0}
+            disabled={isLoading}
           >
             <Sparkles className="w-3 h-3 mr-1" />
             Analyze Symbol
@@ -223,7 +309,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             size="sm"
             className="h-8 text-xs justify-start"
             onClick={() => handleQuickAction("chat")}
-            disabled={isLoading || selectedNodes.length === 0}
+            disabled={isLoading}
           >
             <Eye className="w-3 h-3 mr-1" />
             Summarize

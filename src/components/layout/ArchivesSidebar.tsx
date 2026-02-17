@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { useFileStore, createFileItem } from "@/stores/fileStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,7 @@ export default function ArchivesSidebar({
   const [searchQuery, setSearchQuery] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("files");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = useCallback(
     async (fileList: FileList) => {
@@ -201,6 +202,7 @@ export default function ArchivesSidebar({
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
+                onClick={() => fileInputRef.current?.click()}
               >
                 <Upload
                   className={cn(
@@ -213,6 +215,7 @@ export default function ArchivesSidebar({
                   <label className="text-primary cursor-pointer hover:underline">
                     browse
                     <Input
+                      ref={fileInputRef}
                       type="file"
                       multiple
                       accept=".pdf,.txt,.json,.jpg,.jpeg,.png,.csv"

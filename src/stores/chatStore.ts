@@ -6,7 +6,8 @@ interface ChatState {
   messages: ChatMessage[];
   isLoading: boolean;
   aiProvider: AIProvider;
-  apiKey: string;
+  openAIKey: string;
+  anthropicKey: string;
   contextNodeIds: string[];
   
   // Actions
@@ -14,7 +15,7 @@ interface ChatState {
   clearMessages: () => void;
   setLoading: (isLoading: boolean) => void;
   setAIProvider: (provider: AIProvider) => void;
-  setApiKey: (key: string) => void;
+  setApiKeys: (openAIKey: string, anthropicKey: string) => void;
   setContextNodes: (nodeIds: string[]) => void;
   addContextNode: (nodeId: string) => void;
   removeContextNode: (nodeId: string) => void;
@@ -24,7 +25,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   isLoading: false,
   aiProvider: "openai",
-  apiKey: "",
+  openAIKey: typeof window !== 'undefined' ? localStorage.getItem("openai_api_key") || "" : "",
+  anthropicKey: typeof window !== 'undefined' ? localStorage.getItem("anthropic_api_key") || "" : "",
   contextNodeIds: [],
   
   addMessage: (message) =>
@@ -44,8 +46,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
   setLoading: (isLoading) => set({ isLoading }),
   
   setAIProvider: (provider) => set({ aiProvider: provider }),
-  
-  setApiKey: (key) => set({ apiKey: key }),
+  setApiKeys: (openAIKey, anthropicKey) => {
+    set({ openAIKey, anthropicKey });
+    localStorage.setItem("openai_api_key", openAIKey);
+    localStorage.setItem("anthropic_api_key", anthropicKey);
+  },
   
   setContextNodes: (nodeIds) => set({ contextNodeIds: nodeIds }),
   

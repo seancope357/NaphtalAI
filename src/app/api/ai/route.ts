@@ -6,6 +6,8 @@ interface AIRequest {
   query: string;
   mode: "chat" | "connect" | "analyze_symbol" | "extract_entities";
   provider?: "openai" | "anthropic";
+  openAIKey?: string;
+  anthropicKey?: string;
 }
 
 interface ExtractedEntity {
@@ -91,9 +93,17 @@ async function getZAI() {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as AIRequest;
-    const { context, query, mode } = body;
+    const { context, query, mode, provider, openAIKey, anthropicKey } = body;
 
     const zai = await getZAI();
+
+    const options: any = {};
+    if (provider === "openai" && openAIKey) {
+      options.apiKey = openAIKey;
+    } else if (provider === "anthropic" && anthropicKey) {
+      options.apiKey = anthropicKey;
+    }
+
 
     // Build messages based on mode
     let messages: Array<{ role: "assistant" | "user"; content: string }> = [
@@ -150,6 +160,7 @@ export async function POST(request: NextRequest) {
     const completion = await zai.chat.completions.create({
       messages,
       thinking: { type: "disabled" },
+      ...options,
     });
 
     const response = completion.choices[0]?.message?.content;

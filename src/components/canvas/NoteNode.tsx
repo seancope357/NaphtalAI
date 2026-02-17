@@ -4,14 +4,16 @@ import { memo, useState } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { StickyNote, Pin, X, Edit2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { NodeData } from "@/types";
 import { cn } from "@/lib/utils";
 
-function NoteNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
-  const nodeData = data as unknown as NodeData;
+function NoteNode({ data, selected }: NodeProps) {
+  const nodeData = data as NodeData;
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(nodeData.content);
+  const [editLabel, setEditLabel] = useState(nodeData.label);
 
   const handlePin = () => {
     const event = new CustomEvent("pinNode", { detail: { nodeId: nodeData.id } });
@@ -25,7 +27,7 @@ function NoteNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
 
   const handleSaveContent = () => {
     const event = new CustomEvent("updateNodeContent", {
-      detail: { nodeId: nodeData.id, content: editContent },
+      detail: { nodeId: nodeData.id, content: editContent, label: editLabel },
     });
     window.dispatchEvent(event);
     setIsEditing(false);
@@ -83,7 +85,7 @@ function NoteNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
       <div className={cn("flex items-center justify-between px-3 py-1.5 rounded-t-lg", noteColor.accent)}>
         <div className="flex items-center gap-2">
           <StickyNote className="w-4 h-4 text-background" />
-          <span className="text-xs text-background font-medium">Note</span>
+          <span className="text-xs text-background font-medium">{isEditing ? 'Edit Note' : nodeData.label}</span>
         </div>
         <div className="flex items-center gap-1">
           <Button
@@ -122,6 +124,12 @@ function NoteNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
       <div className="p-3">
         {isEditing ? (
           <div className="space-y-2">
+            <Input
+              value={editLabel}
+              onChange={(e) => setEditLabel(e.target.value)}
+              placeholder="Note title..."
+              className="h-8 text-sm bg-background/50"
+            />
             <Textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}

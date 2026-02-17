@@ -212,8 +212,8 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
       deleteNode(e.detail.nodeId);
     };
 
-    const handleUpdateNodeContent = (e: CustomEvent<{ nodeId: string; content: string }>) => {
-      updateNode(e.detail.nodeId, { content: e.detail.content });
+    const handleUpdateNodeContent = (e: CustomEvent<{ nodeId: string; content: string; label: string }>) => {
+      updateNode(e.detail.nodeId, { content: e.detail.content, label: e.detail.label });
     };
 
     const handleUpdateEdgeLabel = (e: CustomEvent<{ edgeId: string; label: string }>) => {

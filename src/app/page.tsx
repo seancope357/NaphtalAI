@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
+import { createClient, Session } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
 import DocumentViewer from "@/components/layout/DocumentViewer";
@@ -20,6 +22,23 @@ import {
 
 
 export default function Home() {
+  const [session, setSession] = useState<Session | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.push('/signin');
+      } else {
+        setSession(session);
+      }
+    });
+  }, [router]);
+
+  if (!session) {
+    return null; // or a loading spinner
+  }
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [sidebarsCollapsed, setSidebarsCollapsed] = useState({
     left: false,
@@ -180,7 +199,7 @@ export default function Home() {
 
   // Handle AI analysis from the Overseer sidebar
   const handleAnalyze = useCallback(
-    async (mode: string, nodeIds?: string[]) => {
+    async (mode: string, nodeIds?: string[], provider?: "openai" | "anthropic", openAIKey?: string, anthropicKey?: string) => {
       if (!nodeIds || nodeIds.length === 0) return;
 
       setLoading(true);
@@ -218,6 +237,9 @@ export default function Home() {
                 ? "Identify and analyze any symbolic references."
                 : "Provide a summary and analysis.",
             mode,
+            provider,
+            openAIKey,
+            anthropicKey,
           }),
         });
 
