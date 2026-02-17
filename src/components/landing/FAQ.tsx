@@ -1,3 +1,5 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 export default function FAQ() {
   return (
     <div className="py-24 bg-background sm:py-32">
@@ -8,37 +10,31 @@ export default function FAQ() {
           </h2>
         </div>
         <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="space-y-10">
-            <div>
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                What is this tool?
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>What is this tool?</AccordionTrigger>
+              <AccordionContent>
                 This is an AI-powered Freemasonic research and design tool that
                 helps you explore, create, and connect with the rich history and
                 symbolism of Freemasonry.
-              </dd>
-            </div>
-            <div>
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                How does the AI work?
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>How does the AI work?</AccordionTrigger>
+              <AccordionContent>
                 Our AI uses state-of-the-art machine learning algorithms to
                 analyze vast amounts of data and provide you with personalized
                 insights and recommendations.
-              </dd>
-            </div>
-            <div>
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                Is my data secure?
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger>Is my data secure?</AccordionTrigger>
+              <AccordionContent>
                 Yes, we take data security very seriously. All your data is
                 encrypted and stored securely in our database.
-              </dd>
-            </div>
-          </dl>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </div>

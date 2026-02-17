@@ -1,3 +1,5 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function UseCases() {
   return (
     <div className="py-24 bg-background sm:py-32">
@@ -10,27 +12,31 @@ export default function UseCases() {
             Explore, create, and connect
           </p>
         </div>
-        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                For Researchers
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Our AI-powered search engine helps you find relevant information
-                from a vast library of Freemasonic texts, symbols, and rituals.
-              </dd>
-            </div>
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                For Designers
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Generate unique, high-quality designs for regalia, logos, and
-                other visual assets with our AI-powered design tools.
-              </dd>
-            </div>
-          </dl>
+        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-none">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>For Researchers</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Our AI-powered search engine helps you find relevant information
+                  from a vast library of Freemasonic texts, symbols, and rituals.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>For Designers</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Generate unique, high-quality designs for regalia, logos, and
+                  other visual assets with our AI-powered design tools.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

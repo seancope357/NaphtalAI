@@ -1,4 +1,5 @@
 import { Lightbulb, Search, Sparkles } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Features() {
   return (
@@ -16,46 +17,52 @@ export default function Features() {
             rich history and symbolism of Freemasonry.
           </p>
         </div>
-        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Search className="w-6 h-6 text-white" />
+        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-none">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Search className="w-6 h-6" />
                 </div>
-                Intelligent Search
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Our AI-powered search engine helps you find relevant information
-                from a vast library of Freemasonic texts, symbols, and rituals.
-              </dd>
-            </div>
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Sparkles className="w-6 h-6 text-white" />
+                <CardTitle className="mt-4">Intelligent Search</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Our AI-powered search engine helps you find relevant information
+                  from a vast library of Freemasonic texts, symbols, and rituals.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Sparkles className="w-6 h-6" />
                 </div>
-                AI-Powered Design
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Generate unique, high-quality designs for regalia, logos, and
-                other visual assets with our AI-powered design tools.
-              </dd>
-            </div>
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Lightbulb className="w-6 h-6 text-white" />
+                <CardTitle className="mt-4">AI-Powered Design</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Generate unique, high-quality designs for regalia, logos, and
+                  other visual assets with our AI-powered design tools.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Lightbulb className="w-6 h-6" />
                 </div>
-                Personalized Insights
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Our AI analyzes your research and provides personalized insights
-                and recommendations to help you deepen your understanding of
-                Freemasonry.
-              </dd>
-            </div>
-          </dl>
+                <CardTitle className="mt-4">Personalized Insights</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Our AI analyzes your research and provides personalized insights
+                  and recommendations to help you deepen your understanding of
+                  Freemasonry.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

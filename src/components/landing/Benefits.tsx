@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Benefits() {
   return (
@@ -16,44 +17,50 @@ export default function Benefits() {
             rich history and symbolism of Freemasonry.
           </p>
         </div>
-        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Check className="w-6 h-6 text-white" />
+        <div className="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-none">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Check className="w-6 h-6" />
                 </div>
-                Streamline Your Research
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Save time and effort with our AI-powered research tools.
-              </dd>
-            </div>
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Check className="w-6 h-6 text-white" />
+                <CardTitle className="mt-4">Streamline Your Research</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Save time and effort with our AI-powered research tools.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Check className="w-6 h-6" />
                 </div>
-                Generate Unique Designs
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Create stunning, one-of-a-kind designs with our AI-powered
-                design tools.
-              </dd>
-            </div>
-            <div className="relative pl-16">
-              <dt className="text-base font-semibold leading-7 text-foreground">
-                <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
-                  <Check className="w-6 h-6 text-white" />
+                <CardTitle className="mt-4">Generate Unique Designs</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Create stunning, one-of-a-kind designs with our AI-powered
+                  design tools.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary text-primary-foreground">
+                  <Check className="w-6 h-6" />
                 </div>
-                Access a Vast Knowledge Base
-              </dt>
-              <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                Explore a vast library of Freemasonic texts, symbols, and
-                rituals.
-              </dd>
-            </div>
-          </dl>
+                <CardTitle className="mt-4">Access a Vast Knowledge Base</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Explore a vast library of Freemasonic texts, symbols, and
+                  rituals.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
