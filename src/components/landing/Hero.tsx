@@ -38,19 +38,22 @@ export default function Hero() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
-      <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">
-          Your AI-Powered Freemasonic Research and Design Tool
-        </h1>
-        <p className="mt-6 text-lg leading-8 text-muted-foreground">
+    <section className="relative py-20 text-center md:py-32">
+      <div
+        className="absolute inset-0 bg-center bg-cover"
+        style={{ backgroundImage: "url('/placeholder.svg')" }}
+      />
+      <div className="absolute inset-0 bg-background/80" />
+      <div className="container relative">
+        <h1 className="text-4xl font-bold md:text-6xl">Your AI-Powered Freemasonic Research and Design Tool</h1>
+        <p className="mt-4 text-lg md:text-xl text-muted-foreground">
           Unlock the secrets of Freemasonry with our AI-powered research and
           design tool. Explore vast knowledge bases, generate unique designs,
           and connect with a community of like-minded individuals.
         </p>
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="lg" className="mt-10">
+            <Button size="lg" className="mt-8">
               Start Free Trial
             </Button>
           </DialogTrigger>
@@ -84,6 +87,6 @@ export default function Hero() {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,28 +1,30 @@
+import LandingLayout from "../landing-layout";
+import Header from "@/components/landing/Header";
 import Hero from "@/components/landing/Hero";
+import Customers from "@/components/landing/Customers";
 import Features from "@/components/landing/Features";
-import Benefits from "@/components/landing/Benefits";
-import SocialProof from "@/components/landing/SocialProof";
-import UseCases from "@/components/landing/UseCases";
+import Testimonials from "@/components/landing/Testimonials";
+import Highlights from "@/components/landing/Highlights";
+import Pricing from "@/components/landing/Pricing";
 import FAQ from "@/components/landing/FAQ";
+import BottomCTA from "@/components/landing/BottomCTA";
+import BottomBanner from "@/components/landing/BottomBanner";
 import Footer from "@/components/landing/Footer";
-import Divider from "@/components/landing/Divider";
 
-export default function Login() {
+export default function LoginPage() {
   return (
-    <>
+    <LandingLayout>
+      <Header />
       <Hero />
-      <Divider />
+      <Customers />
       <Features />
-      <Divider />
-      <Benefits />
-      <Divider />
-      <SocialProof />
-      <Divider />
-      <UseCases />
-      <Divider />
+      <Testimonials />
+      <Highlights />
+      <Pricing />
       <FAQ />
-      <Divider />
+      <BottomCTA />
+      <BottomBanner />
       <Footer />
-    </>
+    </LandingLayout>
   );
 }
