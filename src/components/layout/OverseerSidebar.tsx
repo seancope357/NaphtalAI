@@ -365,6 +365,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             disabled={isLoading}
           />
           <Button
+            variant="neumo"
             size="icon"
             className="absolute bottom-3 right-3 h-8 w-8"
             onClick={handleSendMessage}

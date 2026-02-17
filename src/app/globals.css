@@ -57,6 +57,11 @@
     --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.30);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
+
+    /* Simple Neumorphism Light Theme (for debugging) */
+    --neumo-bg: #e0e0e0; /* A light grey background color */
+    --neumo-light-shadow: #ffffff; /* For highlights */
+    --neumo-dark-shadow: #a3b1c6; /* For shadows */
   }
 
   .dark {
