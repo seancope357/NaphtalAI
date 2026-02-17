@@ -16,21 +16,6 @@ const CARD = "#0b1120";
 const TEXT = "#f0ebe0";
 const MUTED = "#8a8070";
 
-function CompassMark() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <circle cx="24" cy="24" r="22" stroke={G} strokeWidth="0.8" opacity="0.3" />
-      {/* Square */}
-      <path d="M15,30 L15,20 L22,20" stroke={G} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.9" />
-      {/* Compass left */}
-      <line x1="24" y1="13" x2="16.5" y2="33" stroke={G} strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-      {/* Compass right */}
-      <line x1="24" y1="13" x2="31.5" y2="33" stroke={G} strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-      <circle cx="24" cy="13" r="1.5" fill={G} opacity="0.9" />
-      <text x="24" y="28" textAnchor="middle" fill={G} fontSize="10" fontFamily="Spectral, Georgia, serif" fontWeight="600" opacity="0.95">G</text>
-    </svg>
-  );
-}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -122,7 +107,7 @@ export default function LoginPage() {
       >
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <CompassMark />
+          <img src="/NaphtalAI-Logo.svg" width={64} height={64} alt="NaphtalAI" className="object-contain" />
           <span
             className="mt-3 text-xl font-semibold"
             style={{ fontFamily: "var(--font-display, Spectral, serif)", color: TEXT }}

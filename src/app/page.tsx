@@ -58,121 +58,6 @@ const staggerFast = {
   visible: { transition: { staggerChildren: 0.07 } },
 };
 
-// ─── Masonic SVG Symbol ────────────────────────────────────────────────────
-function CompassSquare({ size = 260, animate = false }: { size?: number; animate?: boolean }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 260 260" fill="none" aria-hidden="true">
-      {/* Outer decorative rings */}
-      <circle cx="130" cy="130" r="124" stroke={G} strokeWidth="0.6" opacity="0.25" />
-      <circle cx="130" cy="130" r="116" stroke={G} strokeWidth="0.3" opacity="0.15" />
-
-      {/* Tick marks on outer ring */}
-      {Array.from({ length: 24 }).map((_, i) => {
-        const angle = (i * 15 * Math.PI) / 180;
-        const inner = i % 6 === 0 ? 106 : i % 2 === 0 ? 110 : 113;
-        const outer = 116;
-        return (
-          <line
-            key={i}
-            x1={130 + inner * Math.cos(angle)}
-            y1={130 + inner * Math.sin(angle)}
-            x2={130 + outer * Math.cos(angle)}
-            y2={130 + outer * Math.sin(angle)}
-            stroke={G}
-            strokeWidth={i % 6 === 0 ? 1.5 : 0.8}
-            opacity={i % 6 === 0 ? 0.5 : 0.25}
-          />
-        );
-      })}
-
-      {/* Inner ring */}
-      <circle cx="130" cy="130" r="88" stroke={G} strokeWidth="0.5" opacity="0.2" />
-
-      {/* The Square (architect's tool) — bottom left */}
-      <motion.path
-        d="M82,168 L82,108 L128,108"
-        stroke={G}
-        strokeWidth="3.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-        opacity="0.9"
-        initial={animate ? { pathLength: 0, opacity: 0 } : undefined}
-        animate={animate ? { pathLength: 1, opacity: 0.9 } : undefined}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.3 }}
-      />
-
-      {/* Compass — left leg */}
-      <motion.line
-        x1="130" y1="68"
-        x2="88" y2="175"
-        stroke={G}
-        strokeWidth="3.5"
-        strokeLinecap="round"
-        opacity="0.9"
-        initial={animate ? { pathLength: 0, opacity: 0 } : undefined}
-        animate={animate ? { pathLength: 1, opacity: 0.9 } : undefined}
-        transition={{ duration: 1, ease: "easeInOut", delay: 0.6 }}
-      />
-
-      {/* Compass — right leg */}
-      <motion.line
-        x1="130" y1="68"
-        x2="172" y2="175"
-        stroke={G}
-        strokeWidth="3.5"
-        strokeLinecap="round"
-        opacity="0.9"
-        initial={animate ? { pathLength: 0, opacity: 0 } : undefined}
-        animate={animate ? { pathLength: 1, opacity: 0.9 } : undefined}
-        transition={{ duration: 1, ease: "easeInOut", delay: 0.8 }}
-      />
-
-      {/* Compass spread arc */}
-      <motion.path
-        d="M88,175 Q130,148 172,175"
-        stroke={G}
-        strokeWidth="1.5"
-        fill="none"
-        strokeDasharray="4 4"
-        opacity="0.45"
-        initial={animate ? { pathLength: 0, opacity: 0 } : undefined}
-        animate={animate ? { pathLength: 1, opacity: 0.45 } : undefined}
-        transition={{ duration: 0.9, ease: "easeInOut", delay: 1.2 }}
-      />
-
-      {/* Compass hinge dot */}
-      <circle cx="130" cy="68" r="5" fill={G} opacity="0.9" />
-      <circle cx="130" cy="68" r="9" stroke={G} strokeWidth="1" fill="none" opacity="0.35" />
-
-      {/* Letter G */}
-      <motion.text
-        x="130"
-        y="143"
-        textAnchor="middle"
-        fill={G}
-        fontSize="36"
-        fontFamily="Spectral, Georgia, serif"
-        fontWeight="600"
-        opacity="0.95"
-        initial={animate ? { opacity: 0, scale: 0.7 } : undefined}
-        animate={animate ? { opacity: 0.95, scale: 1 } : undefined}
-        transition={{ duration: 0.6, delay: 1.4 }}
-      >
-        G
-      </motion.text>
-
-      {/* Center glow */}
-      <circle cx="130" cy="130" r="42" fill={`url(#goldGlow)`} opacity="0.06" />
-      <defs>
-        <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={G} />
-          <stop offset="100%" stopColor={G} stopOpacity="0" />
-        </radialGradient>
-      </defs>
-    </svg>
-  );
-}
 
 // ─── Grid Background ───────────────────────────────────────────────────────
 function GridBackground() {
@@ -474,7 +359,7 @@ export default function LandingPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-8 h-8 shrink-0">
-              <CompassSquare size={32} />
+              <img src="/NaphtalAI-Logo.svg" width={32} height={32} alt="NaphtalAI" className="w-8 h-8 object-contain" />
             </div>
             <span
               className="text-lg font-semibold tracking-tight"
@@ -688,7 +573,7 @@ export default function LandingPage() {
               }}
               aria-hidden="true"
             />
-            <CompassSquare size={280} animate />
+            <img src="/NaphtalAI-Logo.svg" width={280} height={280} alt="NaphtalAI" className="relative z-10 object-contain" />
           </div>
         </motion.div>
 
@@ -1277,7 +1162,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="md:col-span-2">
               <Link href="/" className="flex items-center gap-3">
-                <CompassSquare size={36} />
+                <img src="/NaphtalAI-Logo.svg" width={36} height={36} alt="NaphtalAI" className="object-contain" />
                 <span
                   className="text-xl font-semibold"
                   style={{ fontFamily: "var(--font-display, Spectral, serif)" }}
