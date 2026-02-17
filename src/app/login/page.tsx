@@ -7,14 +7,14 @@ import { createBrowserClient } from "@supabase/ssr";
 import { motion } from "framer-motion";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 
-const G = "#c9a227";
-const GB = "#e8c84a";
-const GD = "rgba(201,162,39,0.12)";
-const GB2 = "rgba(201,162,39,0.25)";
-const BG = "#050911";
-const CARD = "#0b1120";
-const TEXT = "#f0ebe0";
-const MUTED = "#8a8070";
+const G = "oklch(0.7264 0.0581 66.6967)";
+const GB = "oklch(0.7982 0.0243 82.1078)";
+const GD = "oklch(0.7264 0.0581 66.6967 / 0.12)";
+const GB2 = "oklch(0.7264 0.0581 66.6967 / 0.25)";
+const BG = "oklch(0.2747 0.0139 57.6523)";
+const CARD = "oklch(0.3237 0.0155 59.0603)";
+const TEXT = "oklch(0.9239 0.0190 83.0636)";
+const MUTED = "oklch(0.7982 0.0243 82.1078)";
 
 
 export default function LoginPage() {

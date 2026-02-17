@@ -26,16 +26,16 @@ import {
 } from "lucide-react";
 
 // ─── Tokens ────────────────────────────────────────────────────────────────
-const G = "#c9a227";       // Revelation Gold
-const GB = "#e8c84a";      // Gold bright
-const GD = "rgba(201,162,39,0.12)"; // Gold dim
-const GB2 = "rgba(201,162,39,0.25)"; // Gold border
-const BG = "#050911";      // Background
-const CARD = "#0b1120";    // Card surface
-const CARD2 = "#0f1929";   // Card surface 2
-const TEXT = "#f0ebe0";    // Primary text
-const MUTED = "#8a8070";   // Muted text
-const MUTED2 = "#5a5548";  // Dimmer muted
+const G = "oklch(0.7264 0.0581 66.6967)";       // Primary (warm gold-tan)
+const GB = "oklch(0.7982 0.0243 82.1078)";       // Primary lighter
+const GD = "oklch(0.7264 0.0581 66.6967 / 0.12)"; // Primary dim
+const GB2 = "oklch(0.7264 0.0581 66.6967 / 0.25)"; // Primary border
+const BG = "oklch(0.2747 0.0139 57.6523)";      // Background (dark warm brown)
+const CARD = "oklch(0.3237 0.0155 59.0603)";    // Card surface
+const CARD2 = "oklch(0.3795 0.0181 57.1280)";   // Card surface 2 / secondary
+const TEXT = "oklch(0.9239 0.0190 83.0636)";    // Primary text (warm cream)
+const MUTED = "oklch(0.7982 0.0243 82.1078)";   // Muted text
+const MUTED2 = "oklch(0.5391 0.0387 71.1655)";  // Dimmer muted
 
 // ─── Animation Variants ────────────────────────────────────────────────────
 const fadeUp = {

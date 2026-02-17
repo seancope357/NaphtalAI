@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Spectral } from "next/font/google";
+import { Libre_Baskerville, Lora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({
+const libreBaskerville = Libre_Baskerville({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
-
-const spectral = Spectral({
-  variable: "--font-display",
+const lora = Lora({
+  variable: "--font-serif",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -50,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${spectral.variable} antialiased bg-background text-foreground font-sans`}
+        className={`${libreBaskerville.variable} ${lora.variable} ${ibmPlexMono.variable} antialiased bg-background text-foreground font-sans`}
       >
         <ThemeProvider
           attribute="class"
