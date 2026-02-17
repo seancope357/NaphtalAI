@@ -150,45 +150,47 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   return (
     <div className="h-full flex flex-col bg-sidebar border-l border-sidebar-border">
       {/* Header */}
-      <div className="p-4 border-b border-sidebar-border">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
+      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
             <Eye className="w-5 h-5 text-revelation-gold" />
             <h2 className="font-display font-semibold text-sidebar-foreground">
               NaphtalAI
             </h2>
           </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MessageCircleQuestion className="w-4 h-4 text-muted-foreground" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Beta Feedback</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <Textarea
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                  placeholder="Tell us what you think..."
-                  className="min-h-[120px]"
-                />
-                <Button onClick={handleFeedbackSubmit} className="w-full">Submit</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => setShowSettings(!showSettings)}
-          >
-            <Settings className="w-4 h-4 text-muted-foreground" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <MessageCircleQuestion className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Beta Feedback</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 pt-2">
+                  <Textarea
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="Tell us what you think..."
+                    className="min-h-[140px]"
+                  />
+                  <Button onClick={handleFeedbackSubmit} className="w-full">Submit</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9"
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              <Settings className="w-4 h-4 text-muted-foreground" />
+            </Button>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground mb-4">
           AI-powered analysis and discovery
         </p>
 
@@ -219,9 +221,9 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="p-4 border-b border-sidebar-border bg-muted/30">
+        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/30">
           <h3 className="text-sm font-medium mb-3">AI Provider</h3>
-          <div className="flex gap-2">
+          <div className="flex gap-2.5">
             <Button
               variant={aiProvider === "openai" ? "default" : "outline"}
               size="sm"
@@ -250,17 +252,17 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Context Display */}
       {selectedNodes.length > 0 && (
-        <div className="p-3 border-b border-sidebar-border bg-muted/20">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/20">
+          <div className="flex items-center gap-2 mb-2.5">
             <Link2 className="w-4 h-4 text-primary" />
             <span className="text-xs font-medium">Context ({selectedNodes.length} nodes)</span>
           </div>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-2">
             {selectedNodeData.map((node) => (
               <Badge
                 key={node.id}
                 variant="secondary"
-                className="text-[10px] px-1.5 py-0"
+                className="text-xs px-2 py-0.5"
               >
                 {node.data.label.substring(0, 20)}
                 {node.data.label.length > 20 && "..."}
@@ -271,73 +273,73 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       )}
 
       {/* Quick Actions */}
-      <div className="p-3 border-b border-sidebar-border">
-        <p className="text-xs text-muted-foreground mb-2">Quick Actions</p>
-        <div className="grid grid-cols-2 gap-2">
+      <div className="px-6 py-5 border-b border-sidebar-border">
+        <p className="text-xs text-muted-foreground mb-3">Quick Actions</p>
+        <div className="grid grid-cols-2 gap-3">
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start"
+            className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("extract_entities")}
             disabled={isLoading}
           >
-            <Hash className="w-3 h-3 mr-1" />
+            <Hash className="w-3 h-3 mr-1.5" />
             Extract Entities
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start"
+            className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("connect")}
             disabled={isLoading}
           >
-            <Link2 className="w-3 h-3 mr-1" />
+            <Link2 className="w-3 h-3 mr-1.5" />
             Find Connections
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start"
+            className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("analyze_symbol")}
             disabled={isLoading}
           >
-            <Sparkles className="w-3 h-3 mr-1" />
+            <Sparkles className="w-3 h-3 mr-1.5" />
             Analyze Symbol
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start"
+            className="h-9 text-xs justify-start"
             onClick={() => handleQuickAction("chat")}
             disabled={isLoading}
           >
-            <Eye className="w-3 h-3 mr-1" />
+            <Eye className="w-3 h-3 mr-1.5" />
             Summarize
           </Button>
         </div>
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-3">
+      <ScrollArea className="flex-1 px-5 py-4">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center py-8">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center justify-center h-full text-center py-16">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6">
               <Bot className="w-8 h-8 text-muted-foreground" />
             </div>
-            <p className="text-sm text-muted-foreground font-medium mb-1">
+            <p className="text-sm text-muted-foreground font-medium mb-3">
               Ready to Investigate
             </p>
-            <p className="text-xs text-muted-foreground/70 max-w-[200px]">
+            <p className="text-xs text-muted-foreground/70 max-w-[200px] leading-relaxed">
               Select nodes on the canvas and ask questions, or use quick actions to analyze content.
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
             {isLoading && (
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="flex items-center gap-2.5 text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span className="text-xs">NaphtalAI is thinking...</span>
               </div>
@@ -348,7 +350,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-3 border-t border-sidebar-border">
+      <div className="px-5 py-5 border-t border-sidebar-border">
         <div className="relative">
           <Textarea
             value={input}
@@ -359,12 +361,12 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
                 ? `Ask about ${selectedNodes.length} selected node(s)...`
                 : "Ask a question..."
             }
-            className="min-h-[60px] max-h-[120px] pr-10 text-sm resize-none"
+            className="min-h-[80px] max-h-[140px] pr-12 text-sm resize-none"
             disabled={isLoading}
           />
           <Button
             size="icon"
-            className="absolute bottom-2 right-2 h-7 w-7"
+            className="absolute bottom-3 right-3 h-8 w-8"
             onClick={handleSendMessage}
             disabled={!input.trim() || isLoading}
           >
@@ -375,8 +377,8 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             )}
           </Button>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-1.5 text-center">
-          Press Enter to send, Shift+Enter for new line
+        <p className="text-xs text-muted-foreground mt-3 text-center">
+          Enter to send · Shift+Enter for new line
         </p>
       </div>
     </div>
@@ -389,7 +391,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   return (
     <div
       className={cn(
-        "flex gap-2",
+        "flex gap-3",
         isUser ? "justify-end" : "justify-start"
       )}
     >
@@ -408,7 +410,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
         {message.nodeContext && message.nodeContext.length > 0 && (
-          <div className="flex gap-1 mt-2 pt-2 border-t border-border/50">
+          <div className="flex gap-1 mt-3 pt-3 border-t border-border/50">
             <Hash className="w-3 h-3 text-muted-foreground" />
             <span className="text-[10px] text-muted-foreground">
               {message.nodeContext.length} nodes referenced
