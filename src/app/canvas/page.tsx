@@ -197,6 +197,7 @@ export default function Home() {
 
       setLoading(true);
       const nodesToAnalyze = getNodesByIds(nodeIds);
+      const selectedNodeSet = new Set(nodeIds);
 
       try {
         // Gather content from nodes
@@ -216,6 +217,39 @@ export default function Home() {
           contexts.push(`[${node.data.label}]\n${content}`);
         }
 
+        const relatedEdges = edges.filter(
+          (edge) => selectedNodeSet.has(edge.source) || selectedNodeSet.has(edge.target)
+        );
+        const expandedNodeIds = new Set(nodeIds);
+        relatedEdges.forEach((edge) => {
+          expandedNodeIds.add(edge.source);
+          expandedNodeIds.add(edge.target);
+        });
+
+        const graphNodes = nodes
+          .filter((node) => expandedNodeIds.has(node.id))
+          .map((node) => ({
+            id: node.id,
+            type: node.data.type,
+            label: node.data.label,
+            source: node.data.metadata?.source,
+            tags: node.data.metadata?.tags || [],
+          }));
+
+        const graphEdges = edges
+          .filter((edge) => expandedNodeIds.has(edge.source) && expandedNodeIds.has(edge.target))
+          .map((edge) => ({
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
+            label: edge.data?.label,
+            semanticType: edge.data?.semanticType,
+            logicRule: edge.data?.logicRule,
+            confidence: edge.data?.confidence,
+            sourceHandle: edge.sourceHandle || undefined,
+            targetHandle: edge.targetHandle || undefined,
+          }));
+
         const response = await fetch("/api/ai", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -228,8 +262,15 @@ export default function Home() {
                 ? "Find connections between these documents."
                 : mode === "analyze_symbol"
                 ? "Identify and analyze any symbolic references."
+                : mode === "presentation"
+                ? "Create a source-cited slide deck outline from this graph-constrained research context."
                 : "Provide a summary and analysis.",
             mode,
+            graph: {
+              nodes: graphNodes,
+              edges: graphEdges,
+              selectedNodeIds: nodeIds,
+            },
             provider,
             openAIKey,
             anthropicKey,
@@ -320,7 +361,7 @@ export default function Home() {
         setLoading(false);
       }
     },
-    [getNodesByIds, getNodeById, addNodes, addEdge, addEntities, addMessage, setLoading, getAnalyzableContent]
+    [getNodesByIds, getNodeById, addNodes, addEdge, addEntities, addMessage, setLoading, getAnalyzableContent, edges, nodes]
   );
 
   // Handle pinning document to canvas from viewer

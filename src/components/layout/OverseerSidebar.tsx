@@ -27,7 +27,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 
 interface OverseerSidebarProps {
-  onAnalyze: (mode: string, nodeIds?: string[]) => Promise<void>;
+  onAnalyze: (
+    mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation" | string,
+    nodeIds?: string[],
+    provider?: "openai" | "anthropic",
+    openAIKey?: string,
+    anthropicKey?: string
+  ) => Promise<void>;
 }
 
 export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
@@ -319,6 +325,16 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
           >
             <ScanEye className="w-3 h-3 shrink-0" strokeWidth={2.2} />
             Summarize
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
+            onClick={() => handleQuickAction("presentation")}
+            disabled={isLoading}
+          >
+            <BotMessageSquare className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+            Deck
           </Button>
         </div>
       </div>

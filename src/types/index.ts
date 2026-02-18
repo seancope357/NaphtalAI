@@ -61,7 +61,28 @@ export interface EdgeData {
 export interface AIRequest {
   context: string[];
   query: string;
-  mode: 'chat' | 'connect' | 'analyze_symbol' | 'extract_entities';
+  mode: 'chat' | 'connect' | 'analyze_symbol' | 'extract_entities' | 'presentation';
+  graph?: {
+    nodes: Array<{
+      id: string;
+      type: NodeType;
+      label: string;
+      source?: string;
+      tags?: string[];
+    }>;
+    edges: Array<{
+      id: string;
+      source: string;
+      target: string;
+      label?: string;
+      semanticType?: string;
+      logicRule?: string;
+      confidence?: number;
+      sourceHandle?: string;
+      targetHandle?: string;
+    }>;
+    selectedNodeIds?: string[];
+  };
 }
 
 // AI Response

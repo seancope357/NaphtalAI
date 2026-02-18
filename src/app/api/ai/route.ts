@@ -4,10 +4,31 @@ import ZAI from "z-ai-web-dev-sdk";
 interface AIRequest {
   context: string[];
   query: string;
-  mode: "chat" | "connect" | "analyze_symbol" | "extract_entities";
+  mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation";
   provider?: "openai" | "anthropic";
   openAIKey?: string;
   anthropicKey?: string;
+  graph?: {
+    nodes: Array<{
+      id: string;
+      type: string;
+      label: string;
+      source?: string;
+      tags?: string[];
+    }>;
+    edges: Array<{
+      id: string;
+      source: string;
+      target: string;
+      label?: string;
+      semanticType?: string;
+      logicRule?: string;
+      confidence?: number;
+      sourceHandle?: string;
+      targetHandle?: string;
+    }>;
+    selectedNodeIds?: string[];
+  };
 }
 
 interface ExtractedEntity {
@@ -81,6 +102,30 @@ Connection types:
 
 Always maintain a scholarly, investigative tone. Extract ALL named entities from the text.`;
 
+function buildGraphConstraintBlock(
+  graph: AIRequest["graph"],
+  mode: AIRequest["mode"]
+): string {
+  if (!graph || graph.nodes.length === 0) return "";
+
+  const boundedGraph = {
+    ...graph,
+    nodes: graph.nodes.slice(0, 140),
+    edges: graph.edges.slice(0, 320),
+  };
+  const graphJson = JSON.stringify(boundedGraph, null, 2);
+
+  const modeSpecificInstruction =
+    mode === "presentation"
+      ? `When creating slides, each claim must include:
+- source node citation in [N:<nodeId>] format
+- supporting edge citation in [E:<edgeId>] format when relationship-based
+- a confidence note if confidence < 0.75`
+      : `Use graph edges as inference constraints. Prefer relationship claims that are explicitly represented in edges.`;
+
+  return `\n\nGraph constraints (authoritative):\n${graphJson}\n\nRules:\n- Treat edges as explicit relationship constraints.\n- Do not invent unsupported links between nodes.\n- Mark uncertain inferences as hypotheses.\n${modeSpecificInstruction}`;
+}
+
 let zaiInstance: Awaited<ReturnType<typeof ZAI.create>> | null = null;
 
 async function getZAI() {
@@ -93,7 +138,7 @@ async function getZAI() {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as AIRequest;
-    const { context, query, mode, provider, openAIKey, anthropicKey } = body;
+    const { context, query, mode, provider, openAIKey, anthropicKey, graph } = body;
 
     const zai = await getZAI();
 
@@ -109,6 +154,7 @@ export async function POST(request: NextRequest) {
     let messages: Array<{ role: "assistant" | "user"; content: string }> = [
       { role: "assistant", content: SYSTEM_PROMPT },
     ];
+    const graphConstraints = buildGraphConstraintBlock(graph, mode);
 
     switch (mode) {
       case "chat":
@@ -116,12 +162,12 @@ export async function POST(request: NextRequest) {
         if (context.length > 0) {
           messages.push({
             role: "user",
-            content: `Context from selected documents:\n${context.join("\n\n---\n\n")}\n\nQuestion: ${query}`,
+            content: `Context from selected documents:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nQuestion: ${query}`,
           });
         } else {
           messages.push({
             role: "user",
-            content: query,
+            content: `${query}${graphConstraints}`,
           });
         }
         break;
@@ -130,7 +176,7 @@ export async function POST(request: NextRequest) {
         // Find connections between documents
         messages.push({
           role: "user",
-          content: `Analyze these documents and find hidden connections, themes, or relationships:\n\n${context.join("\n\n---\n\n")}\n\nIdentify:\n1. Common themes or topics\n2. Shared entities (people, places, organizations)\n3. Temporal connections\n4. Symbolic or thematic connections\n\nRespond with JSON containing entities array and connections array.`,
+          content: `Analyze these documents and find hidden connections, themes, or relationships:\n\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nIdentify:\n1. Common themes or topics\n2. Shared entities (people, places, organizations)\n3. Temporal connections\n4. Symbolic or thematic connections\n\nRespond with JSON containing entities array and connections array.`,
         });
         break;
 
@@ -138,7 +184,7 @@ export async function POST(request: NextRequest) {
         // Symbol recognition and analysis
         messages.push({
           role: "user",
-          content: `Analyze this content for Freemasonic or symbolic references:\n\n${context.join("\n\n")}\n\nIdentify and explain:\n1. Any Masonic symbols mentioned (Square and Compasses, Eye of Providence, etc.)\n2. Symbolic meanings and historical context\n3. Related symbolism in Freemasonry\n4. Cultural or historical significance\n\nRespond with JSON containing entities (for symbols found) and connections.`,
+          content: `Analyze this content for Freemasonic or symbolic references:\n\n${context.join("\n\n")}${graphConstraints}\n\nIdentify and explain:\n1. Any Masonic symbols mentioned (Square and Compasses, Eye of Providence, etc.)\n2. Symbolic meanings and historical context\n3. Related symbolism in Freemasonry\n4. Cultural or historical significance\n\nRespond with JSON containing entities (for symbols found) and connections.`,
         });
         break;
 
@@ -146,14 +192,21 @@ export async function POST(request: NextRequest) {
         // Entity extraction
         messages.push({
           role: "user",
-          content: `Extract ALL entities from this text:\n\n${context.join("\n\n")}\n\nFor each entity, identify:\n- Name (full name or proper noun)\n- Type (person, location, date, symbol, organization, or concept)\n- Context (brief quote or description of where it appears)\n- Aliases (alternative names or abbreviations)\n\nAlso identify any relationships/connections between entities.\n\nRespond ONLY with valid JSON containing entities and connections arrays.`,
+          content: `Extract ALL entities from this text:\n\n${context.join("\n\n")}${graphConstraints}\n\nFor each entity, identify:\n- Name (full name or proper noun)\n- Type (person, location, date, symbol, organization, or concept)\n- Context (brief quote or description of where it appears)\n- Aliases (alternative names or abbreviations)\n\nAlso identify any relationships/connections between entities.\n\nRespond ONLY with valid JSON containing entities and connections arrays.`,
+        });
+        break;
+
+      case "presentation":
+        messages.push({
+          role: "user",
+          content: `Create a slide presentation outline from this research context.\n\nContext:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nRequirements:\n1. Provide 8-12 slides.\n2. Each slide includes: title, key points, suggested visual, and speaker notes.\n3. Every substantive claim must cite supporting node(s) as [N:<nodeId>].\n4. Relationship-based claims must also cite edge(s) as [E:<edgeId>].\n5. Include a final "Sources & Evidence Trail" slide.\n6. Prefer high-confidence edges and mark uncertain edges as hypotheses.\n\nOutput as clear markdown with sections per slide.`,
         });
         break;
 
       default:
         messages.push({
           role: "user",
-          content: query,
+          content: `${query}${graphConstraints}`,
         });
     }
 
