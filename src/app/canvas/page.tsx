@@ -10,7 +10,10 @@ import { useCanvasStore, createEntityNode, createEdge, createDocumentNode } from
 import { useChatStore, createAssistantMessage } from "@/stores/chatStore";
 import { useFileStore } from "@/stores/fileStore";
 import { useEntityStore, type Entity, type EntityType } from "@/stores/entityStore";
+import { useViewerStore } from "@/stores/viewerStore";
 import { getFile } from "@/lib/indexedDb";
+import { getReadableContentPreview, inferFileTypeFromName, isBinaryPreview } from "@/lib/fileContent";
+import { WORKSPACE_LAYOUT } from "@/lib/workspaceConstraints";
 import type { FileItem, ExtractedEntity } from "@/types";
 
 import {
@@ -22,10 +25,6 @@ import {
 
 export default function Home() {
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
-  const [sidebarsCollapsed, setSidebarsCollapsed] = useState({
-    left: false,
-    right: false,
-  });
 
   const {
     nodes,
@@ -37,8 +36,9 @@ export default function Home() {
     getNodesByIds,
   } = useCanvasStore();
 
-  const { addMessage, setLoading, isLoading } = useChatStore();
+  const { addMessage, setLoading } = useChatStore();
   const { files } = useFileStore();
+  const { openFile } = useViewerStore();
   const {
     addEntity,
     addEntities,
@@ -50,6 +50,13 @@ export default function Home() {
   // Handle drag start from file sidebar
   const handleDragStart = useCallback((file: FileItem) => {
     // File is being dragged
+  }, []);
+
+  const getAnalyzableContent = useCallback((content: string) => {
+    if (isBinaryPreview(content)) {
+      return "Binary visual asset attached. Use direct visual inspection instead of text extraction.";
+    }
+    return content;
   }, []);
 
   // Handle node selection
@@ -142,7 +149,7 @@ export default function Home() {
       if (node.data.fileId) {
         const storedFile = await getFile(node.data.fileId);
         if (storedFile && typeof storedFile.content === "string") {
-          content = storedFile.content;
+          content = getAnalyzableContent(storedFile.content);
         }
       }
 
@@ -177,7 +184,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [getNodeById, addMessage, setLoading]);
+  }, [getNodeById, addMessage, setLoading, getAnalyzableContent]);
 
   // Handle AI analysis from the Overseer sidebar
   const handleAnalyze = useCallback(
@@ -198,7 +205,7 @@ export default function Home() {
           if (node.data.fileId) {
             const storedFile = await getFile(node.data.fileId);
             if (storedFile && typeof storedFile.content === "string") {
-              content = storedFile.content;
+              content = getAnalyzableContent(storedFile.content);
             }
           }
 
@@ -309,7 +316,7 @@ export default function Home() {
         setLoading(false);
       }
     },
-    [getNodesByIds, getNodeById, addNodes, addEdge, addEntities, addMessage, setLoading]
+    [getNodesByIds, getNodeById, addNodes, addEdge, addEntities, addMessage, setLoading, getAnalyzableContent]
   );
 
   // Handle pinning document to canvas from viewer
@@ -318,8 +325,8 @@ export default function Home() {
       // Get full content from IndexedDB
       const storedFile = await getFile(file.id);
       const content = storedFile && typeof storedFile.content === "string"
-        ? storedFile.content.substring(0, 2000)
-        : "";
+        ? getReadableContentPreview(storedFile.content, file.type)
+        : getReadableContentPreview(undefined, file.type);
 
       const node = createDocumentNode(
         file.id,
@@ -332,7 +339,7 @@ export default function Home() {
       addNode(node);
 
       // Auto-extract entities from the document
-      if (storedFile && typeof storedFile.content === "string") {
+      if (storedFile && typeof storedFile.content === "string" && !isBinaryPreview(storedFile.content)) {
         addMessage(createAssistantMessage(
           `Document "${file.name}" has been pinned to the canvas. I'm now extracting entities...`
         ));
@@ -382,11 +389,12 @@ export default function Home() {
       setLoading(true);
 
       try {
+        const safeContent = getAnalyzableContent(content);
         const response = await fetch("/api/ai", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            context: [content],
+            context: [safeContent],
             query: "Provide a comprehensive analysis of this document.",
             mode: "chat",
           }),
@@ -403,36 +411,59 @@ export default function Home() {
         setLoading(false);
       }
     },
-    [addMessage, setLoading]
+    [addMessage, setLoading, getAnalyzableContent]
   );
 
-  // Toggle sidebar
-  const toggleSidebar = useCallback((side: "left" | "right") => {
-    setSidebarsCollapsed((prev) => ({
-      ...prev,
-      [side]: !prev[side],
-    }));
-  }, []);
+  const handleOpenFileFromCanvas = useCallback(
+    async (fileId: string) => {
+      const stored = await getFile(fileId);
+      if (!stored) return;
+
+      const fileMeta = files.find((file) => file.id === fileId) || {
+        id: fileId,
+        name: stored.name,
+        type: inferFileTypeFromName(stored.name) || "txt",
+        size: stored.size,
+        uploadedAt: new Date(stored.uploadedAt),
+        thumbnail: stored.thumbnail,
+      };
+
+      openFile(fileMeta, stored.content);
+    },
+    [files, openFile]
+  );
 
   return (
     <main className="h-screen w-screen flex overflow-hidden bg-background">
       <PanelGroup direction="horizontal">
-        <Panel defaultSize={20} minSize={15}>
+        <Panel
+          defaultSize={WORKSPACE_LAYOUT.panels.left.defaultSize}
+          minSize={WORKSPACE_LAYOUT.panels.left.minSize}
+          maxSize={WORKSPACE_LAYOUT.panels.left.maxSize}
+        >
           <ArchivesSidebar
             onDragStart={handleDragStart}
             onEntityClick={handleEntityClick}
             onAddEntityToCanvas={handleAddEntityToCanvas}
           />
         </Panel>
-        <PanelResizeHandle className="w-1 bg-sidebar-border hover:bg-primary/60 transition-colors duration-200 cursor-col-resize" />
-        <Panel defaultSize={60} minSize={30}>
+        <PanelResizeHandle className="w-1.5 bg-sidebar-border hover:bg-primary/50 transition-colors duration-200 cursor-col-resize" />
+        <Panel
+          defaultSize={WORKSPACE_LAYOUT.panels.center.defaultSize}
+          minSize={WORKSPACE_LAYOUT.panels.center.minSize}
+        >
           <Trestleboard
             onNodeSelect={handleNodeSelect}
             onAnalyzeRequest={handleAnalyzeRequest}
+            onOpenFile={handleOpenFileFromCanvas}
           />
         </Panel>
-        <PanelResizeHandle className="w-1 bg-sidebar-border hover:bg-primary/60 transition-colors duration-200 cursor-col-resize" />
-        <Panel defaultSize={20} minSize={15}>
+        <PanelResizeHandle className="w-1.5 bg-sidebar-border hover:bg-primary/50 transition-colors duration-200 cursor-col-resize" />
+        <Panel
+          defaultSize={WORKSPACE_LAYOUT.panels.right.defaultSize}
+          minSize={WORKSPACE_LAYOUT.panels.right.minSize}
+          maxSize={WORKSPACE_LAYOUT.panels.right.maxSize}
+        >
           <OverseerSidebar onAnalyze={handleAnalyze} />
         </Panel>
       </PanelGroup>

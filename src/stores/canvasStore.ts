@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import type { CanvasNode, CanvasEdge, NodeData, EdgeData, ConnectionStyle } from "@/types";
+import { WORKSPACE_GRID, NODE_DIMENSIONS } from "@/lib/workspaceConstraints";
+import { inferFileTypeFromName } from "@/lib/fileContent";
 
 // History entry for undo/redo
 interface HistoryEntry {
@@ -92,7 +94,7 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   
   // Grid
   snapToGrid: true,
-  gridSize: 20,
+  gridSize: WORKSPACE_GRID.defaultSize,
   showGrid: true,
   
   // Helper to save history
@@ -423,12 +425,13 @@ export function createDocumentNode(
   content?: string,
   size?: { width?: number; height?: number }
 ): CanvasNode {
+  const fileType = inferFileTypeFromName(fileName);
   return {
     id: uuidv4(),
     type: "fileNode",
     position,
-    width: size?.width || 280,
-    height: size?.height,
+    width: size?.width || NODE_DIMENSIONS.file.defaultWidth,
+    height: size?.height || NODE_DIMENSIONS.file.defaultHeight,
     data: {
       id: uuidv4(),
       type: "file",
@@ -440,6 +443,7 @@ export function createDocumentNode(
         source: fileName,
         date: new Date().toISOString(),
         tags: [],
+        fileType,
         isPinned: false,
       },
     },
@@ -455,7 +459,8 @@ export function createNoteNode(
     id: uuidv4(),
     type: "noteNode",
     position,
-    width: 200,
+    width: NODE_DIMENSIONS.note.defaultWidth,
+    height: NODE_DIMENSIONS.note.defaultHeight,
     data: {
       id: uuidv4(),
       type: "note",
@@ -482,7 +487,8 @@ export function createEntityNode(
     id: uuidv4(),
     type: "entityNode",
     position,
-    width: 180,
+    width: NODE_DIMENSIONS.entity.defaultWidth,
+    height: NODE_DIMENSIONS.entity.defaultHeight,
     data: {
       id: uuidv4(),
       type: "entity",
@@ -504,7 +510,8 @@ export function createEdge(
   sourceId: string,
   targetId: string,
   label?: string,
-  style: ConnectionStyle = "red-string"
+  style: ConnectionStyle = "red-string",
+  metadata?: Partial<EdgeData>
 ): CanvasEdge {
   return {
     id: uuidv4(),
@@ -516,6 +523,7 @@ export function createEdge(
       label,
       style,
       isAnimated: false,
+      ...metadata,
     },
   };
 }

@@ -32,6 +32,9 @@ import { useCanvasStore, createNoteNode, createEdge } from "@/stores/canvasStore
 import type { FileItem, CanvasNode, CanvasEdge } from "@/types";
 import { getFile } from "@/lib/indexedDb";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { getReadableContentPreview } from "@/lib/fileContent";
+import { validateConnection } from "@/lib/connectionRules";
+import { WORKSPACE_GRID } from "@/lib/workspaceConstraints";
 
 const nodeTypes: NodeTypes = {
   fileNode: DocumentNode,
@@ -52,15 +55,16 @@ interface TrestleboardProps {
 function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: TrestleboardProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition, fitView, zoomIn, zoomOut } = useReactFlow();
+  const [connectionNotice, setConnectionNotice] = useState<string | null>(null);
 
   // Read grid color from design system CSS variable
-  const [gridColor, setGridColor] = useState<string>("#404040");
-  useEffect(() => {
+  const [gridColor] = useState<string>(() => {
+    if (typeof window === "undefined") return "#404040";
     const color = getComputedStyle(document.documentElement)
       .getPropertyValue("--muted-foreground")
       .trim();
-    if (color) setGridColor(color);
-  }, []);
+    return color || "#404040";
+  });
 
   // Initialize keyboard shortcuts
   useKeyboardShortcuts();
@@ -85,8 +89,8 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
     snapToGrid,
   } = useCanvasStore();
 
-  const [localNodes, setLocalNodes, onNodesChangeBase] = useNodesState(nodes);
-  const [localEdges, setLocalEdges, onEdgesChangeBase] = useEdgesState(edges);
+  const [localNodes, setLocalNodes] = useNodesState(nodes);
+  const [localEdges, setLocalEdges] = useEdgesState(edges);
 
   // Sync store to local state
   useEffect(() => {
@@ -132,16 +136,33 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
   const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
       if (connection.source && connection.target) {
+        const sourceNode = localNodes.find((node) => node.id === connection.source);
+        const targetNode = localNodes.find((node) => node.id === connection.target);
+        const validation = validateConnection(sourceNode, targetNode, localEdges);
+
+        if (!validation.valid) {
+          setConnectionNotice(validation.reason || "Invalid connection.");
+          return;
+        }
+
         const newEdge = createEdge(
           connection.source,
           connection.target,
-          undefined,
-          connectionStyle
+          validation.label,
+          connectionStyle,
+          {
+            semanticType: validation.semanticType,
+            sourceNodeType: sourceNode?.data.type,
+            targetNodeType: targetNode?.data.type,
+            logicRule: validation.logicRule,
+            confidence: 0.85,
+          }
         );
         addStoreEdge(newEdge);
+        setConnectionNotice(null);
       }
     },
-    [connectionStyle, addStoreEdge]
+    [connectionStyle, addStoreEdge, localNodes, localEdges]
   );
 
   // Handle file drop
@@ -173,19 +194,25 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
           id: `node-${file.id}`,
           type: "fileNode",
           position,
+          width: 360,
+          height: 440,
           data: {
             id: `node-${file.id}`,
             type: "file",
             label: file.name,
             content: typeof storedFile?.content === "string"
-              ? storedFile.content.substring(0, 2000)
-              : "",
+              ? getReadableContentPreview(storedFile.content, file.type)
+              : getReadableContentPreview(undefined, file.type),
+            previewContent: typeof storedFile?.content === "string"
+              ? getReadableContentPreview(storedFile.content, file.type)
+              : getReadableContentPreview(undefined, file.type),
             thumbnail: storedFile?.thumbnail || file.thumbnail,
             fileId: file.id,
             metadata: {
               source: file.name,
               date: new Date().toISOString(),
               tags: [],
+              fileType: file.type,
               isPinned: false,
             },
           },
@@ -198,6 +225,12 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
     },
     [screenToFlowPosition, addNode]
   );
+
+  useEffect(() => {
+    if (!connectionNotice) return;
+    const timeout = window.setTimeout(() => setConnectionNotice(null), 2600);
+    return () => window.clearTimeout(timeout);
+  }, [connectionNotice]);
 
   // Handle custom events
   useEffect(() => {
@@ -264,7 +297,7 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
   }, [addNode]);
 
   const handleFitView = useCallback(() => {
-    fitView({ padding: 0.2 });
+    fitView({ padding: WORKSPACE_GRID.fitViewPadding });
   }, [fitView]);
 
   const handleClearCanvas = useCallback(() => {
@@ -306,9 +339,11 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
-        minZoom={0.1}
-        maxZoom={2}
+        fitViewOptions={{ padding: WORKSPACE_GRID.fitViewPadding }}
+        minZoom={WORKSPACE_GRID.minZoom}
+        maxZoom={WORKSPACE_GRID.maxZoom}
+        snapToGrid={snapToGrid}
+        snapGrid={[gridSize, gridSize]}
         defaultEdgeOptions={{
           type: "customEdge",
           animated: false,
@@ -350,15 +385,23 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
         />
 
         <Panel position="top-center">
-          <div className="bg-card/90 backdrop-blur-sm border border-border rounded-lg px-4 py-2">
+          <div className="bg-card/90 backdrop-blur-sm border border-border rounded-lg px-4 py-2 min-w-[220px]">
             <h1 className="font-display font-semibold text-card-foreground text-sm">
-              The Trestleboard
+              Research Canvas
             </h1>
             <p className="text-[10px] text-muted-foreground">
-              {localNodes.length} nodes • {localEdges.length} connections
+              {localNodes.length} assets • {localEdges.length} structured links
             </p>
           </div>
         </Panel>
+
+        {connectionNotice && (
+          <Panel position="top-right">
+            <div className="bg-card/95 border border-border rounded-lg px-3 py-2 shadow-lg">
+              <p className="text-[11px] text-card-foreground">{connectionNotice}</p>
+            </div>
+          </Panel>
+        )}
       </ReactFlow>
 
       <FloatingToolbar

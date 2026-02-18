@@ -19,12 +19,14 @@ export interface NodeData {
   type: NodeType;
   label: string;
   content: string;
+  previewContent?: string;
   thumbnail?: string;
   fileId?: string;
   metadata: {
     source?: string;
     date?: string;
     tags?: string[];
+    fileType?: FileType;
     entityType?: 'person' | 'location' | 'date' | 'symbol' | 'organization';
     isPinned?: boolean;
   };
@@ -36,7 +38,7 @@ export interface FileItem {
   name: string;
   type: FileType;
   size: number;
-  content?: string;
+  content?: string | ArrayBuffer;
   thumbnail?: string;
   uploadedAt: Date;
   indexedDbKey?: string;
@@ -48,6 +50,11 @@ export interface EdgeData {
   label?: string;
   style?: ConnectionStyle;
   isAnimated?: boolean;
+  semanticType?: string;
+  sourceNodeType?: NodeType;
+  targetNodeType?: NodeType;
+  logicRule?: string;
+  confidence?: number;
 }
 
 // AI Request

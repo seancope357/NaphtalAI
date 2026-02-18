@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useRef } from "react";
 import { useFileStore, createFileItem } from "@/stores/fileStore";
-import { saveFile, readFileContent, createThumbnail } from "@/lib/indexedDb";
+import { saveFile, readFileContent, createThumbnail, getFile } from "@/lib/indexedDb";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +43,7 @@ export default function ArchivesSidebar({
   onAddEntityToCanvas,
 }: ArchivesSidebarProps) {
   const { files, addFile, removeFile, isUploading, setUploading } = useFileStore();
+  const { openFile } = useViewerStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("files");
@@ -106,6 +107,17 @@ export default function ArchivesSidebar({
     e.dataTransfer.effectAllowed = "move";
     onDragStart(file);
   };
+
+  const handleOpenFile = useCallback(async (file: FileItem) => {
+    const stored = await getFile(file.id);
+    if (stored?.content) {
+      openFile(file, stored.content);
+      return;
+    }
+    if (file.content) {
+      openFile(file, file.content);
+    }
+  }, [openFile]);
 
 
 
@@ -269,6 +281,7 @@ export default function ArchivesSidebar({
                         key={file.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, file)}
+                        onDoubleClick={() => handleOpenFile(file)}
                         className={cn(
                           "group flex items-center gap-3 p-3 rounded-lg",
                           "bg-transparent border border-transparent",

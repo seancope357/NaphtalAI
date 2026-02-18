@@ -178,13 +178,22 @@ export async function readFileContent(file: File): Promise<string | ArrayBuffer>
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     
-    // For images, read as data URL
+    // Images are stored as data URLs for immediate rendering.
     if (file.type.startsWith("image/")) {
-      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => reject(new Error("Failed to read file"));
       reader.readAsDataURL(file);
+      return;
+    }
+
+    // PDFs are stored as binary for scalable canvas and viewer rendering.
+    if (file.type === "application/pdf") {
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = () => reject(new Error("Failed to read file"));
+      reader.readAsArrayBuffer(file);
+      return;
     } else {
-      // For text-based files, read as text
+      // Text-based formats remain plain text for analysis prompts.
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => reject(new Error("Failed to read file"));
       reader.readAsText(file);

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Pin, X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight, FileText, Sparkles, FileWarning } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { useViewerStore } from "@/stores/viewerStore";
 import type { FileItem } from "@/types";
+import { buildPdfBlobUrl, buildPdfViewerUrl } from "@/lib/fileContent";
 
 interface DocumentViewerProps {
   onPinToCanvas: (file: FileItem, thumbnail: string | undefined, position: { x: number; y: number }) => void;
@@ -17,7 +17,6 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
   const { isOpen, currentFile, fileContent, closeFile } = useViewerStore();
   const [scale, setScale] = useState(1.0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [numPages, setNumPages] = useState<number>(0);
 
   // Reset state when file changes - using a ref to track previous file
   const currentFileId = currentFile?.id;
@@ -28,11 +27,23 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
       const timer = setTimeout(() => {
         setScale(1.0);
         setPageNumber(1);
-        setNumPages(0);
       }, 0);
       return () => clearTimeout(timer);
     }
   }, [currentFileId]);
+
+  const pdfSource = useMemo(() => {
+    if (!isOpen || currentFile?.type !== "pdf") return null;
+    return buildPdfBlobUrl(fileContent);
+  }, [isOpen, currentFile?.type, fileContent]);
+
+  useEffect(() => {
+    return () => {
+      if (pdfSource?.startsWith("blob:")) {
+        URL.revokeObjectURL(pdfSource);
+      }
+    };
+  }, [pdfSource]);
 
   // Handle pin to canvas
   const handlePin = useCallback(() => {
@@ -69,7 +80,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
       } else if (e.key === "ArrowLeft" && pageNumber > 1) {
         setPageNumber((p) => p - 1);
       } else if (e.key === "ArrowRight") {
-        setPageNumber((p) => Math.min(numPages || 1, p + 1));
+        setPageNumber((p) => p + 1);
       } else if (e.key === "+" || e.key === "=") {
         setScale((s) => Math.min(s + 0.2, 3));
       } else if (e.key === "-") {
@@ -79,7 +90,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
     
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, pageNumber, numPages, closeFile]);
+  }, [isOpen, pageNumber, closeFile]);
 
   if (!isOpen || !currentFile) return null;
 
@@ -141,6 +152,29 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                 <ZoomIn className="w-4 h-4" />
               </Button>
             </div>
+
+            {isPdf && (
+              <div className="flex items-center gap-0.5 mr-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
+                  disabled={pageNumber <= 1}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <span className="text-xs text-muted-foreground min-w-14 text-center">Pg {pageNumber}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => setPageNumber((p) => p + 1)}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
             
             {/* Action Buttons */}
             <Button
@@ -178,31 +212,31 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
         <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-muted/10">
           {/* PDF Placeholder - will use iframe for PDFs */}
           {isPdf && (
-            <div className="w-full h-full flex flex-col items-center justify-center">
-              {fileContent instanceof ArrayBuffer ? (
+            <div className="w-full h-full overflow-auto flex items-start justify-center p-4">
+              {pdfSource ? (
+                <iframe
+                  src={buildPdfViewerUrl(pdfSource, pageNumber, scale * 100)}
+                  title={currentFile.name}
+                  className="border border-border rounded-lg shadow-lg bg-white transition-all"
+                  style={{
+                    width: `${Math.max(70, Math.round(scale * 100))}%`,
+                    minWidth: "560px",
+                    height: `${Math.max(680, Math.round(scale * 980))}px`,
+                  }}
+                />
+              ) : (
                 <div className="text-center p-8">
                   <FileWarning className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
                   <p className="text-sm text-muted-foreground mb-2">
-                    PDF preview requires additional setup
+                    Could not render this PDF preview
                   </p>
                   <p className="text-xs text-muted-foreground/70 mb-4">
-                    Click "Pin to Canvas" to add this document to your workspace
+                    You can still pin this document to the canvas.
                   </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handlePin}
-                  >
+                  <Button variant="outline" size="sm" onClick={handlePin}>
                     <Pin className="w-4 h-4 mr-2" />
                     Pin to Canvas
                   </Button>
-                </div>
-              ) : (
-                <div className="text-center p-8">
-                  <FileText className="w-12 h-12 text-primary/50 mx-auto mb-4" />
-                  <p className="text-sm text-muted-foreground">
-                    PDF loaded - ready to pin to canvas
-                  </p>
                 </div>
               )}
             </div>
@@ -244,6 +278,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
           <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
             <span>ESC to close</span>
             <span>+/- to zoom</span>
+            {isPdf && <span>←/→ change page</span>}
           </div>
         </div>
       </div>

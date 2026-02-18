@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { NodeData } from "@/types";
 import { cn } from "@/lib/utils";
+import { NODE_DIMENSIONS } from "@/lib/workspaceConstraints";
 
 function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
   const nodeData = data as unknown as NodeData;
@@ -85,23 +86,27 @@ function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
   return (
     <div
       className={cn(
-        "border rounded-lg shadow-lg min-w-[160px] max-w-[200px]",
+        "border rounded-xl shadow-lg w-[220px] min-h-[190px]",
         "transition-all duration-200",
         getEntityColor(),
         selected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
         nodeData.metadata.isPinned && "ring-1 ring-revelation-gold"
       )}
+      style={{
+        minWidth: `${NODE_DIMENSIONS.entity.minWidth}px`,
+        maxWidth: `${NODE_DIMENSIONS.entity.maxWidth}px`,
+      }}
     >
       {/* Handles */}
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background"
+        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !left-[-7px]"
       />
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background"
+        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !right-[-7px]"
       />
       <Handle
         type="target"

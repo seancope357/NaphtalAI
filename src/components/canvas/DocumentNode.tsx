@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useCallback } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { FileText, ImageIcon, FileCode, FileSpreadsheet, Pin, X, Sparkles, Maximize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -8,17 +8,21 @@ import { Button } from "@/components/ui/button";
 import type { NodeData } from "@/types";
 import { cn } from "@/lib/utils";
 import { useResizable, ResizeHandle } from "@/hooks/useResizable";
+import { NODE_DIMENSIONS } from "@/lib/workspaceConstraints";
+import { buildPdfBlobUrl, buildPdfViewerUrl, getReadableContentPreview, inferFileTypeFromName } from "@/lib/fileContent";
+import { getFile } from "@/lib/indexedDb";
 
-function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
+function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: string]: unknown }>) {
   const nodeData = data as unknown as NodeData;
-  const [isHovered, setIsHovered] = useState(false);
+  const [pdfSource, setPdfSource] = useState<string | null>(null);
+  const fileType = nodeData.metadata.fileType || inferFileTypeFromName(nodeData.label);
+  const isPdf = fileType === "pdf";
 
   const getFileIcon = () => {
-    const source = nodeData.metadata.source?.toLowerCase() || "";
-    if (source.endsWith(".pdf")) return <FileText className="w-5 h-5" />;
-    if (source.match(/\.(jpg|jpeg|png|gif)$/)) return <ImageIcon className="w-5 h-5" />;
-    if (source.endsWith(".json")) return <FileCode className="w-5 h-5" />;
-    if (source.endsWith(".csv")) return <FileSpreadsheet className="w-5 h-5" />;
+    if (fileType === "pdf") return <FileText className="w-5 h-5" />;
+    if (fileType === "jpg" || fileType === "png") return <ImageIcon className="w-5 h-5" />;
+    if (fileType === "json") return <FileCode className="w-5 h-5" />;
+    if (fileType === "csv") return <FileSpreadsheet className="w-5 h-5" />;
     return <FileText className="w-5 h-5" />;
   };
 
@@ -45,11 +49,45 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
   }, [nodeData.id]);
 
   const { size, handleMouseDown } = useResizable({
-    initialWidth: 280,
-    minWidth: 200,
-    maxWidth: 500,
+    initialWidth: typeof width === "number" ? width : NODE_DIMENSIONS.file.defaultWidth,
+    initialHeight: typeof height === "number" ? height : NODE_DIMENSIONS.file.defaultHeight,
+    minWidth: NODE_DIMENSIONS.file.minWidth,
+    maxWidth: NODE_DIMENSIONS.file.maxWidth,
+    minHeight: NODE_DIMENSIONS.file.minHeight,
+    maxHeight: NODE_DIMENSIONS.file.maxHeight,
     onResize: handleResize,
   });
+
+  useEffect(() => {
+    if (!isPdf || !nodeData.fileId) return;
+
+    let isMounted = true;
+    let localBlobUrl: string | null = null;
+
+    const loadPdf = async () => {
+      const storedFile = await getFile(nodeData.fileId!);
+      const source = buildPdfBlobUrl(storedFile?.content);
+      if (!isMounted) {
+        if (source?.startsWith("blob:")) URL.revokeObjectURL(source);
+        return;
+      }
+      if (source?.startsWith("blob:")) {
+        localBlobUrl = source;
+      }
+      setPdfSource(source);
+    };
+
+    loadPdf().catch(() => setPdfSource(null));
+
+    return () => {
+      isMounted = false;
+      if (localBlobUrl) {
+        URL.revokeObjectURL(localBlobUrl);
+      }
+    };
+  }, [isPdf, nodeData.fileId]);
+
+  const resolvedPdfSource = isPdf ? pdfSource : null;
 
   const handleOpenViewer = () => {
     if (nodeData.fileId) {
@@ -58,32 +96,42 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
     }
   };
 
+  const previewText = useMemo(
+    () =>
+      nodeData.previewContent ||
+      getReadableContentPreview(nodeData.content, fileType) ||
+      "Open this source to inspect details.",
+    [nodeData.previewContent, nodeData.content, fileType]
+  );
+
   return (
     <div
       className={cn(
-        "group bg-card border border-border rounded-lg shadow-lg relative",
+        "group bg-card border border-border rounded-xl shadow-lg relative overflow-hidden",
         "transition-all duration-200",
         selected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
         nodeData.metadata.isPinned && "ring-1 ring-revelation-gold"
       )}
-      style={{ width: `${size.width}px` }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        width: typeof size.width === "number" ? `${size.width}px` : size.width,
+        height: typeof size.height === "number" ? `${size.height}px` : size.height,
+      }}
     >
       {/* Resize Handles */}
       <ResizeHandle onMouseDown={handleMouseDown} direction="se" />
       <ResizeHandle onMouseDown={handleMouseDown} direction="e" />
+      <ResizeHandle onMouseDown={handleMouseDown} direction="s" />
 
       {/* Handles for connections */}
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background"
+        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !left-[-7px]"
       />
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background"
+        className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !right-[-7px]"
       />
       <Handle
         type="target"
@@ -99,12 +147,10 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30 rounded-t-lg">
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-border bg-muted/30">
         <div className="flex items-center gap-2">
           <div className="text-primary">{getFileIcon()}</div>
-          <span className="text-xs text-muted-foreground font-mono uppercase">
-            Document
-          </span>
+          <span className="text-[11px] text-muted-foreground font-mono uppercase tracking-wider">Source</span>
         </div>
         <div className="flex items-center gap-0.5">
           <Button
@@ -142,28 +188,41 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
         </div>
       </div>
 
-      {/* Thumbnail */}
-      {nodeData.thumbnail && (
-        <div className="aspect-video bg-muted relative overflow-hidden">
-          <img
-            src={nodeData.thumbnail}
-            alt={nodeData.label}
-            className="w-full h-full object-cover"
-          />
+      {/* Preview */}
+      <div className="px-3 pt-3">
+        <div
+          className={cn(
+            "relative rounded-lg border border-border/80 bg-muted/20 overflow-hidden",
+            "h-[clamp(180px,45%,420px)]"
+          )}
+        >
+          {resolvedPdfSource ? (
+            <iframe
+              src={buildPdfViewerUrl(resolvedPdfSource, 1, 100)}
+              title={`${nodeData.label} preview`}
+              className="w-full h-full border-0 pointer-events-none bg-white"
+            />
+          ) : nodeData.thumbnail ? (
+            <img
+              src={nodeData.thumbnail}
+              alt={nodeData.label}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <FileText className="w-8 h-8 text-muted-foreground/40" />
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Content */}
-      <div className="p-3">
-        <h3 className="font-display font-semibold text-sm text-card-foreground truncate mb-1">
+      <div className="p-3 pb-2">
+        <h3 className="font-display font-semibold text-sm text-card-foreground truncate mb-1.5">
           {nodeData.label}
         </h3>
 
-        {nodeData.content && (
-          <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-            {nodeData.content.substring(0, 100)}...
-          </p>
-        )}
+        <p className="text-xs text-muted-foreground line-clamp-3 mb-2 min-h-[3.25rem]">{previewText}</p>
 
         {/* Tags */}
         {nodeData.metadata.tags && nodeData.metadata.tags.length > 0 && (
@@ -185,7 +244,7 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
           <Button
             size="sm"
             variant="default"
-            className="flex-1 h-7 text-xs bg-lodge-blue hover:bg-lodge-blue/90"
+            className="flex-1 h-8 text-xs bg-lodge-blue hover:bg-lodge-blue/90"
             onClick={handleAnalyze}
           >
             <Sparkles className="w-3 h-3 mr-1" />
@@ -196,7 +255,7 @@ function DocumentNode({ data, selected }: NodeProps<{ [key: string]: unknown }>)
 
       {/* Date */}
       {nodeData.metadata.date && (
-        <div className="px-3 py-1 border-t border-border text-[10px] text-muted-foreground font-mono rounded-b-lg">
+        <div className="px-3 py-1.5 border-t border-border text-[10px] text-muted-foreground font-mono">
           {new Date(nodeData.metadata.date).toLocaleDateString()}
         </div>
       )}
