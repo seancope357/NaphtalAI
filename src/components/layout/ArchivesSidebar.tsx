@@ -148,50 +148,50 @@ export default function ArchivesSidebar({
   );
 
   return (
-    <div className="h-full flex flex-col bg-sidebar">
+    <div className="h-full flex flex-col bg-sidebar/90 backdrop-blur-sm">
       {/* Header */}
-      <div className="px-6 pt-6 pb-4 border-b border-sidebar-border">
-        <div className="flex items-center justify-between gap-2 mb-1">
+      <div className="px-4 pt-4 pb-3 border-b border-sidebar-border/80">
+        <div className="flex items-center justify-between gap-2 mb-0.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
-              <Archive className="w-4 h-4 text-primary" />
+            <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
+              <Archive className="w-3.5 h-3.5 text-primary" />
             </div>
-            <h2 className="font-display font-semibold text-sidebar-foreground tracking-tight">
+            <h2 className="font-display font-semibold text-sm text-sidebar-foreground tracking-tight">
               The Archives
             </h2>
           </div>
           <Link
             href="/landing"
-            className="h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-200"
+            className="h-7 w-7 flex items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-200"
             title="Back to Home"
           >
-            <Home className="w-4 h-4" />
+            <Home className="w-3.5 h-3.5" />
           </Link>
         </div>
-        <p className="text-xs text-muted-foreground/70 mt-2 mb-4 pl-9">
+        <p className="text-[11px] text-muted-foreground/70 mt-1.5 mb-3 pl-8">
           Research materials & entities
         </p>
 
         {/* Tab Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-9 bg-muted/40 p-0.5">
+          <TabsList className="grid w-full grid-cols-3 h-8 bg-muted/40 p-0.5">
             <TabsTrigger
               value="files"
-              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
               <FolderOpen className="w-3 h-3 mr-1.5" />
               Files
             </TabsTrigger>
             <TabsTrigger
               value="entities"
-              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
               <Hash className="w-3 h-3 mr-1.5" />
               Entities
             </TabsTrigger>
             <TabsTrigger
               value="search"
-              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
               <GitBranch className="w-3 h-3 mr-1.5" />
               Graph
@@ -207,14 +207,14 @@ export default function ArchivesSidebar({
           <TabsContent value="files" className="h-full m-0 data-[state=inactive]:hidden">
             <div className="h-full flex flex-col">
               {/* Search */}
-              <div className="px-5 py-3 border-b border-sidebar-border">
+              <div className="px-4 py-2.5 border-b border-sidebar-border/80">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
                   <Input
                     placeholder="Search files…"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-8 text-xs bg-sidebar-accent/30 border-sidebar-border focus-visible:ring-primary/40 focus-visible:border-primary/50"
+                    className="pl-9 h-8 text-[11px] bg-sidebar-accent/30 border-sidebar-border focus-visible:ring-primary/40 focus-visible:border-primary/50"
                   />
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function ArchivesSidebar({
               {/* Upload Zone */}
               <div
                 className={cn(
-                  "mx-5 my-3 p-5 border border-dashed rounded-lg transition-all duration-200 cursor-pointer",
+                  "mx-4 my-2.5 p-4 border border-dashed rounded-lg transition-all duration-200 cursor-pointer",
                   "flex flex-col items-center justify-center gap-2",
                   isDragging
                     ? "border-primary bg-primary/8 scale-[1.01]"
@@ -234,7 +234,7 @@ export default function ArchivesSidebar({
                 onClick={() => fileInputRef.current?.click()}
               >
                 <div className={cn(
-                  "w-8 h-8 rounded-md flex items-center justify-center transition-colors",
+                  "w-7 h-7 rounded-md flex items-center justify-center transition-colors",
                   isDragging ? "bg-primary/20" : "bg-muted/60"
                 )}>
                   <Upload
@@ -244,7 +244,7 @@ export default function ArchivesSidebar({
                     )}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground/70 text-center leading-relaxed">
+                <p className="text-[11px] text-muted-foreground/70 text-center leading-relaxed">
                   Drop files or{" "}
                   <label className="text-primary cursor-pointer hover:underline">
                     browse

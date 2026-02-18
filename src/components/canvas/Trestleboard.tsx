@@ -327,8 +327,8 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
   }, [localNodes, localEdges]);
 
   return (
-    <div ref={reactFlowWrapper} className="w-full h-full relative p-2 md:p-3 bg-background">
-      <div className="w-full h-full rounded-xl border border-border/80 overflow-hidden bg-background/70 backdrop-blur-sm">
+    <div ref={reactFlowWrapper} className="w-full h-full relative p-1.5 md:p-2 bg-background">
+      <div className="w-full h-full rounded-lg border border-border/70 overflow-hidden bg-background/80 backdrop-blur-sm">
       <ReactFlow
         nodes={localNodes}
         edges={localEdges}
@@ -350,7 +350,7 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
           animated: false,
         }}
         proOptions={{ hideAttribution: true }}
-        className="bg-background"
+        className="bg-background/80"
       >
         {showGrid && (
           <Background
@@ -362,14 +362,14 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
         )}
 
         <Controls
-          className="!bg-card !border-border !rounded-lg !shadow-lg"
+          className="!bg-card/95 !border-border !rounded-md !shadow-md"
           showZoom={false}
           showFitView={false}
           showInteractive={false}
         />
 
         <MiniMap
-          className="!bg-card !border-border !rounded-lg"
+          className="!bg-card/95 !border-border !rounded-md"
           nodeColor={(node) => {
             switch (node.type) {
               case "fileNode":
@@ -386,11 +386,11 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
         />
 
         <Panel position="top-center">
-          <div className="bg-card/90 backdrop-blur-sm border border-border rounded-lg px-4 py-2 min-w-[220px]">
-            <h1 className="font-display font-semibold text-card-foreground text-sm">
-              Research Canvas
+          <div className="bg-card/95 backdrop-blur-sm border border-border rounded-md px-3 py-1.5 min-w-[205px]">
+            <h1 className="font-display font-semibold text-card-foreground text-xs tracking-tight">
+              Canvas
             </h1>
-            <p className="text-[10px] text-muted-foreground">
+            <p className="text-[10px] text-muted-foreground leading-tight">
               {localNodes.length} assets • {localEdges.length} structured links
             </p>
           </div>

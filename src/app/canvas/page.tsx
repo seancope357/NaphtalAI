@@ -435,25 +435,25 @@ export default function Home() {
   );
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-background p-3 md:p-4">
-      <div className="h-full min-h-0 rounded-2xl border border-border/80 bg-card/20 shadow-xl overflow-hidden flex flex-col">
-        <header className="h-14 shrink-0 border-b border-border/70 px-4 md:px-5 flex items-center justify-between bg-background/95 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg border border-border bg-card flex items-center justify-center">
-              <Layers className="w-4 h-4 text-primary" />
+    <main className="h-screen w-screen overflow-hidden bg-background p-2 md:p-3">
+      <div className="h-full min-h-0 rounded-xl border border-border/70 bg-card/25 shadow-xl overflow-hidden flex flex-col">
+        <header className="h-11 md:h-12 shrink-0 border-b border-border/70 px-3 md:px-4 flex items-center justify-between bg-background/95 backdrop-blur-sm">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="h-7 w-7 rounded-md border border-border bg-card flex items-center justify-center shrink-0">
+              <Layers className="w-3.5 h-3.5 text-primary" />
             </div>
-            <div>
-              <h1 className="text-sm font-semibold tracking-tight text-foreground">Naphtal Research Workspace</h1>
-              <p className="text-[11px] text-muted-foreground">Structured evidence mapping and analysis canvas</p>
+            <div className="min-w-0">
+              <h1 className="text-xs md:text-sm font-semibold tracking-tight text-foreground truncate">Naphtal Research Workspace</h1>
+              <p className="hidden lg:block text-[10px] text-muted-foreground truncate">Structured evidence mapping and analysis canvas</p>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-border bg-card text-[11px]">
-              <Network className="w-3.5 h-3.5 text-primary" />
+          <div className="hidden md:flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
+              <Network className="w-3 h-3 text-primary" />
               <span className="text-muted-foreground">{nodes.length} nodes</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-border bg-card text-[11px]">
-              <PanelLeftClose className="w-3.5 h-3.5 text-primary" />
+            <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
+              <PanelLeftClose className="w-3 h-3 text-primary" />
               <span className="text-muted-foreground">{edges.length} links</span>
             </div>
           </div>
@@ -472,7 +472,7 @@ export default function Home() {
                 onAddEntityToCanvas={handleAddEntityToCanvas}
               />
             </Panel>
-            <PanelResizeHandle className="w-2 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
+            <PanelResizeHandle className="w-1.5 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
             <Panel
               defaultSize={WORKSPACE_LAYOUT.panels.center.defaultSize}
               minSize={WORKSPACE_LAYOUT.panels.center.minSize}
@@ -483,7 +483,7 @@ export default function Home() {
                 onOpenFile={handleOpenFileFromCanvas}
               />
             </Panel>
-            <PanelResizeHandle className="w-2 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
+            <PanelResizeHandle className="w-1.5 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
             <Panel
               defaultSize={WORKSPACE_LAYOUT.panels.right.defaultSize}
               minSize={WORKSPACE_LAYOUT.panels.right.minSize}

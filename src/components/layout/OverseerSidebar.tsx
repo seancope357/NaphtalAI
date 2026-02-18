@@ -148,22 +148,22 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   const selectedNodeData = getNodesByIds(selectedNodes);
 
   return (
-    <div className="h-full flex flex-col bg-sidebar">
+    <div className="h-full flex flex-col bg-sidebar/90 backdrop-blur-sm">
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
-        <div className="flex items-center justify-between mb-1">
+      <div className="px-4 pt-4 pb-3 border-b border-sidebar-border/80">
+        <div className="flex items-center justify-between mb-0.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
-              <Eye className="w-4 h-4 text-primary" />
+            <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
+              <Eye className="w-3.5 h-3.5 text-primary" />
             </div>
-            <h2 className="font-display font-semibold text-sidebar-foreground tracking-tight">
+            <h2 className="font-display font-semibold text-sm text-sidebar-foreground tracking-tight">
               NaphtalAI
             </h2>
           </div>
           <div className="flex items-center gap-1">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+                <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary">
                   <MessageCircleQuestion className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
@@ -186,16 +186,16 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               variant="ghost"
               size="icon"
               className={cn(
-                "h-8 w-8 text-muted-foreground hover:text-primary transition-colors",
+                "h-7 w-7 text-muted-foreground hover:text-primary transition-colors",
                 showSettings && "text-primary bg-primary/10"
               )}
               onClick={() => setShowSettings(!showSettings)}
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground/70 mt-2 mb-4 pl-9">
+        <p className="text-[11px] text-muted-foreground/70 mt-1.5 mb-3 pl-8">
           AI-powered analysis and discovery
         </p>
 
@@ -226,7 +226,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/30">
+        <div className="px-4 py-4 border-b border-sidebar-border/80 bg-muted/30">
           <h3 className="text-sm font-medium mb-3">AI Provider</h3>
           <div className="flex gap-2.5">
             <Button
@@ -257,7 +257,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Context Display */}
       {selectedNodes.length > 0 && (
-        <div className="px-6 py-4 border-b border-sidebar-border bg-primary/5">
+        <div className="px-4 py-3 border-b border-sidebar-border/80 bg-primary/5">
           <div className="flex items-center gap-2 mb-2.5">
             <Link2 className="w-3.5 h-3.5 text-primary" />
             <span className="text-xs font-medium text-primary">Context · {selectedNodes.length} node{selectedNodes.length !== 1 ? "s" : ""}</span>
@@ -278,13 +278,13 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       )}
 
       {/* Quick Actions */}
-      <div className="px-5 py-4 border-b border-sidebar-border">
+      <div className="px-4 py-3 border-b border-sidebar-border/80">
         <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium mb-3">Quick Actions</p>
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start gap-2 pl-3"
+            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
             onClick={() => handleQuickAction("extract_entities")}
             disabled={isLoading}
           >
@@ -294,7 +294,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start gap-2 pl-3"
+            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
             onClick={() => handleQuickAction("connect")}
             disabled={isLoading}
           >
@@ -304,7 +304,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start gap-2 pl-3"
+            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
             onClick={() => handleQuickAction("analyze_symbol")}
             disabled={isLoading}
           >
@@ -314,7 +314,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs justify-start gap-2 pl-3"
+            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
             onClick={() => handleQuickAction("chat")}
             disabled={isLoading}
           >
@@ -325,7 +325,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 px-5 py-4">
+      <ScrollArea className="flex-1 px-4 py-3.5">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
             <div className="w-14 h-14 rounded-full bg-primary/10 ring-1 ring-primary/25 flex items-center justify-center mb-5">
@@ -355,7 +355,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="px-5 py-4 border-t border-sidebar-border">
+      <div className="px-4 py-3 border-t border-sidebar-border/80">
         <div className="relative">
           <Textarea
             value={input}

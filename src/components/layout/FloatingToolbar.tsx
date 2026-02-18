@@ -88,8 +88,8 @@ export default function FloatingToolbar({
 
   return (
     <TooltipProvider>
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-        <div className="flex items-center gap-0.5 bg-card/95 backdrop-blur-md border border-primary/20 rounded-lg p-1 shadow-lg">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
+        <div className="flex items-center gap-0.5 bg-card/95 backdrop-blur-md border border-border/80 rounded-xl p-1 shadow-xl">
           {/* Undo/Redo */}
           <Tooltip>
             <TooltipTrigger asChild>
