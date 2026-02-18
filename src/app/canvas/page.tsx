@@ -355,9 +355,26 @@ export default function Home() {
             );
           }
         } else {
+          const validationIssues = Array.isArray(data?.details?.issues)
+            ? data.details.issues
+            : [];
+          const issuePreview = validationIssues
+            .slice(0, 3)
+            .map((issue: any, index: number) => {
+              const missing = Array.isArray(issue?.missing) ? issue.missing.join(" + ") : "citations";
+              return `${index + 1}. ${issue?.slide || "Slide"} -> missing ${missing}`;
+            })
+            .join("\n");
+          const detailsMessage =
+            typeof data?.details?.message === "string"
+              ? data.details.message
+              : typeof data?.error === "string"
+              ? data.error
+              : "I encountered an error processing your request. Please try again.";
+
           addMessage(
             createAssistantMessage(
-              "I encountered an error processing your request. Please try again."
+              issuePreview ? `${detailsMessage}\n\n${issuePreview}` : detailsMessage
             )
           );
         }

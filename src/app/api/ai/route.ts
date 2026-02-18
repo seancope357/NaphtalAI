@@ -131,6 +131,98 @@ function buildGraphConstraintBlock(
   return `\n\nGraph constraints (authoritative):\n${graphJson}\n\nRules:\n- Treat edges as explicit relationship constraints.\n- Do not invent unsupported links between nodes.\n- Mark uncertain inferences as hypotheses.\n${modeSpecificInstruction}`;
 }
 
+interface CitationIssue {
+  slide: string;
+  claim: string;
+  missing: Array<"node" | "edge">;
+}
+
+interface CitationValidationResult {
+  valid: boolean;
+  checkedClaims: number;
+  issues: CitationIssue[];
+  message: string;
+}
+
+function validatePresentationCitations(markdown: string): CitationValidationResult {
+  const lines = markdown.split(/\r?\n/);
+  const issues: CitationIssue[] = [];
+  let checkedClaims = 0;
+  let currentSlide = "Unlabeled slide";
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    if (/^#{1,6}\s*/.test(line)) {
+      const heading = line.replace(/^#{1,6}\s*/, "").trim();
+      if (/slide\s*\d+/i.test(heading)) {
+        currentSlide = heading;
+      }
+      continue;
+    }
+
+    const isClaimLine =
+      /^[-*+]\s+/.test(line) ||
+      /^\d+\.\s+/.test(line) ||
+      /^claim\s*[:\-]/i.test(line);
+
+    if (!isClaimLine) continue;
+
+    const claim = line
+      .replace(/^[-*+]\s+/, "")
+      .replace(/^\d+\.\s+/, "")
+      .replace(/^claim\s*[:\-]\s*/i, "")
+      .trim();
+
+    if (!claim) continue;
+
+    checkedClaims += 1;
+
+    const hasNodeCitation = /\[N:[^\]]+\]/i.test(claim);
+    const hasEdgeCitation = /\[E:[^\]]+\]/i.test(claim);
+    const missing: Array<"node" | "edge"> = [];
+
+    if (!hasNodeCitation) missing.push("node");
+    if (!hasEdgeCitation) missing.push("edge");
+
+    if (missing.length > 0) {
+      issues.push({
+        slide: currentSlide,
+        claim,
+        missing,
+      });
+    }
+  }
+
+  if (checkedClaims === 0) {
+    return {
+      valid: false,
+      checkedClaims: 0,
+      issues: [],
+      message:
+        "Deck validation failed: no claim lines detected. Use bullet/numbered claim lines with [N:<nodeId>] and [E:<edgeId>] citations.",
+    };
+  }
+
+  if (issues.length > 0) {
+    return {
+      valid: false,
+      checkedClaims,
+      issues,
+      message:
+        "Deck validation failed: every slide claim must include both [N:<nodeId>] and [E:<edgeId>] citations.",
+    };
+  }
+
+  return {
+    valid: true,
+    checkedClaims,
+    issues: [],
+    message: "Deck citations validated.",
+  };
+}
+
 let zaiInstance: Awaited<ReturnType<typeof ZAI.create>> | null = null;
 
 async function getZAI() {
@@ -204,7 +296,7 @@ export async function POST(request: NextRequest) {
       case "presentation":
         messages.push({
           role: "user",
-          content: `Create a slide presentation outline from this research context.\n\nContext:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nRequirements:\n1. Provide 8-12 slides.\n2. Each slide includes: title, key points, suggested visual, and speaker notes.\n3. Every substantive claim must cite supporting node(s) as [N:<nodeId>].\n4. Relationship-based claims must also cite edge(s) as [E:<edgeId>].\n5. Include a final "Sources & Evidence Trail" slide.\n6. Prefer high-confidence edges and mark uncertain edges as hypotheses.\n\nOutput as clear markdown with sections per slide.`,
+          content: `Create a slide presentation outline from this research context.\n\nContext:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nRequirements:\n1. Provide 8-12 slides.\n2. Each slide includes: title, key points, suggested visual, and speaker notes.\n3. Every claim line must include BOTH citations: [N:<nodeId>] and [E:<edgeId>].\n4. Include a final "Sources & Evidence Trail" slide.\n5. Prefer high-confidence edges and mark uncertain edges as hypotheses.\n\nOutput as clear markdown with sections per slide.`,
         });
         break;
       case "report":
@@ -261,6 +353,25 @@ export async function POST(request: NextRequest) {
       }
     } else {
       parsedResponse = response;
+    }
+
+    if (mode === "presentation" && typeof parsedResponse === "string") {
+      const validation = validatePresentationCitations(parsedResponse);
+      if (!validation.valid) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "citation_validation_failed",
+            details: {
+              message: validation.message,
+              checkedClaims: validation.checkedClaims,
+              issues: validation.issues.slice(0, 24),
+            },
+            mode,
+          },
+          { status: 422 }
+        );
+      }
     }
 
     return NextResponse.json({
