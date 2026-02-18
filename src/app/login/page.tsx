@@ -14,6 +14,7 @@ import {
   MailCheck,
   MoveLeft,
 } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 import type { Database } from "@/database.types";
 
@@ -169,7 +170,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:44px_44px]" />
       </div>
 
-      <header className="relative z-10 mx-auto flex h-12 w-full max-w-6xl items-center px-4 md:px-8">
+      <header className="relative z-10 mx-auto flex h-12 w-full max-w-6xl items-center justify-between px-4 md:px-8">
         <Link
           href="/"
           className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-background/75 px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:border-border hover:text-foreground"
@@ -177,6 +178,7 @@ export default function LoginPage() {
           <MoveLeft className="h-3.5 w-3.5" strokeWidth={2.2} />
           Back to landing
         </Link>
+        <ModeToggle className="border-border/70 bg-background/75 text-foreground hover:bg-accent" />
       </header>
 
       <main className="relative z-10 mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-6xl items-center px-4 pb-8 md:px-8 md:pb-12">

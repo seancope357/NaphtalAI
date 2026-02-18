@@ -7,6 +7,7 @@ import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
 import DocumentViewer from "@/components/layout/DocumentViewer";
 import Trestleboard from "@/components/canvas/Trestleboard";
+import { ModeToggle } from "@/components/mode-toggle";
 import { useCanvasStore, createEntityNode, createEdge, createDocumentNode } from "@/stores/canvasStore";
 import { useChatStore, createAssistantMessage } from "@/stores/chatStore";
 import { useFileStore } from "@/stores/fileStore";
@@ -447,15 +448,18 @@ export default function Home() {
               <p className="hidden lg:block text-[10px] text-muted-foreground truncate">Structured evidence mapping and analysis canvas</p>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
-              <Crosshair className="w-3 h-3 text-primary" strokeWidth={2.2} />
-              <span className="text-muted-foreground">{nodes.length} nodes</span>
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
+                <Crosshair className="w-3 h-3 text-primary" strokeWidth={2.2} />
+                <span className="text-muted-foreground">{nodes.length} nodes</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
+                <Waypoints className="w-3 h-3 text-primary" strokeWidth={2.2} />
+                <span className="text-muted-foreground">{edges.length} links</span>
+              </div>
             </div>
-            <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
-              <Waypoints className="w-3 h-3 text-primary" strokeWidth={2.2} />
-              <span className="text-muted-foreground">{edges.length} links</span>
-            </div>
+            <ModeToggle className="border-border bg-card text-foreground hover:bg-accent" />
           </div>
         </header>
 

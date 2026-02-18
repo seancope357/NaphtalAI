@@ -11,6 +11,7 @@ import {
   ScanSearch,
   Waypoints,
 } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const featureCards = [
   {
@@ -83,9 +84,10 @@ export default function LandingExperience() {
             <span className="text-sm font-semibold tracking-tight">NaphtalAI</span>
           </div>
           <div className="flex items-center gap-2">
+            <ModeToggle className="border-border bg-card text-foreground hover:bg-accent" />
             <Link
               href="/login"
-              className="inline-flex h-9 items-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              className="hidden h-9 items-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent sm:inline-flex"
             >
               Sign In
             </Link>
