@@ -74,9 +74,14 @@ export function buildPdfBlobUrl(content: string | ArrayBuffer | null | undefined
   return URL.createObjectURL(blob);
 }
 
-export function buildPdfViewerUrl(source: string, pageNumber: number, zoom: number): string {
+export function buildPdfViewerUrl(
+  source: string,
+  pageNumber: number,
+  zoom: number,
+  viewMode: "FitH" | "Fit" = "FitH"
+): string {
   const separator = source.includes("#") ? "&" : "#";
   const safePage = Math.max(1, pageNumber);
   const safeZoom = Math.max(25, Math.min(500, Math.round(zoom)));
-  return `${source}${separator}page=${safePage}&zoom=${safeZoom}&toolbar=0&navpanes=0&view=FitH`;
+  return `${source}${separator}page=${safePage}&zoom=${safeZoom}&toolbar=0&navpanes=0&view=${viewMode}`;
 }
