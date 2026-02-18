@@ -208,7 +208,7 @@ export default function LandingExperience() {
                           <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card">
                             <Icon className="h-4 w-4 text-primary" strokeWidth={2.2} />
                           </div>
-                          <span className="rounded-md border border-primary/25 bg-primary/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                          <span className="rounded-md border border-primary/25 bg-primary/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary dark:text-white">
                             Source-bound
                           </span>
                         </div>
