@@ -148,7 +148,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   const selectedNodeData = getNodesByIds(selectedNodes);
 
   return (
-    <div className="h-full flex flex-col bg-sidebar border-l border-sidebar-border">
+    <div className="h-full flex flex-col bg-sidebar">
       {/* Header */}
       <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between mb-1">

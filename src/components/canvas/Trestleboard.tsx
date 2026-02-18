@@ -327,7 +327,8 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
   }, [localNodes, localEdges]);
 
   return (
-    <div ref={reactFlowWrapper} className="w-full h-full relative">
+    <div ref={reactFlowWrapper} className="w-full h-full relative p-2 md:p-3 bg-background">
+      <div className="w-full h-full rounded-xl border border-border/80 overflow-hidden bg-background/70 backdrop-blur-sm">
       <ReactFlow
         nodes={localNodes}
         edges={localEdges}
@@ -403,6 +404,7 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
           </Panel>
         )}
       </ReactFlow>
+      </div>
 
       <FloatingToolbar
         onAddNote={handleAddNote}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Layers, PanelLeftClose, Network } from "lucide-react";
 
 import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
@@ -434,39 +435,65 @@ export default function Home() {
   );
 
   return (
-    <main className="h-screen w-screen flex overflow-hidden bg-background">
-      <PanelGroup direction="horizontal">
-        <Panel
-          defaultSize={WORKSPACE_LAYOUT.panels.left.defaultSize}
-          minSize={WORKSPACE_LAYOUT.panels.left.minSize}
-          maxSize={WORKSPACE_LAYOUT.panels.left.maxSize}
-        >
-          <ArchivesSidebar
-            onDragStart={handleDragStart}
-            onEntityClick={handleEntityClick}
-            onAddEntityToCanvas={handleAddEntityToCanvas}
-          />
-        </Panel>
-        <PanelResizeHandle className="w-1.5 bg-sidebar-border hover:bg-primary/50 transition-colors duration-200 cursor-col-resize" />
-        <Panel
-          defaultSize={WORKSPACE_LAYOUT.panels.center.defaultSize}
-          minSize={WORKSPACE_LAYOUT.panels.center.minSize}
-        >
-          <Trestleboard
-            onNodeSelect={handleNodeSelect}
-            onAnalyzeRequest={handleAnalyzeRequest}
-            onOpenFile={handleOpenFileFromCanvas}
-          />
-        </Panel>
-        <PanelResizeHandle className="w-1.5 bg-sidebar-border hover:bg-primary/50 transition-colors duration-200 cursor-col-resize" />
-        <Panel
-          defaultSize={WORKSPACE_LAYOUT.panels.right.defaultSize}
-          minSize={WORKSPACE_LAYOUT.panels.right.minSize}
-          maxSize={WORKSPACE_LAYOUT.panels.right.maxSize}
-        >
-          <OverseerSidebar onAnalyze={handleAnalyze} />
-        </Panel>
-      </PanelGroup>
+    <main className="h-screen w-screen overflow-hidden bg-background p-3 md:p-4">
+      <div className="h-full min-h-0 rounded-2xl border border-border/80 bg-card/20 shadow-xl overflow-hidden flex flex-col">
+        <header className="h-14 shrink-0 border-b border-border/70 px-4 md:px-5 flex items-center justify-between bg-background/95 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-lg border border-border bg-card flex items-center justify-center">
+              <Layers className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-sm font-semibold tracking-tight text-foreground">Naphtal Research Workspace</h1>
+              <p className="text-[11px] text-muted-foreground">Structured evidence mapping and analysis canvas</p>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-2.5">
+            <div className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-border bg-card text-[11px]">
+              <Network className="w-3.5 h-3.5 text-primary" />
+              <span className="text-muted-foreground">{nodes.length} nodes</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-border bg-card text-[11px]">
+              <PanelLeftClose className="w-3.5 h-3.5 text-primary" />
+              <span className="text-muted-foreground">{edges.length} links</span>
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-1 min-h-0">
+          <PanelGroup direction="horizontal">
+            <Panel
+              defaultSize={WORKSPACE_LAYOUT.panels.left.defaultSize}
+              minSize={WORKSPACE_LAYOUT.panels.left.minSize}
+              maxSize={WORKSPACE_LAYOUT.panels.left.maxSize}
+            >
+              <ArchivesSidebar
+                onDragStart={handleDragStart}
+                onEntityClick={handleEntityClick}
+                onAddEntityToCanvas={handleAddEntityToCanvas}
+              />
+            </Panel>
+            <PanelResizeHandle className="w-2 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
+            <Panel
+              defaultSize={WORKSPACE_LAYOUT.panels.center.defaultSize}
+              minSize={WORKSPACE_LAYOUT.panels.center.minSize}
+            >
+              <Trestleboard
+                onNodeSelect={handleNodeSelect}
+                onAnalyzeRequest={handleAnalyzeRequest}
+                onOpenFile={handleOpenFileFromCanvas}
+              />
+            </Panel>
+            <PanelResizeHandle className="w-2 bg-sidebar-border/80 hover:bg-primary/40 transition-colors duration-200 cursor-col-resize" />
+            <Panel
+              defaultSize={WORKSPACE_LAYOUT.panels.right.defaultSize}
+              minSize={WORKSPACE_LAYOUT.panels.right.minSize}
+              maxSize={WORKSPACE_LAYOUT.panels.right.maxSize}
+            >
+              <OverseerSidebar onAnalyze={handleAnalyze} />
+            </Panel>
+          </PanelGroup>
+        </div>
+      </div>
 
       {/* Document Viewer Overlay */}
       <DocumentViewer

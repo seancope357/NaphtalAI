@@ -148,7 +148,7 @@ export default function ArchivesSidebar({
   );
 
   return (
-    <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
+    <div className="h-full flex flex-col bg-sidebar">
       {/* Header */}
       <div className="px-6 pt-6 pb-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between gap-2 mb-1">
