@@ -109,7 +109,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
   const isText = currentFile.type === "txt" || currentFile.type === "json" || currentFile.type === "csv";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-5">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-background/90 backdrop-blur-sm"
@@ -117,9 +117,9 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
       />
       
       {/* Viewer Container */}
-      <div className="relative z-10 flex flex-col max-w-[90vw] max-h-[90vh] bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
+      <div className="relative z-10 flex h-[calc(100vh-1.5rem)] w-full max-w-[1700px] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-2xl md:h-[calc(100vh-2.5rem)]">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted/30 px-4 py-3">
           <div className="flex items-center gap-3">
             <FileScan className="w-5 h-5 text-primary" strokeWidth={2.2} />
             <div>
@@ -137,7 +137,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {/* Zoom Controls */}
             <div className="flex items-center gap-1 mr-2">
               <Button
@@ -219,20 +219,15 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
         </div>
         
         {/* Content Area */}
-        <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-muted/10">
-          {/* PDF Placeholder - will use iframe for PDFs */}
+        <div className="flex-1 overflow-auto bg-muted/10">
+          {/* PDF Preview */}
           {isPdf && (
-            <div className="w-full h-full overflow-auto flex items-start justify-center p-4">
+            <div className="h-full w-full p-3 md:p-4">
               {pdfSource ? (
                 <iframe
                   src={buildPdfViewerUrl(pdfSource, pageNumber, scale * 100)}
                   title={currentFile.name}
-                  className="border border-border rounded-lg shadow-lg bg-white transition-all"
-                  style={{
-                    width: `${Math.max(70, Math.round(scale * 100))}%`,
-                    minWidth: "560px",
-                    height: `${Math.max(680, Math.round(scale * 980))}px`,
-                  }}
+                  className="h-full w-full rounded-lg border border-border bg-white shadow-lg transition-all"
                 />
               ) : (
                 <div className="text-center p-8">
@@ -254,32 +249,35 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
           
           {/* Image Preview */}
           {isImage && fileContent && (
-            <img
-              src={fileContent as string}
-              alt={currentFile.name}
-              style={{ 
-                transform: `scale(${scale})`,
-                transformOrigin: "center",
-                maxHeight: "70vh",
-                objectFit: "contain"
-              }}
-              className="shadow-lg rounded max-w-full"
-            />
+            <div className="flex h-full w-full items-center justify-center p-4">
+              <img
+                src={fileContent as string}
+                alt={currentFile.name}
+                style={{
+                  transform: `scale(${scale})`,
+                  transformOrigin: "center",
+                  maxHeight: "calc(100vh - 210px)",
+                  objectFit: "contain",
+                }}
+                className="max-w-full rounded shadow-lg"
+              />
+            </div>
           )}
           
           {/* Text Preview */}
           {isText && fileContent && (
-            <pre 
-              className="font-mono text-sm text-card-foreground bg-muted/30 p-4 rounded-lg overflow-auto border border-border"
-              style={{ 
-                maxWidth: "60vw",
-                maxHeight: "60vh"
-              }}
-            >
-              {typeof fileContent === "string" 
-                ? fileContent.substring(0, 5000) + (fileContent.length > 5000 ? "\n\n... (truncated)" : "")
-                : "Binary content"}
-            </pre>
+            <div className="flex h-full w-full items-start justify-center p-4">
+              <pre
+                className="w-full max-w-[1200px] overflow-auto rounded-lg border border-border bg-muted/30 p-4 font-mono text-sm text-card-foreground"
+                style={{
+                  maxHeight: "calc(100vh - 230px)",
+                }}
+              >
+                {typeof fileContent === "string"
+                  ? fileContent.substring(0, 5000) + (fileContent.length > 5000 ? "\n\n... (truncated)" : "")
+                  : "Binary content"}
+              </pre>
+            </div>
           )}
         </div>
         

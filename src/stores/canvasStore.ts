@@ -426,14 +426,15 @@ export function createDocumentNode(
   size?: { width?: number; height?: number }
 ): CanvasNode {
   const fileType = inferFileTypeFromName(fileName);
+  const nodeId = uuidv4();
   return {
-    id: uuidv4(),
+    id: nodeId,
     type: "fileNode",
     position,
     width: size?.width || NODE_DIMENSIONS.file.defaultWidth,
     height: size?.height || NODE_DIMENSIONS.file.defaultHeight,
     data: {
-      id: uuidv4(),
+      id: nodeId,
       type: "file",
       label: fileName,
       content: content || "",
@@ -455,14 +456,15 @@ export function createNoteNode(
   position: { x: number; y: number },
   content: string = ""
 ): CanvasNode {
+  const nodeId = uuidv4();
   return {
-    id: uuidv4(),
+    id: nodeId,
     type: "noteNode",
     position,
     width: NODE_DIMENSIONS.note.defaultWidth,
     height: NODE_DIMENSIONS.note.defaultHeight,
     data: {
-      id: uuidv4(),
+      id: nodeId,
       type: "note",
       label: "Note",
       content,
@@ -483,14 +485,15 @@ export function createEntityNode(
   sourceId?: string,
   context?: string
 ): CanvasNode {
+  const nodeId = uuidv4();
   return {
-    id: uuidv4(),
+    id: nodeId,
     type: "entityNode",
     position,
     width: NODE_DIMENSIONS.entity.defaultWidth,
     height: NODE_DIMENSIONS.entity.defaultHeight,
     data: {
-      id: uuidv4(),
+      id: nodeId,
       type: "entity",
       label: name,
       content: context || "",

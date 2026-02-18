@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { PanelsTopLeft, Crosshair, Waypoints } from "lucide-react";
+import { PanelsTopLeft, Crosshair, Waypoints, LayoutGrid } from "lucide-react";
 
 import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
@@ -36,6 +36,8 @@ export default function Home() {
     addEdge,
     getNodeById,
     getNodesByIds,
+    showGrid,
+    setShowGrid,
   } = useCanvasStore();
 
   const { addMessage, setLoading } = useChatStore();
@@ -459,6 +461,18 @@ export default function Home() {
                 <span className="text-muted-foreground">{edges.length} links</span>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setShowGrid(!showGrid)}
+              className={`inline-flex h-9 items-center gap-1.5 rounded-md border px-2.5 text-[11px] font-semibold transition-colors ${
+                showGrid
+                  ? "border-primary/40 bg-primary/10 text-primary"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <LayoutGrid className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {showGrid ? "Grid On" : "Grid Off"}
+            </button>
             <ModeToggle className="border-border bg-card text-foreground hover:bg-accent" />
           </div>
         </header>

@@ -234,14 +234,19 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
 
   // Handle custom events
   useEffect(() => {
+    const resolveNode = (incomingId: string) =>
+      nodes.find((n) => n.id === incomingId || n.data.id === incomingId);
+
+    const resolveNodeId = (incomingId: string) => resolveNode(incomingId)?.id ?? incomingId;
+
     const handleAnalyzeNode = (e: CustomEvent<{ nodeId: string }>) => {
-      onAnalyzeRequest(e.detail.nodeId);
+      onAnalyzeRequest(resolveNodeId(e.detail.nodeId));
     };
 
     const handlePinNode = (e: CustomEvent<{ nodeId: string }>) => {
-      const node = nodes.find((n) => n.data.id === e.detail.nodeId || n.id === e.detail.nodeId);
+      const node = resolveNode(e.detail.nodeId);
       if (node) {
-        updateNode(node.data.id, {
+        updateNode(node.id, {
           metadata: {
             ...node.data.metadata,
             isPinned: !node.data.metadata.isPinned,
@@ -251,11 +256,14 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
     };
 
     const handleDeleteNode = (e: CustomEvent<{ nodeId: string }>) => {
-      deleteNode(e.detail.nodeId);
+      deleteNode(resolveNodeId(e.detail.nodeId));
     };
 
     const handleUpdateNodeContent = (e: CustomEvent<{ nodeId: string; content: string; label: string }>) => {
-      updateNode(e.detail.nodeId, { content: e.detail.content, label: e.detail.label });
+      updateNode(resolveNodeId(e.detail.nodeId), {
+        content: e.detail.content,
+        label: e.detail.label,
+      });
     };
 
     const handleUpdateEdgeLabel = (e: CustomEvent<{ edgeId: string; label: string }>) => {
@@ -263,7 +271,10 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
     };
 
     const handleResizeNode = (e: CustomEvent<{ nodeId: string; width: number; height: number }>) => {
-      updateNodeSize(e.detail.nodeId, { width: e.detail.width, height: e.detail.height });
+      updateNodeSize(resolveNodeId(e.detail.nodeId), {
+        width: e.detail.width,
+        height: e.detail.height,
+      });
     };
 
     const handleOpenFile = (e: CustomEvent<{ fileId: string }>) => {

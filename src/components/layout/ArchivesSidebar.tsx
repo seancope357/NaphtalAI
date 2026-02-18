@@ -282,6 +282,12 @@ export default function ArchivesSidebar({
                         draggable
                         onDragStart={(e) => handleDragStart(e, file)}
                         onDoubleClick={() => handleOpenFile(file)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleOpenFile(file);
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        title="Double-click to open full viewer"
                         className={cn(
                           "group flex items-center gap-3 p-3 rounded-lg",
                           "bg-transparent border border-transparent",
