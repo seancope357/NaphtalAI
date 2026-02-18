@@ -15,31 +15,31 @@ import {
 const featureCards = [
   {
     icon: PanelsTopLeft,
-    title: "Illumination Canvas",
+    title: "Structured Canvas",
     description:
-      "Map documents, notes, and ideas on a structured infinite canvas designed to reveal meaning, not just store fragments.",
+      "Map documents, notes, and ideas on an infinite canvas designed for analytical structure instead of visual clutter.",
   },
   {
     icon: BotMessageSquare,
-    title: "Knowledge Dialogue",
+    title: "Analytical Dialogue",
     description:
-      "Interrogate your material with AI to move from raw references toward coherent understanding and clear insight.",
+      "Interrogate your material with AI to move from raw references toward coherent interpretation and usable conclusions.",
   },
   {
     icon: FileStack,
-    title: "Scalable Source Library",
+    title: "Scalable Source Viewer",
     description:
       "Open PDFs and source files as first-class study objects with smooth zoom, navigation, and pin-to-canvas composition.",
   },
   {
     icon: Waypoints,
-    title: "Knowledge Architecture",
+    title: "Connection Logic",
     description:
-      "Connections are validated with explicit semantics so your graph reflects thought structure, not visual clutter.",
+      "Connections are validated with explicit semantics so your graph reflects reasoning structure, not guesswork.",
   },
   {
     icon: ScanSearch,
-    title: "Pattern Discovery",
+    title: "Pattern Exploration",
     description:
       "Trace motifs, entities, and ideas across the graph, then bring discoveries back into context for deeper synthesis.",
   },
@@ -62,7 +62,7 @@ const workflowSteps = [
   },
   {
     title: "Illuminate",
-    text: "Use scoped AI analysis to surface insight, clarify narratives, and produce reports that communicate real understanding.",
+    text: "Use scoped AI analysis to clarify narratives, surface implications, and produce reports that support confident decisions.",
   },
 ];
 
@@ -102,16 +102,16 @@ export default function LandingExperience() {
       <main className="relative mx-auto max-w-7xl px-4 pb-20 pt-12 md:px-8 md:pt-14">
         <section className="mx-auto max-w-5xl text-center">
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
-            Knowledge Illumination Platform
+            Research Intelligence Platform
           </p>
 
           <h1 className="mx-auto mt-5 max-w-[18ch] text-4xl font-semibold leading-tight tracking-tight text-balance md:text-6xl">
-            Turn scattered sources into living knowledge and clear illumination.
+            Build clarity from complex source material.
           </h1>
 
           <p className="mx-auto mt-5 max-w-[65ch] text-sm text-muted-foreground md:text-base">
-            NaphtalAI helps you move from collection to comprehension. Build a structured knowledge
-            graph, connect ideas with intent, and use AI to surface the meaning behind the material.
+            NaphtalAI turns dense documents into connected context. Structure relationships, test
+            interpretations, and generate outputs that are defensible, clear, and presentation-ready.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -119,7 +119,7 @@ export default function LandingExperience() {
               href="/login?next=/canvas"
               className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
             >
-              Enter the Knowledge Workspace
+              Enter the Research Workspace
               <ArrowRightFromLine className="h-4 w-4" strokeWidth={2.2} />
             </Link>
             <Link
@@ -137,7 +137,7 @@ export default function LandingExperience() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <LockKeyhole className="h-3.5 w-3.5 text-primary" strokeWidth={2.2} />
-              Knowledge-first structure
+              Structured reasoning graph
             </span>
           </div>
 
@@ -172,7 +172,7 @@ export default function LandingExperience() {
         <section className="mx-auto mt-14 max-w-6xl">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">Core capabilities</h2>
           <p className="mx-auto mt-2 max-w-[62ch] text-center text-sm text-muted-foreground md:text-base">
-            A modern system for turning archival material into coherent knowledge and communicable insight.
+            A modern system for transforming archival material into interpretable models and communicable outcomes.
           </p>
 
           <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -199,7 +199,7 @@ export default function LandingExperience() {
         <section className="mx-auto mt-14 max-w-6xl">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">Workflow</h2>
           <p className="mx-auto mt-2 max-w-[56ch] text-center text-sm text-muted-foreground md:text-base">
-            A clear path from source material to understanding, interpretation, and illumination.
+            A clear path from source material to synthesis, interpretation, and delivery.
           </p>
           <div className="mt-8 grid gap-3 md:grid-cols-3">
             {workflowSteps.map((step, index) => (
@@ -217,9 +217,9 @@ export default function LandingExperience() {
         <div className="mx-auto mt-14 h-px w-full max-w-6xl bg-border/60" />
 
         <section className="mx-auto mt-14 max-w-4xl rounded-2xl border border-border/70 bg-card/70 p-6 text-center shadow-xl md:p-8">
-          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to research for understanding, not noise?</h2>
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to move from accumulation to clarity?</h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-sm text-muted-foreground md:text-base">
-            Sign in to use the full workspace and convert raw source material into structured, usable knowledge.
+            Sign in to use the full workspace and turn raw source material into structured analysis you can act on.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link
