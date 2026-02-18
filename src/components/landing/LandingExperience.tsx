@@ -143,7 +143,7 @@ export default function LandingExperience() {
             </span>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-border/70 bg-card/75 p-4 text-left shadow-2xl backdrop-blur-sm md:p-5">
+          <div className="mt-10 rounded-2xl border border-border/70 bg-card/95 p-4 text-left shadow-2xl backdrop-blur-sm md:p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="text-sm font-semibold">Workspace Preview</div>
               <div className="rounded-md border border-border bg-background px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground">
@@ -151,16 +151,16 @@ export default function LandingExperience() {
               </div>
             </div>
             <div className="grid gap-3 md:grid-cols-12">
-              <div className="rounded-lg border border-border bg-background p-3 md:col-span-7">
+              <div className="rounded-lg border border-border bg-card p-3 md:col-span-7">
                 <div className="mb-2 text-xs font-semibold text-foreground">Pinned Source Material</div>
                 <div className="h-28 rounded-md border border-border/70 bg-muted/20" />
               </div>
               <div className="grid gap-3 md:col-span-5">
-                <div className="rounded-lg border border-border bg-background p-3">
+                <div className="rounded-lg border border-border bg-card p-3">
                   <div className="text-xs font-semibold">Concepts</div>
                   <p className="mt-1 text-[11px] text-muted-foreground">Themes, symbols, people, places</p>
                 </div>
-                <div className="rounded-lg border border-border bg-background p-3">
+                <div className="rounded-lg border border-border bg-card p-3">
                   <div className="text-xs font-semibold">Insights</div>
                   <p className="mt-1 text-[11px] text-muted-foreground">Structured relationships + interpretation</p>
                 </div>
@@ -172,7 +172,7 @@ export default function LandingExperience() {
         <div className="mx-auto mt-14 h-px w-full max-w-6xl bg-border/60" />
 
         <section className="mx-auto mt-14 max-w-6xl">
-          <div className="rounded-2xl border border-border/70 bg-card/70 p-5 shadow-2xl backdrop-blur-sm md:p-8">
+          <div className="rounded-2xl border border-border/70 bg-card/95 p-5 shadow-2xl backdrop-blur-sm md:p-8">
             <div className="grid gap-6 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
@@ -186,10 +186,10 @@ export default function LandingExperience() {
                   keeps every interpretation connected to its source material so exports stay defensible.
                 </p>
                 <div className="mt-4 grid gap-2 text-xs text-muted-foreground">
-                  <div className="rounded-md border border-border/70 bg-background/70 px-3 py-2">
+                  <div className="rounded-md border border-border/70 bg-card/90 px-3 py-2">
                     Citation rule: every generated claim must reference source evidence.
                   </div>
-                  <div className="rounded-md border border-border/70 bg-background/70 px-3 py-2">
+                  <div className="rounded-md border border-border/70 bg-card/90 px-3 py-2">
                     Reports and slide outputs inherit source links from the canvas graph.
                   </div>
                 </div>
@@ -202,7 +202,7 @@ export default function LandingExperience() {
                     return (
                       <article
                         key={feature.title}
-                        className="group rounded-xl border border-border/70 bg-background/70 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-xl"
+                        className="group rounded-xl border border-border/70 bg-card/95 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-xl"
                       >
                         <div className="mb-3 flex items-center justify-between">
                           <div className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card">
@@ -221,7 +221,7 @@ export default function LandingExperience() {
               </div>
             </div>
 
-            <div className="mt-8 rounded-xl border border-border/70 bg-background/70 p-4 md:p-5">
+            <div className="mt-8 rounded-xl border border-border/70 bg-card/95 p-4 md:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-sm font-semibold tracking-tight md:text-base">Citation Guardrails Workflow</h3>
                 <span className="rounded-md border border-primary/25 bg-primary/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
@@ -230,7 +230,7 @@ export default function LandingExperience() {
               </div>
               <div className="mt-4 grid gap-3 md:grid-cols-3">
                 {workflowSteps.map((step, index) => (
-                  <article key={step.title} className="rounded-lg border border-border/70 bg-card/80 p-4">
+                  <article key={step.title} className="rounded-lg border border-border/70 bg-card/95 p-4">
                     <div className="mb-3 inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-primary/35 bg-primary/10 px-1.5 text-[11px] font-semibold text-primary">
                       0{index + 1}
                     </div>
@@ -245,7 +245,7 @@ export default function LandingExperience() {
 
         <div className="mx-auto mt-14 h-px w-full max-w-6xl bg-border/60" />
 
-        <section className="mx-auto mt-14 max-w-4xl rounded-2xl border border-border/70 bg-card/70 p-6 text-center shadow-xl md:p-8">
+        <section className="mx-auto mt-14 max-w-4xl rounded-2xl border border-border/70 bg-card/95 p-6 text-center shadow-xl md:p-8">
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to move from accumulation to clarity?</h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-sm text-muted-foreground md:text-base">
             Sign in to use the full workspace and turn raw source material into structured analysis you can act on.
