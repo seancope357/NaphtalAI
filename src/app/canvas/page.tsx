@@ -444,7 +444,7 @@ export default function Home() {
               <PanelsTopLeft className="w-3.5 h-3.5 text-primary" strokeWidth={2.2} />
             </div>
             <div className="min-w-0">
-              <h1 className="text-xs md:text-sm font-semibold tracking-tight text-foreground truncate">Naphtal Research Workspace</h1>
+              <h1 className="text-xs md:text-sm font-semibold tracking-tight text-foreground truncate">NaphtalAI Research Workspace</h1>
               <p className="hidden lg:block text-[10px] text-muted-foreground truncate">Structured evidence mapping and analysis canvas</p>
             </div>
           </div>
