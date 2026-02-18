@@ -355,7 +355,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="px-4 py-4 border-t border-sidebar-border">
+      <div className="px-5 py-4 border-t border-sidebar-border">
         <div className="relative">
           <Textarea
             value={input}

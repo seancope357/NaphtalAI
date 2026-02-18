@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef, useEffect, useState } from "react";
 import {
   ReactFlow,
   Background,
@@ -52,6 +52,15 @@ interface TrestleboardProps {
 function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: TrestleboardProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition, fitView, zoomIn, zoomOut } = useReactFlow();
+
+  // Read grid color from design system CSS variable
+  const [gridColor, setGridColor] = useState<string>("#404040");
+  useEffect(() => {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue("--muted-foreground")
+      .trim();
+    if (color) setGridColor(color);
+  }, []);
 
   // Initialize keyboard shortcuts
   useKeyboardShortcuts();
@@ -309,7 +318,7 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
       >
         {showGrid && (
           <Background
-            color="#fbbf24"
+            color={gridColor}
             gap={gridSize}
             size={1.5}
             className="!bg-background"

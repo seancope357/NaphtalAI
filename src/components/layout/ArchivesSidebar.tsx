@@ -195,7 +195,7 @@ export default function ArchivesSidebar({
           <TabsContent value="files" className="h-full m-0 data-[state=inactive]:hidden">
             <div className="h-full flex flex-col">
               {/* Search */}
-              <div className="px-4 py-3 border-b border-sidebar-border">
+              <div className="px-5 py-3 border-b border-sidebar-border">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
                   <Input
@@ -210,7 +210,7 @@ export default function ArchivesSidebar({
               {/* Upload Zone */}
               <div
                 className={cn(
-                  "mx-4 my-3 p-5 border border-dashed rounded-lg transition-all duration-200 cursor-pointer",
+                  "mx-5 my-3 p-5 border border-dashed rounded-lg transition-all duration-200 cursor-pointer",
                   "flex flex-col items-center justify-center gap-2",
                   isDragging
                     ? "border-primary bg-primary/8 scale-[1.01]"
@@ -249,7 +249,7 @@ export default function ArchivesSidebar({
               </div>
 
               {/* File List */}
-              <ScrollArea className="flex-1 px-3">
+              <ScrollArea className="flex-1 px-4">
                 {filteredFiles.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-14 text-center">
                     <div className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center mb-4">
