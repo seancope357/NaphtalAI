@@ -514,12 +514,16 @@ export function createEdge(
   targetId: string,
   label?: string,
   style: ConnectionStyle = "red-string",
-  metadata?: Partial<EdgeData>
+  metadata?: Partial<EdgeData>,
+  sourceHandle?: string | null,
+  targetHandle?: string | null
 ): CanvasEdge {
   return {
     id: uuidv4(),
     source: sourceId,
     target: targetId,
+    sourceHandle: sourceHandle ?? undefined,
+    targetHandle: targetHandle ?? undefined,
     type: "customEdge",
     animated: false,
     data: {

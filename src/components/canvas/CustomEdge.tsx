@@ -28,9 +28,21 @@ const getDroopyPath = ({
   const dx = targetX - sourceX;
   const dy = targetY - sourceY;
   const distance = Math.sqrt(dx * dx + dy * dy);
-  const controlPointX = (sourceX + targetX) / 2;
-  const controlPointY = (sourceY + targetY) / 2 + distance * droopiness;
-  return `M ${sourceX},${sourceY} Q ${controlPointX},${controlPointY} ${targetX},${targetY}`;
+  const sag = distance * droopiness;
+
+  const cp1x = sourceX + dx * 0.25;
+  const cp2x = sourceX + dx * 0.75;
+  const cp1y = sourceY + sag;
+  const cp2y = targetY + sag;
+
+  const labelX = (sourceX + targetX) / 2;
+  const labelY = (sourceY + targetY) / 2 + sag * 0.7;
+
+  return {
+    path: `M ${sourceX},${sourceY} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${targetX},${targetY}`,
+    labelX,
+    labelY,
+  };
 };
 
 
@@ -53,10 +65,8 @@ function CustomEdge({
   const [label, setLabel] = useState(edgeData.label || "");
   const [edgePath, labelX, labelY] = droopiness > 0
     ? (() => {
-        const path = getDroopyPath({ sourceX, sourceY, targetX, targetY, droopiness });
-        const labelX = (sourceX + targetX) / 2;
-        const labelY = (sourceY + targetY) / 2 + Math.sqrt(Math.pow(targetX - sourceX, 2) + Math.pow(targetY - sourceY, 2)) * droopiness / 1.5;
-        return [path, labelX, labelY];
+        const gravityPath = getDroopyPath({ sourceX, sourceY, targetX, targetY, droopiness });
+        return [gravityPath.path, gravityPath.labelX, gravityPath.labelY] as const;
       })()
     : getBezierPath({
         sourceX,

@@ -135,11 +135,13 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
       <Handle
         type="target"
         position={Position.Left}
+        id="left"
         className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !left-[-7px]"
       />
       <Handle
         type="source"
         position={Position.Right}
+        id="right"
         className="!w-3 !h-3 !bg-lodge-blue !border-2 !border-background !right-[-7px]"
       />
       <Handle

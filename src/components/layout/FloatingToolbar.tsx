@@ -124,25 +124,40 @@ export default function FloatingToolbar({
             </TooltipContent>
           </Tooltip>
 
-          {/* Droopiness control */}
+          {/* String gravity slider */}
+          <div className="hidden md:flex items-center gap-2 px-2">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+              Gravity
+            </p>
+            <Slider
+              value={[droopiness]}
+              onValueChange={(value) => setDroopiness(value[0])}
+              max={1}
+              step={0.01}
+              className="w-24"
+            />
+            <span className="w-8 text-right text-[10px] text-muted-foreground">
+              {droopiness.toFixed(2)}
+            </span>
+          </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className="h-8 w-8 md:hidden"
               >
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.35355 2.64645C3.15829 2.45118 2.84171 2.45118 2.64645 2.64645C2.45118 2.84171 2.45118 3.15829 2.64645 3.35355L7.5 8.20711L12.3536 3.35355C12.5488 3.15829 12.5488 2.84171 12.3536 2.64645C12.1583 2.45118 11.8417 2.45118 11.6464 2.64645L7.5 6.79289L3.35355 2.64645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                <Waypoints className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-64 p-2" side="top">
               <div className="space-y-2">
-                <p className="text-xs font-medium text-muted-foreground px-1">Droopiness</p>
+                <p className="text-xs font-medium text-muted-foreground px-1">String gravity</p>
                 <Slider
-                  defaultValue={[droopiness]}
+                  value={[droopiness]}
                   onValueChange={(value) => setDroopiness(value[0])}
                   max={1}
-                  step={0.05}
+                  step={0.01}
                 />
               </div>
             </PopoverContent>

@@ -145,6 +145,61 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
           return;
         }
 
+        const resolveHandle = (
+          source: CanvasNode | undefined,
+          target: CanvasNode | undefined,
+          requested: Connection
+        ) => {
+          if (requested.sourceHandle && requested.targetHandle) {
+            return {
+              sourceHandle: requested.sourceHandle,
+              targetHandle: requested.targetHandle,
+            };
+          }
+
+          if (!source || !target) {
+            return {
+              sourceHandle: requested.sourceHandle || "right",
+              targetHandle: requested.targetHandle || "left",
+            };
+          }
+
+          const sourceWidth = (typeof source.width === "number" ? source.width : 320) / 2;
+          const sourceHeight = (typeof source.height === "number" ? source.height : 240) / 2;
+          const targetWidth = (typeof target.width === "number" ? target.width : 320) / 2;
+          const targetHeight = (typeof target.height === "number" ? target.height : 240) / 2;
+
+          const sourceCenter = {
+            x: source.position.x + sourceWidth,
+            y: source.position.y + sourceHeight,
+          };
+          const targetCenter = {
+            x: target.position.x + targetWidth,
+            y: target.position.y + targetHeight,
+          };
+
+          const dx = targetCenter.x - sourceCenter.x;
+          const dy = targetCenter.y - sourceCenter.y;
+
+          if (Math.abs(dx) >= Math.abs(dy)) {
+            return {
+              sourceHandle: dx >= 0 ? "right" : "bottom",
+              targetHandle: dx >= 0 ? "left" : "top",
+            };
+          }
+
+          return {
+            sourceHandle: dy >= 0 ? "bottom" : "right",
+            targetHandle: dy >= 0 ? "top" : "left",
+          };
+        };
+
+        const { sourceHandle, targetHandle } = resolveHandle(
+          sourceNode,
+          targetNode,
+          connection
+        );
+
         const newEdge = createEdge(
           connection.source,
           connection.target,
@@ -156,7 +211,9 @@ function TrestleboardInner({ onNodeSelect, onAnalyzeRequest, onOpenFile }: Trest
             targetNodeType: targetNode?.data.type,
             logicRule: validation.logicRule,
             confidence: 0.85,
-          }
+          },
+          sourceHandle,
+          targetHandle
         );
         addStoreEdge(newEdge);
         setConnectionNotice(null);
