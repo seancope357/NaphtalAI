@@ -176,21 +176,21 @@ export default function ArchivesSidebar({
           <TabsList className="grid w-full grid-cols-3 h-8 bg-muted/40 p-0.5">
             <TabsTrigger
               value="files"
-              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] font-semibold text-sidebar-foreground/85 hover:text-sidebar-foreground dark:text-sidebar-foreground/90 dark:hover:text-white data-[state=active]:bg-sidebar data-[state=active]:text-sidebar-foreground dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
             >
               <FolderOpenDot className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Files
             </TabsTrigger>
             <TabsTrigger
               value="entities"
-              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] font-semibold text-sidebar-foreground/85 hover:text-sidebar-foreground dark:text-sidebar-foreground/90 dark:hover:text-white data-[state=active]:bg-sidebar data-[state=active]:text-sidebar-foreground dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
             >
               <Fingerprint className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Entities
             </TabsTrigger>
             <TabsTrigger
               value="search"
-              className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              className="text-[11px] font-semibold text-sidebar-foreground/85 hover:text-sidebar-foreground dark:text-sidebar-foreground/90 dark:hover:text-white data-[state=active]:bg-sidebar data-[state=active]:text-sidebar-foreground dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
             >
               <Waypoints className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Graph
