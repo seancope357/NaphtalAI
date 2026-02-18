@@ -15,54 +15,54 @@ import {
 const featureCards = [
   {
     icon: PanelsTopLeft,
-    title: "Visual Research Canvas",
+    title: "Illumination Canvas",
     description:
-      "Map documents, notes, and entities on a structured infinite canvas with strict connection rules and semantic links.",
+      "Map documents, notes, and ideas on a structured infinite canvas designed to reveal meaning, not just store fragments.",
   },
   {
     icon: BotMessageSquare,
-    title: "Agentic Analysis",
+    title: "Knowledge Dialogue",
     description:
-      "Run guided analysis modes that extract entities, connect evidence, and generate readable findings from selected context.",
+      "Interrogate your material with AI to move from raw references toward coherent understanding and clear insight.",
   },
   {
     icon: FileStack,
-    title: "Scalable PDF Workflow",
+    title: "Scalable Source Library",
     description:
-      "Open and inspect PDFs as first-class assets with zoom, page navigation, and pin-to-canvas composition.",
+      "Open PDFs and source files as first-class study objects with smooth zoom, navigation, and pin-to-canvas composition.",
   },
   {
     icon: Waypoints,
-    title: "Structured Link Logic",
+    title: "Knowledge Architecture",
     description:
-      "Connections are validated and enriched with semantic metadata so downstream report generation stays grounded.",
+      "Connections are validated with explicit semantics so your graph reflects thought structure, not visual clutter.",
   },
   {
     icon: ScanSearch,
-    title: "Knowledge Retrieval",
+    title: "Pattern Discovery",
     description:
-      "Search entities and graph context quickly, then pull any result back into the workspace for deeper analysis.",
+      "Trace motifs, entities, and ideas across the graph, then bring discoveries back into context for deeper synthesis.",
   },
   {
     icon: Crosshair,
-    title: "Production-Ready UX",
+    title: "Refined Research UX",
     description:
-      "Dense, modern workspace ergonomics with responsive paneling, consistent card systems, and interaction-first controls.",
+      "A focused, modern interface with disciplined spacing and responsive controls built for long-form analytical work.",
   },
 ];
 
 const workflowSteps = [
   {
-    title: "Ingest",
-    text: "Upload source files, open them in the viewer, and pin key evidence directly to the canvas.",
+    title: "Gather",
+    text: "Collect source materials, open them in context, and pin the most meaningful fragments to your canvas.",
   },
   {
-    title: "Structure",
-    text: "Extract entities and build explicit relationships so your information model stays interpretable.",
+    title: "Distill",
+    text: "Extract entities, themes, and relationships to transform scattered information into structured knowledge.",
   },
   {
-    title: "Synthesize",
-    text: "Use the AI assistant on scoped node selections to produce findings, briefs, and presentation-ready outputs.",
+    title: "Illuminate",
+    text: "Use scoped AI analysis to surface insight, clarify narratives, and produce reports that communicate real understanding.",
   },
 ];
 
@@ -102,17 +102,16 @@ export default function LandingExperience() {
       <main className="relative mx-auto max-w-7xl px-4 pb-20 pt-12 md:px-8 md:pt-14">
         <section className="mx-auto max-w-5xl text-center">
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
-            Research Intelligence Platform
+            Knowledge Illumination Platform
           </p>
 
           <h1 className="mx-auto mt-5 max-w-[18ch] text-4xl font-semibold leading-tight tracking-tight text-balance md:text-6xl">
-            Modern intelligence workbench for evidence-driven research
+            We are not chasing evidence. We are pursuing knowledge and light.
           </h1>
 
           <p className="mx-auto mt-5 max-w-[65ch] text-sm text-muted-foreground md:text-base">
-            NaphtalAI turns fragmented archives into a structured, navigable knowledge graph. Ingest
-            documents, connect evidence, and collaborate with AI in a workspace designed for serious
-            analysis.
+            NaphtalAI transforms fragmented archives into a navigable knowledge graph. Study source
+            material, connect ideas, and work with AI to illuminate meaning with clarity and rigor.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -120,7 +119,7 @@ export default function LandingExperience() {
               href="/login?next=/canvas"
               className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
             >
-              Start Investigating
+              Begin the Search for Light
               <ArrowRightFromLine className="h-4 w-4" strokeWidth={2.2} />
             </Link>
             <Link
@@ -138,7 +137,7 @@ export default function LandingExperience() {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <LockKeyhole className="h-3.5 w-3.5 text-primary" strokeWidth={2.2} />
-              Auth-gated workspace
+              Knowledge-first structure
             </span>
           </div>
 
@@ -151,17 +150,17 @@ export default function LandingExperience() {
             </div>
             <div className="grid gap-3 md:grid-cols-12">
               <div className="rounded-lg border border-border bg-background p-3 md:col-span-7">
-                <div className="mb-2 text-xs font-semibold text-foreground">Pinned PDF Evidence</div>
+                <div className="mb-2 text-xs font-semibold text-foreground">Pinned Source Material</div>
                 <div className="h-28 rounded-md border border-border/70 bg-muted/20" />
               </div>
               <div className="grid gap-3 md:col-span-5">
                 <div className="rounded-lg border border-border bg-background p-3">
-                  <div className="text-xs font-semibold">Entities</div>
-                  <p className="mt-1 text-[11px] text-muted-foreground">People, locations, organizations</p>
+                  <div className="text-xs font-semibold">Concepts</div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">Themes, symbols, people, places</p>
                 </div>
                 <div className="rounded-lg border border-border bg-background p-3">
-                  <div className="text-xs font-semibold">Connections</div>
-                  <p className="mt-1 text-[11px] text-muted-foreground">Semantic relationships + confidence</p>
+                  <div className="text-xs font-semibold">Insights</div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">Structured relationships + interpretation</p>
                 </div>
               </div>
             </div>
@@ -173,8 +172,7 @@ export default function LandingExperience() {
         <section className="mx-auto mt-14 max-w-6xl">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">Core capabilities</h2>
           <p className="mx-auto mt-2 max-w-[62ch] text-center text-sm text-muted-foreground md:text-base">
-            Structured sections, consistent card sizing, and clean interaction density built for modern
-            research workflows.
+            A modern system for turning archival material into coherent knowledge and communicable insight.
           </p>
 
           <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -201,7 +199,7 @@ export default function LandingExperience() {
         <section className="mx-auto mt-14 max-w-6xl">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">Workflow</h2>
           <p className="mx-auto mt-2 max-w-[56ch] text-center text-sm text-muted-foreground md:text-base">
-            A clear, step-based process from evidence intake to AI-assisted deliverables.
+            A clear path from source material to understanding, interpretation, and illumination.
           </p>
           <div className="mt-8 grid gap-3 md:grid-cols-3">
             {workflowSteps.map((step, index) => (
@@ -219,9 +217,9 @@ export default function LandingExperience() {
         <div className="mx-auto mt-14 h-px w-full max-w-6xl bg-border/60" />
 
         <section className="mx-auto mt-14 max-w-4xl rounded-2xl border border-border/70 bg-card/70 p-6 text-center shadow-xl md:p-8">
-          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to modernize your research stack?</h2>
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to build knowledge in the light?</h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-sm text-muted-foreground md:text-base">
-            Sign in to access the full canvas workspace, entity graph, and AI-assisted analysis pipeline.
+            Sign in to enter the full canvas workspace and turn raw material into structured understanding.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link
