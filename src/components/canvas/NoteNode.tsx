@@ -2,7 +2,7 @@
 
 import { memo, useState } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { StickyNote, Pin, X, Edit2, Check } from "lucide-react";
+import { CheckCheck, MapPinned, NotebookPen, SquarePen, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -89,7 +89,7 @@ function NoteNode({ data, selected }: NodeProps) {
       {/* Header */}
       <div className={cn("flex items-center justify-between px-4 py-2 rounded-t-lg", noteColor.accent)}>
         <div className="flex items-center gap-2.5">
-          <StickyNote className="w-4 h-4 text-background" />
+          <NotebookPen className="w-4 h-4 text-background" strokeWidth={2.2} />
           <span className="text-xs text-background font-medium">{isEditing ? 'Edit Note' : nodeData.label}</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -99,7 +99,7 @@ function NoteNode({ data, selected }: NodeProps) {
             className="h-5 w-5 text-background/70 hover:text-background"
             onClick={() => setIsEditing(!isEditing)}
           >
-            <Edit2 className="w-3 h-3" />
+            <SquarePen className="w-3 h-3" strokeWidth={2.2} />
           </Button>
           <Button
             variant="ghost"
@@ -107,11 +107,12 @@ function NoteNode({ data, selected }: NodeProps) {
             className="h-5 w-5 text-background/70 hover:text-background"
             onClick={handlePin}
           >
-            <Pin
+            <MapPinned
               className={cn(
                 "w-3 h-3",
-                nodeData.metadata.isPinned && "fill-current"
+                nodeData.metadata.isPinned && "text-revelation-gold"
               )}
+              strokeWidth={2.2}
             />
           </Button>
           <Button
@@ -120,7 +121,7 @@ function NoteNode({ data, selected }: NodeProps) {
             className="h-5 w-5 text-background/70 hover:text-red-300"
             onClick={handleDelete}
           >
-            <X className="w-3 h-3" />
+            <X className="w-3 h-3" strokeWidth={2.2} />
           </Button>
         </div>
       </div>
@@ -147,7 +148,7 @@ function NoteNode({ data, selected }: NodeProps) {
               onClick={handleSaveContent}
               className="w-full h-8"
             >
-              <Check className="w-3 h-3 mr-1.5" />
+              <CheckCheck className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Save
             </Button>
           </div>

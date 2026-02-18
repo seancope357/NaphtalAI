@@ -9,19 +9,18 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Archive,
-  Upload,
-  FileText,
-  ImageIcon,
-  FileCode,
-  FileSpreadsheet,
-  Trash2,
-  GripVertical,
-  Search,
-  FolderOpen,
-  Hash,
-  GitBranch,
-  Home,
+  FileChartColumn,
+  FileJson,
+  FileScan,
+  FolderArchive,
+  FolderOpenDot,
+  Fingerprint,
+  HardDriveUpload,
+  House,
+  ImagePlay,
+  ScanSearch,
+  Trash,
+  Waypoints,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -124,16 +123,16 @@ export default function ArchivesSidebar({
   const getFileIconComponent = (type: FileType) => {
     switch (type) {
       case "pdf":
-        return <FileText className="w-4 h-4 text-red-400" />;
+        return <FileScan className="w-4 h-4 text-red-400" strokeWidth={2.2} />;
       case "jpg":
       case "png":
-        return <ImageIcon className="w-4 h-4 text-green-400" />;
+        return <ImagePlay className="w-4 h-4 text-green-400" strokeWidth={2.2} />;
       case "json":
-        return <FileCode className="w-4 h-4 text-yellow-400" />;
+        return <FileJson className="w-4 h-4 text-yellow-400" strokeWidth={2.2} />;
       case "csv":
-        return <FileSpreadsheet className="w-4 h-4 text-blue-400" />;
+        return <FileChartColumn className="w-4 h-4 text-blue-400" strokeWidth={2.2} />;
       default:
-        return <FileText className="w-4 h-4 text-gray-400" />;
+        return <FileScan className="w-4 h-4 text-gray-400" strokeWidth={2.2} />;
     }
   };
 
@@ -154,7 +153,7 @@ export default function ArchivesSidebar({
         <div className="flex items-center justify-between gap-2 mb-0.5">
           <div className="flex items-center gap-2.5">
             <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
-              <Archive className="w-3.5 h-3.5 text-primary" />
+              <FolderArchive className="w-3.5 h-3.5 text-primary" strokeWidth={2.2} />
             </div>
             <h2 className="font-display font-semibold text-sm text-sidebar-foreground tracking-tight">
               The Archives
@@ -165,7 +164,7 @@ export default function ArchivesSidebar({
             className="h-7 w-7 flex items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-200"
             title="Back to Home"
           >
-            <Home className="w-3.5 h-3.5" />
+            <House className="w-3.5 h-3.5" strokeWidth={2.2} />
           </Link>
         </div>
         <p className="text-[11px] text-muted-foreground/70 mt-1.5 mb-3 pl-8">
@@ -179,21 +178,21 @@ export default function ArchivesSidebar({
               value="files"
               className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
-              <FolderOpen className="w-3 h-3 mr-1.5" />
+              <FolderOpenDot className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Files
             </TabsTrigger>
             <TabsTrigger
               value="entities"
               className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
-              <Hash className="w-3 h-3 mr-1.5" />
+              <Fingerprint className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Entities
             </TabsTrigger>
             <TabsTrigger
               value="search"
               className="text-[11px] data-[state=active]:bg-sidebar data-[state=active]:text-primary data-[state=active]:shadow-sm"
             >
-              <GitBranch className="w-3 h-3 mr-1.5" />
+              <Waypoints className="w-3 h-3 mr-1.5" strokeWidth={2.2} />
               Graph
             </TabsTrigger>
           </TabsList>
@@ -209,7 +208,7 @@ export default function ArchivesSidebar({
               {/* Search */}
               <div className="px-4 py-2.5 border-b border-sidebar-border/80">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
+                  <ScanSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" strokeWidth={2.2} />
                   <Input
                     placeholder="Search files…"
                     value={searchQuery}
@@ -237,11 +236,12 @@ export default function ArchivesSidebar({
                   "w-7 h-7 rounded-md flex items-center justify-center transition-colors",
                   isDragging ? "bg-primary/20" : "bg-muted/60"
                 )}>
-                  <Upload
+                  <HardDriveUpload
                     className={cn(
                       "w-4 h-4 transition-colors",
                       isDragging ? "text-primary" : "text-muted-foreground/60"
                     )}
+                    strokeWidth={2.2}
                   />
                 </div>
                 <p className="text-[11px] text-muted-foreground/70 text-center leading-relaxed">
@@ -265,7 +265,7 @@ export default function ArchivesSidebar({
                 {filteredFiles.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-14 text-center">
                     <div className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center mb-4">
-                      <FolderOpen className="w-5 h-5 text-muted-foreground/50" />
+                      <FolderOpenDot className="w-5 h-5 text-muted-foreground/50" strokeWidth={2.2} />
                     </div>
                     <p className="text-sm text-muted-foreground/70">
                       {files.length === 0 ? "No files uploaded" : "No matching files"}
@@ -327,7 +327,7 @@ export default function ArchivesSidebar({
                             removeFile(file.id);
                           }}
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash className="w-3 h-3" strokeWidth={2.2} />
                         </Button>
                       </div>
                     ))}

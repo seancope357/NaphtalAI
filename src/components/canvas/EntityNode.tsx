@@ -3,14 +3,13 @@
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import {
-  User,
-  MapPin,
-  Calendar,
-  Shield,
-  Building2,
-  Pin,
+  Building,
+  CalendarClock,
+  MapPinned,
+  ScanEye,
+  ShieldEllipsis,
+  UserRound,
   X,
-  Eye,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,17 +23,17 @@ function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
   const getEntityIcon = () => {
     switch (nodeData.metadata.entityType) {
       case "person":
-        return <User className="w-4 h-4" />;
+        return <UserRound className="w-4 h-4" strokeWidth={2.2} />;
       case "location":
-        return <MapPin className="w-4 h-4" />;
+        return <MapPinned className="w-4 h-4" strokeWidth={2.2} />;
       case "date":
-        return <Calendar className="w-4 h-4" />;
+        return <CalendarClock className="w-4 h-4" strokeWidth={2.2} />;
       case "symbol":
-        return <Shield className="w-4 h-4" />;
+        return <ShieldEllipsis className="w-4 h-4" strokeWidth={2.2} />;
       case "organization":
-        return <Building2 className="w-4 h-4" />;
+        return <Building className="w-4 h-4" strokeWidth={2.2} />;
       default:
-        return <User className="w-4 h-4" />;
+        return <UserRound className="w-4 h-4" strokeWidth={2.2} />;
     }
   };
 
@@ -136,13 +135,14 @@ function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
             className="h-5 w-5"
             onClick={handlePin}
           >
-            <Pin
+            <MapPinned
               className={cn(
                 "w-3 h-3",
                 nodeData.metadata.isPinned
-                  ? "text-revelation-gold fill-current"
+                  ? "text-revelation-gold"
                   : "text-muted-foreground"
               )}
+              strokeWidth={2.2}
             />
           </Button>
           <Button
@@ -151,7 +151,7 @@ function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
             className="h-5 w-5 text-muted-foreground hover:text-destructive"
             onClick={handleDelete}
           >
-            <X className="w-3 h-3" />
+            <X className="w-3 h-3" strokeWidth={2.2} />
           </Button>
         </div>
       </div>
@@ -190,7 +190,7 @@ function EntityNode({ data, selected }: NodeProps<{ [key: string]: unknown }>) {
           className="w-full h-6 text-xs"
           onClick={handleAnalyze}
         >
-          <Eye className="w-3 h-3 mr-1" />
+          <ScanEye className="w-3 h-3 mr-1" strokeWidth={2.2} />
           Investigate
         </Button>
       </div>

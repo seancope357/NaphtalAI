@@ -8,17 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
-  Eye,
-  Send,
-  Sparkles,
-  Settings,
-  User,
-  Bot,
-  Link2,
-  Hash,
+  BotMessageSquare,
+  Fingerprint,
   Loader2,
-  AlertCircle,
-  MessageCircleQuestion,
+  MessageCircleQuestionMark,
+  ScanEye,
+  SendHorizontal,
+  Settings2,
+  UserRound,
+  WandSparkles,
+  Waypoints,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
@@ -154,7 +153,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         <div className="flex items-center justify-between mb-0.5">
           <div className="flex items-center gap-2.5">
             <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
-              <Eye className="w-3.5 h-3.5 text-primary" />
+              <ScanEye className="w-3.5 h-3.5 text-primary" strokeWidth={2.2} />
             </div>
             <h2 className="font-display font-semibold text-sm text-sidebar-foreground tracking-tight">
               NaphtalAI
@@ -164,7 +163,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary">
-                  <MessageCircleQuestion className="w-4 h-4" />
+                  <MessageCircleQuestionMark className="w-4 h-4" strokeWidth={2.2} />
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -191,7 +190,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               )}
               onClick={() => setShowSettings(!showSettings)}
             >
-              <Settings className="w-3.5 h-3.5" />
+              <Settings2 className="w-3.5 h-3.5" strokeWidth={2.2} />
             </Button>
           </div>
         </div>
@@ -259,7 +258,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       {selectedNodes.length > 0 && (
         <div className="px-4 py-3 border-b border-sidebar-border/80 bg-primary/5">
           <div className="flex items-center gap-2 mb-2.5">
-            <Link2 className="w-3.5 h-3.5 text-primary" />
+            <Waypoints className="w-3.5 h-3.5 text-primary" strokeWidth={2.2} />
             <span className="text-xs font-medium text-primary">Context · {selectedNodes.length} node{selectedNodes.length !== 1 ? "s" : ""}</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -288,7 +287,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             onClick={() => handleQuickAction("extract_entities")}
             disabled={isLoading}
           >
-            <Hash className="w-3 h-3 shrink-0" />
+            <Fingerprint className="w-3 h-3 shrink-0" strokeWidth={2.2} />
             Extract
           </Button>
           <Button
@@ -298,7 +297,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             onClick={() => handleQuickAction("connect")}
             disabled={isLoading}
           >
-            <Link2 className="w-3 h-3 shrink-0" />
+            <Waypoints className="w-3 h-3 shrink-0" strokeWidth={2.2} />
             Connect
           </Button>
           <Button
@@ -308,7 +307,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             onClick={() => handleQuickAction("analyze_symbol")}
             disabled={isLoading}
           >
-            <Sparkles className="w-3 h-3 shrink-0" />
+            <WandSparkles className="w-3 h-3 shrink-0" strokeWidth={2.2} />
             Symbol
           </Button>
           <Button
@@ -318,7 +317,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             onClick={() => handleQuickAction("chat")}
             disabled={isLoading}
           >
-            <Eye className="w-3 h-3 shrink-0" />
+            <ScanEye className="w-3 h-3 shrink-0" strokeWidth={2.2} />
             Summarize
           </Button>
         </div>
@@ -329,7 +328,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
             <div className="w-14 h-14 rounded-full bg-primary/10 ring-1 ring-primary/25 flex items-center justify-center mb-5">
-              <Bot className="w-7 h-7 text-primary/70" />
+              <BotMessageSquare className="w-7 h-7 text-primary/70" strokeWidth={2.2} />
             </div>
             <p className="text-sm text-sidebar-foreground font-medium mb-2">
               Ready to Investigate
@@ -379,7 +378,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             {isLoading ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Send className="w-3.5 h-3.5" />
+              <SendHorizontal className="w-3.5 h-3.5" strokeWidth={2.2} />
             )}
           </Button>
         </div>
@@ -403,7 +402,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
     >
       {!isUser && (
         <div className="w-5 h-5 rounded-md bg-primary/15 ring-1 ring-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Eye className="w-2.5 h-2.5 text-primary" />
+          <ScanEye className="w-2.5 h-2.5 text-primary" strokeWidth={2.2} />
         </div>
       )}
       <div
@@ -417,7 +416,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         <p className="whitespace-pre-wrap">{message.content}</p>
         {message.nodeContext && message.nodeContext.length > 0 && (
           <div className="flex gap-1 mt-2.5 pt-2.5 border-t border-border/30">
-            <Hash className="w-2.5 h-2.5 text-muted-foreground mt-0.5" />
+            <Fingerprint className="w-2.5 h-2.5 text-muted-foreground mt-0.5" strokeWidth={2.2} />
             <span className="text-[10px] text-muted-foreground">
               {message.nodeContext.length} nodes referenced
             </span>
@@ -426,7 +425,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       </div>
       {isUser && (
         <div className="w-5 h-5 rounded-md bg-primary/15 ring-1 ring-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <User className="w-2.5 h-2.5 text-primary" />
+          <UserRound className="w-2.5 h-2.5 text-primary" strokeWidth={2.2} />
         </div>
       )}
     </div>

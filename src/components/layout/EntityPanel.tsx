@@ -12,21 +12,19 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  User,
-  MapPin,
-  Building2,
-  Calendar,
-  Shield,
-  Lightbulb,
-  ChevronDown,
-  ChevronRight,
-  Search,
-  Filter,
-  Link2,
-  Trash2,
-  Merge,
-  Layers,
-  Hash,
+  Building,
+  CalendarClock,
+  CircleChevronDown,
+  CircleChevronRight,
+  Fingerprint,
+  MapPinned,
+  PanelsTopLeft,
+  ScanSearch,
+  ShieldEllipsis,
+  SlidersHorizontal,
+  Sparkle,
+  UserRound,
+  Waypoints,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -44,32 +42,32 @@ interface EntityPanelProps {
 
 const ENTITY_TYPE_CONFIG: Record<EntityType, { icon: React.ReactNode; label: string; color: string }> = {
   person: {
-    icon: <User className="w-3.5 h-3.5" />,
+    icon: <UserRound className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "People",
     color: "text-blue-400",
   },
   location: {
-    icon: <MapPin className="w-3.5 h-3.5" />,
+    icon: <MapPinned className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "Locations",
     color: "text-green-400",
   },
   organization: {
-    icon: <Building2 className="w-3.5 h-3.5" />,
+    icon: <Building className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "Organizations",
     color: "text-purple-400",
   },
   date: {
-    icon: <Calendar className="w-3.5 h-3.5" />,
+    icon: <CalendarClock className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "Dates",
     color: "text-orange-400",
   },
   symbol: {
-    icon: <Shield className="w-3.5 h-3.5" />,
+    icon: <ShieldEllipsis className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "Symbols",
     color: "text-amber-400",
   },
   concept: {
-    icon: <Lightbulb className="w-3.5 h-3.5" />,
+    icon: <Sparkle className="w-3.5 h-3.5" strokeWidth={2.2} />,
     label: "Concepts",
     color: "text-cyan-400",
   },
@@ -159,7 +157,7 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
       <div className="p-3 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Hash className="w-4 h-4 text-revelation-gold" />
+            <Fingerprint className="w-4 h-4 text-revelation-gold" strokeWidth={2.2} />
             <h3 className="font-display font-semibold text-sm text-sidebar-foreground">
               Entities
             </h3>
@@ -171,7 +169,7 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
 
         {/* Search */}
         <div className="relative mb-2">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <ScanSearch className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" strokeWidth={2.2} />
           <Input
             placeholder="Search entities..."
             value={filters.searchTerm}
@@ -185,13 +183,13 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="sm" className="w-full h-7 text-xs justify-between">
               <span className="flex items-center gap-1.5">
-                <Filter className="w-3 h-3" />
+                <SlidersHorizontal className="w-3 h-3" strokeWidth={2.2} />
                 Type Filters
               </span>
               {isFiltersOpen ? (
-                <ChevronDown className="w-3 h-3" />
+                <CircleChevronDown className="w-3 h-3" strokeWidth={2.2} />
               ) : (
-                <ChevronRight className="w-3 h-3" />
+                <CircleChevronRight className="w-3 h-3" strokeWidth={2.2} />
               )}
             </Button>
           </CollapsibleTrigger>
@@ -234,11 +232,11 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
           </span>
           <div className="flex gap-1">
             <Button variant="ghost" size="sm" className="h-6 text-xs">
-              <Link2 className="w-3 h-3 mr-1" />
+              <Waypoints className="w-3 h-3 mr-1" strokeWidth={2.2} />
               Connect
             </Button>
             <Button variant="ghost" size="sm" className="h-6 text-xs">
-              <Layers className="w-3 h-3 mr-1" />
+              <PanelsTopLeft className="w-3 h-3 mr-1" strokeWidth={2.2} />
               Merge
             </Button>
             <Button
@@ -270,9 +268,9 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
                 <CollapsibleTrigger asChild>
                   <button className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted/50 transition-colors">
                     {isExpanded ? (
-                      <ChevronDown className="w-3 h-3 text-muted-foreground" />
+                      <CircleChevronDown className="w-3 h-3 text-muted-foreground" strokeWidth={2.2} />
                     ) : (
-                      <ChevronRight className="w-3 h-3 text-muted-foreground" />
+                      <CircleChevronRight className="w-3 h-3 text-muted-foreground" strokeWidth={2.2} />
                     )}
                     <span className={config.color}>{config.icon}</span>
                     <span className="text-xs font-medium text-card-foreground">
@@ -320,7 +318,7 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
                                     variant="outline"
                                     className="text-[10px] h-4 px-1 bg-revelation-gold/20 text-revelation-gold border-revelation-gold/30"
                                   >
-                                    <Link2 className="w-2.5 h-2.5 mr-0.5" />
+                                    <Waypoints className="w-2.5 h-2.5 mr-0.5" strokeWidth={2.2} />
                                     {connectionCount}
                                   </Badge>
                                 )}
@@ -350,7 +348,7 @@ export default function EntityPanel({ onEntityClick, onAddToCanvas }: EntityPane
                               }}
                               title="Add to canvas"
                             >
-                              <Layers className="w-3 h-3" />
+                              <PanelsTopLeft className="w-3 h-3" strokeWidth={2.2} />
                             </Button>
                           </div>
                         );

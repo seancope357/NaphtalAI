@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Pin, X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight, FileText, Sparkles, FileWarning } from "lucide-react";
+import {
+  CircleChevronLeft,
+  CircleChevronRight,
+  FileScan,
+  FileSearch2,
+  MapPinned,
+  ScanSearch,
+  X,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useViewerStore } from "@/stores/viewerStore";
@@ -111,7 +121,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
           <div className="flex items-center gap-3">
-            <FileText className="w-5 h-5 text-primary" />
+            <FileScan className="w-5 h-5 text-primary" strokeWidth={2.2} />
             <div>
               <h2 className="font-display font-semibold text-card-foreground text-sm">
                 {currentFile.name}
@@ -137,7 +147,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                 onClick={() => setScale((s) => Math.max(s - 0.2, 0.3))}
                 disabled={scale <= 0.3}
               >
-                <ZoomOut className="w-4 h-4" />
+                <ZoomOut className="w-4 h-4" strokeWidth={2.2} />
               </Button>
               <span className="text-xs text-muted-foreground w-12 text-center">
                 {Math.round(scale * 100)}%
@@ -149,7 +159,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                 onClick={() => setScale((s) => Math.min(s + 0.2, 3))}
                 disabled={scale >= 3}
               >
-                <ZoomIn className="w-4 h-4" />
+                <ZoomIn className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </div>
 
@@ -162,7 +172,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                   onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
                   disabled={pageNumber <= 1}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <CircleChevronLeft className="w-4 h-4" strokeWidth={2.2} />
                 </Button>
                 <span className="text-xs text-muted-foreground min-w-14 text-center">Pg {pageNumber}</span>
                 <Button
@@ -171,7 +181,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                   className="h-8 w-8"
                   onClick={() => setPageNumber((p) => p + 1)}
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <CircleChevronRight className="w-4 h-4" strokeWidth={2.2} />
                 </Button>
               </div>
             )}
@@ -183,7 +193,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
               className="bg-lodge-blue hover:bg-lodge-blue/90"
               onClick={handleAnalyze}
             >
-              <Sparkles className="w-4 h-4 mr-1" />
+              <ScanSearch className="w-4 h-4 mr-1" strokeWidth={2.2} />
               Analyze
             </Button>
             
@@ -193,7 +203,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
               className="bg-revelation-gold text-background hover:bg-revelation-gold/90"
               onClick={handlePin}
             >
-              <Pin className="w-4 h-4 mr-1" />
+              <MapPinned className="w-4 h-4 mr-1" strokeWidth={2.2} />
               Pin to Canvas
             </Button>
             
@@ -203,7 +213,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
               className="h-8 w-8"
               onClick={closeFile}
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" strokeWidth={2.2} />
             </Button>
           </div>
         </div>
@@ -226,7 +236,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                 />
               ) : (
                 <div className="text-center p-8">
-                  <FileWarning className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+                  <FileSearch2 className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" strokeWidth={2.2} />
                   <p className="text-sm text-muted-foreground mb-2">
                     Could not render this PDF preview
                   </p>
@@ -234,7 +244,7 @@ export default function DocumentViewer({ onPinToCanvas, onAnalyze }: DocumentVie
                     You can still pin this document to the canvas.
                   </p>
                   <Button variant="outline" size="sm" onClick={handlePin}>
-                    <Pin className="w-4 h-4 mr-2" />
+                    <MapPinned className="w-4 h-4 mr-2" strokeWidth={2.2} />
                     Pin to Canvas
                   </Button>
                 </div>

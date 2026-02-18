@@ -2,7 +2,16 @@
 
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { FileText, ImageIcon, FileCode, FileSpreadsheet, Pin, X, Sparkles, Maximize2 } from "lucide-react";
+import {
+  ArrowUpRightFromSquare,
+  FileChartColumn,
+  FileJson,
+  FileScan,
+  ImagePlay,
+  MapPinned,
+  ScanSearch,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { NodeData } from "@/types";
@@ -19,11 +28,11 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
   const isPdf = fileType === "pdf";
 
   const getFileIcon = () => {
-    if (fileType === "pdf") return <FileText className="w-5 h-5" />;
-    if (fileType === "jpg" || fileType === "png") return <ImageIcon className="w-5 h-5" />;
-    if (fileType === "json") return <FileCode className="w-5 h-5" />;
-    if (fileType === "csv") return <FileSpreadsheet className="w-5 h-5" />;
-    return <FileText className="w-5 h-5" />;
+    if (fileType === "pdf") return <FileScan className="w-5 h-5" strokeWidth={2.2} />;
+    if (fileType === "jpg" || fileType === "png") return <ImagePlay className="w-5 h-5" strokeWidth={2.2} />;
+    if (fileType === "json") return <FileJson className="w-5 h-5" strokeWidth={2.2} />;
+    if (fileType === "csv") return <FileChartColumn className="w-5 h-5" strokeWidth={2.2} />;
+    return <FileScan className="w-5 h-5" strokeWidth={2.2} />;
   };
 
   const handleAnalyze = () => {
@@ -160,7 +169,7 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
             onClick={handleOpenViewer}
             title="Open in viewer"
           >
-            <Maximize2 className="w-3 h-3" />
+            <ArrowUpRightFromSquare className="w-3 h-3" strokeWidth={2.2} />
           </Button>
           <Button
             variant="ghost"
@@ -168,13 +177,14 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
             className="h-6 w-6"
             onClick={handlePin}
           >
-            <Pin
+            <MapPinned
               className={cn(
                 "w-3 h-3",
                 nodeData.metadata.isPinned
                   ? "text-revelation-gold fill-current"
                   : "text-muted-foreground"
               )}
+              strokeWidth={2.2}
             />
           </Button>
           <Button
@@ -183,7 +193,7 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
             className="h-6 w-6 text-muted-foreground hover:text-destructive"
             onClick={handleDelete}
           >
-            <X className="w-3 h-3" />
+            <X className="w-3 h-3" strokeWidth={2.2} />
           </Button>
         </div>
       </div>
@@ -210,7 +220,7 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <FileText className="w-8 h-8 text-muted-foreground/40" />
+              <FileScan className="w-8 h-8 text-muted-foreground/40" strokeWidth={2.2} />
             </div>
           )}
         </div>
@@ -247,7 +257,7 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
             className="flex-1 h-8 text-xs bg-lodge-blue hover:bg-lodge-blue/90"
             onClick={handleAnalyze}
           >
-            <Sparkles className="w-3 h-3 mr-1" />
+            <ScanSearch className="w-3 h-3 mr-1" strokeWidth={2.2} />
             Analyze
           </Button>
         </div>

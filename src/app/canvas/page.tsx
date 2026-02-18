@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Layers, PanelLeftClose, Network } from "lucide-react";
+import { PanelsTopLeft, Crosshair, Waypoints } from "lucide-react";
 
 import ArchivesSidebar from "@/components/layout/ArchivesSidebar";
 import OverseerSidebar from "@/components/layout/OverseerSidebar";
@@ -440,7 +440,7 @@ export default function Home() {
         <header className="h-11 md:h-12 shrink-0 border-b border-border/70 px-3 md:px-4 flex items-center justify-between bg-background/95 backdrop-blur-sm">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="h-7 w-7 rounded-md border border-border bg-card flex items-center justify-center shrink-0">
-              <Layers className="w-3.5 h-3.5 text-primary" />
+              <PanelsTopLeft className="w-3.5 h-3.5 text-primary" strokeWidth={2.2} />
             </div>
             <div className="min-w-0">
               <h1 className="text-xs md:text-sm font-semibold tracking-tight text-foreground truncate">Naphtal Research Workspace</h1>
@@ -449,11 +449,11 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-2">
             <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
-              <Network className="w-3 h-3 text-primary" />
+              <Crosshair className="w-3 h-3 text-primary" strokeWidth={2.2} />
               <span className="text-muted-foreground">{nodes.length} nodes</span>
             </div>
             <div className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border bg-card text-[10px]">
-              <PanelLeftClose className="w-3 h-3 text-primary" />
+              <Waypoints className="w-3 h-3 text-primary" strokeWidth={2.2} />
               <span className="text-muted-foreground">{edges.length} links</span>
             </div>
           </div>

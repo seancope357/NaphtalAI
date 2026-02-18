@@ -14,14 +14,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  StickyNote,
+  NotebookPen,
   ZoomIn,
   ZoomOut,
-  Maximize2,
-  Link,
-  Trash2,
-  Download,
-  Settings,
+  SquareArrowOutUpRight,
+  Waypoints,
+  Trash,
+  HardDriveDownload,
   Undo2,
   Redo2,
   AlignLeft,
@@ -31,7 +30,7 @@ import {
   AlignCenterVertical,
   AlignEndVertical,
   Copy,
-  Grid3X3,
+  LayoutGrid,
   Keyboard,
   X,
 } from "lucide-react";
@@ -96,11 +95,11 @@ export default function FloatingToolbar({
               <Button
                 variant="ghost"
                 size="icon"
-                className={cn("h-8 w-8 transition-colors", canUndo() && "text-primary hover:text-primary")}
-                onClick={undo}
-                disabled={!canUndo()}
-              >
-                <Undo2 className="w-4 h-4" />
+              className={cn("h-8 w-8 transition-colors", canUndo() && "text-primary hover:text-primary")}
+              onClick={undo}
+              disabled={!canUndo()}
+            >
+                <Undo2 className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -113,11 +112,11 @@ export default function FloatingToolbar({
               <Button
                 variant="ghost"
                 size="icon"
-                className={cn("h-8 w-8 transition-colors", canRedo() && "text-primary hover:text-primary")}
-                onClick={redo}
-                disabled={!canRedo()}
-              >
-                <Redo2 className="w-4 h-4" />
+              className={cn("h-8 w-8 transition-colors", canRedo() && "text-primary hover:text-primary")}
+              onClick={redo}
+              disabled={!canRedo()}
+            >
+                <Redo2 className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -160,7 +159,7 @@ export default function FloatingToolbar({
                 className="h-8 w-8"
                 onClick={onAddNote}
               >
-                <StickyNote className="w-4 h-4" />
+                <NotebookPen className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -328,7 +327,7 @@ export default function FloatingToolbar({
                 className="h-8 w-8"
                 onClick={onZoomOut}
               >
-                <ZoomOut className="w-4 h-4" />
+                <ZoomOut className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -344,7 +343,7 @@ export default function FloatingToolbar({
                 className="h-8 w-8"
                 onClick={onZoomIn}
               >
-                <ZoomIn className="w-4 h-4" />
+                <ZoomIn className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -360,7 +359,7 @@ export default function FloatingToolbar({
                 className="h-8 w-8"
                 onClick={onFitView}
               >
-                <Maximize2 className="w-4 h-4" />
+                <SquareArrowOutUpRight className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -379,7 +378,7 @@ export default function FloatingToolbar({
                 className={cn("h-8 w-8 transition-colors", showGrid && "text-primary bg-primary/10")}
                 onClick={() => setShowGrid(!showGrid)}
               >
-                <Grid3X3 className="w-4 h-4" />
+                <LayoutGrid className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -404,7 +403,7 @@ export default function FloatingToolbar({
                   )
                 }
               >
-                <Link className="w-4 h-4" />
+                <Waypoints className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -425,7 +424,7 @@ export default function FloatingToolbar({
                 className="h-8 w-8"
                 onClick={onExportCanvas}
               >
-                <Download className="w-4 h-4" />
+                <HardDriveDownload className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -443,7 +442,7 @@ export default function FloatingToolbar({
                 onClick={deleteSelected}
                 disabled={!hasSelection}
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -461,7 +460,7 @@ export default function FloatingToolbar({
                 size="icon"
                 className="h-8 w-8"
               >
-                <Keyboard className="w-4 h-4" />
+                <Keyboard className="w-4 h-4" strokeWidth={2.2} />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-3" side="top">
@@ -473,7 +472,7 @@ export default function FloatingToolbar({
                   className="h-6 w-6"
                   onClick={() => setShowShortcuts(false)}
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3 h-3" strokeWidth={2.2} />
                 </Button>
               </div>
               <div className="space-y-3 max-h-[300px] overflow-y-auto">

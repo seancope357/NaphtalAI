@@ -6,15 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Search,
+  ArrowRightFromLine,
+  Building,
+  CalendarClock,
+  MapPinned,
+  ScanSearch,
+  ShieldEllipsis,
+  UserRoundSearch,
+  Waypoints,
   X,
-  GitBranch,
-  ArrowRight,
-  Users,
-  MapPin,
-  Building2,
-  Shield,
-  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -121,17 +121,17 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
   const getEntityIcon = (type: string) => {
     switch (type) {
       case "person":
-        return <Users className="w-3 h-3" />;
+        return <UserRoundSearch className="w-3 h-3" strokeWidth={2.2} />;
       case "location":
-        return <MapPin className="w-3 h-3" />;
+        return <MapPinned className="w-3 h-3" strokeWidth={2.2} />;
       case "organization":
-        return <Building2 className="w-3 h-3" />;
+        return <Building className="w-3 h-3" strokeWidth={2.2} />;
       case "date":
-        return <Calendar className="w-3 h-3" />;
+        return <CalendarClock className="w-3 h-3" strokeWidth={2.2} />;
       case "symbol":
-        return <Shield className="w-3 h-3" />;
+        return <ShieldEllipsis className="w-3 h-3" strokeWidth={2.2} />;
       default:
-        return <GitBranch className="w-3 h-3" />;
+        return <Waypoints className="w-3 h-3" strokeWidth={2.2} />;
     }
   };
 
@@ -140,7 +140,7 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
       {/* Search Input */}
       <div className="p-3 border-b border-border">
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <ScanSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" strokeWidth={2.2} />
           <Input
             placeholder="Search entities & connections..."
             value={query}
@@ -155,7 +155,7 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
               className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
               onClick={clearSearch}
             >
-              <X className="w-3 h-3" />
+              <X className="w-3 h-3" strokeWidth={2.2} />
             </Button>
           )}
         </div>
@@ -168,7 +168,7 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
       <ScrollArea className="flex-1">
         {!query && results.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
-            <GitBranch className="w-10 h-10 text-muted-foreground/30 mb-3" />
+            <Waypoints className="w-10 h-10 text-muted-foreground/30 mb-3" strokeWidth={2.2} />
             <p className="text-sm text-muted-foreground font-medium">
               Graph Search
             </p>
@@ -236,7 +236,7 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
                             variant="outline"
                             className="text-[10px] px-1.5 py-0 h-4"
                           >
-                            <GitBranch className="w-2.5 h-2.5 mr-0.5" />
+                            <Waypoints className="w-2.5 h-2.5 mr-0.5" strokeWidth={2.2} />
                             {result.connections.length} connection{result.connections.length !== 1 ? "s" : ""}
                           </Badge>
                           <span className="text-[10px] text-muted-foreground">
@@ -266,7 +266,7 @@ export default function GraphSearch({ onResultClick }: GraphSearchProps) {
                         ) : (
                           <>
                             Show {result.connections.length} connection{result.connections.length !== 1 ? "s" : ""}
-                            <ArrowRight className="w-3 h-3 ml-auto" />
+                            <ArrowRightFromLine className="w-3 h-3 ml-auto" strokeWidth={2.2} />
                           </>
                         )}
                       </button>
