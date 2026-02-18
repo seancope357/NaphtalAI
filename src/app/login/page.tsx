@@ -1,223 +1,352 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
-import { motion } from "framer-motion";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
-const G = "oklch(0.7264 0.0581 66.6967)";
-const GB = "oklch(0.7982 0.0243 82.1078)";
-const GD = "oklch(0.7264 0.0581 66.6967 / 0.12)";
-const GB2 = "oklch(0.7264 0.0581 66.6967 / 0.25)";
-const BG = "oklch(0.2747 0.0139 57.6523)";
-const CARD = "oklch(0.3237 0.0155 59.0603)";
-const TEXT = "oklch(0.9239 0.0190 83.0636)";
-const MUTED = "oklch(0.7982 0.0243 82.1078)";
+import type { Database } from "@/database.types";
 
+type AuthMode = "signin" | "signup";
+
+const DEFAULT_NEXT_PATH = "/canvas";
+
+function sanitizeNextPath(value: string | null): string {
+  if (!value) return DEFAULT_NEXT_PATH;
+  if (!value.startsWith("/") || value.startsWith("//")) return DEFAULT_NEXT_PATH;
+  return value;
+}
+
+function resolveMode(value: string | null): AuthMode {
+  return value === "signup" ? "signup" : "signin";
+}
+
+function buildEmailRedirect(nextPath: string): string | undefined {
+  if (typeof window === "undefined") return undefined;
+
+  const redirectUrl = new URL("/auth/callback", window.location.origin);
+  redirectUrl.searchParams.set("next", nextPath);
+  return redirectUrl.toString();
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return "Unable to complete that request right now.";
+}
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const supabase = useMemo(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!url || !anonKey) return null;
+    return createBrowserClient<Database>(url, anonKey);
+  }, []);
+
+  const [mode, setMode] = useState<AuthMode>("signin");
+  const [nextPath, setNextPath] = useState(DEFAULT_NEXT_PATH);
+  const [callbackError, setCallbackError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
+  const [magicLinkLoading, setMagicLinkLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [supabase, setSupabase] = useState<any>(null);
-  const router = useRouter();
 
   useEffect(() => {
-    const client = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    setSupabase(client);
+    const params = new URLSearchParams(window.location.search);
+
+    setNextPath(sanitizeNextPath(params.get("next")));
+    setMode(resolveMode(params.get("mode")));
+    setCallbackError(params.get("error"));
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!supabase) return;
-    setLoading(true);
+  const clearFeedback = () => {
     setError(null);
     setSuccess(null);
+    setCallbackError(null);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    clearFeedback();
+
+    if (!supabase) {
+      setError("Missing Supabase configuration. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        setSuccess("Check your email to confirm your account.");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        router.push("/canvas");
+      if (mode === "signin") {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) throw signInError;
+
+        router.replace(nextPath);
+        router.refresh();
+        return;
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again.");
+
+      const emailRedirectTo = buildEmailRedirect(nextPath);
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: emailRedirectTo ? { emailRedirectTo } : undefined,
+      });
+
+      if (signUpError) throw signUpError;
+
+      if (data.session) {
+        router.replace(nextPath);
+        router.refresh();
+        return;
+      }
+
+      setSuccess("Account created. Confirm your email to finish sign-up.");
+    } catch (submitError) {
+      setError(getErrorMessage(submitError));
     } finally {
       setLoading(false);
     }
   };
 
+  const handleMagicLink = async () => {
+    clearFeedback();
+
+    if (!email) {
+      setError("Enter your email first, then request a magic link.");
+      return;
+    }
+
+    if (!supabase) {
+      setError("Missing Supabase configuration. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+      return;
+    }
+
+    setMagicLinkLoading(true);
+
+    try {
+      const emailRedirectTo = buildEmailRedirect(nextPath);
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          ...(emailRedirectTo ? { emailRedirectTo } : {}),
+          shouldCreateUser: mode === "signup",
+        },
+      });
+
+      if (otpError) throw otpError;
+
+      setSuccess("Magic link sent. Check your inbox to continue.");
+    } catch (otpSubmitError) {
+      setError(getErrorMessage(otpSubmitError));
+    } finally {
+      setMagicLinkLoading(false);
+    }
+  };
+
+  const activeError = error ?? callbackError;
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
-      style={{ backgroundColor: BG }}
-    >
-      {/* Background grid */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke={G} strokeWidth="0.3" opacity="0.18" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, transparent 0%, ${BG} 75%)` }} />
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(900px_560px_at_0%_0%,rgba(56,189,248,0.15),transparent_60%),radial-gradient(840px_560px_at_100%_0%,rgba(59,130,246,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:44px_44px]" />
       </div>
 
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: `radial-gradient(circle, rgba(201,162,39,0.06) 0%, transparent 70%)` }}
-        aria-hidden="true"
-      />
-
-      {/* Back to home */}
-      <Link
-        href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 text-sm transition-colors z-10"
-        style={{ color: MUTED }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = TEXT)}
-        onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
-      >
-        <ArrowLeft size={15} />
-        Back to home
-      </Link>
-
-      {/* Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full max-w-sm rounded-xl p-8"
-        style={{ background: CARD, border: `1px solid ${GB2}` }}
-      >
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <img src="/NaphtalAI-Logo.svg" width={64} height={64} alt="NaphtalAI" className="object-contain" />
-          <span
-            className="mt-3 text-xl font-semibold"
-            style={{ fontFamily: "var(--font-display, Spectral, serif)", color: TEXT }}
-          >
-            Naphtal<span style={{ color: G }}>AI</span>
-          </span>
-          <p className="mt-1 text-xs tracking-widest uppercase" style={{ color: MUTED }}>
-            Lux e Tenebris
-          </p>
-        </div>
-
-        {/* Mode toggle */}
-        <div
-          className="flex rounded-lg p-1 mb-6"
-          style={{ background: BG, border: `1px solid ${GB2}` }}
+      <header className="relative z-10 mx-auto flex h-12 w-full max-w-6xl items-center px-4 md:px-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-background/75 px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:border-border hover:text-foreground"
         >
-          {(["signin", "signup"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => { setMode(m); setError(null); setSuccess(null); }}
-              className="flex-1 py-2 text-sm font-medium rounded-md transition-all"
-              style={{
-                background: mode === m ? GD : "transparent",
-                color: mode === m ? G : MUTED,
-                border: mode === m ? `1px solid ${GB2}` : "1px solid transparent",
-              }}
-            >
-              {m === "signin" ? "Sign In" : "Create Account"}
-            </button>
-          ))}
-        </div>
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to landing
+        </Link>
+      </header>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: MUTED }}>
-              Email address
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="brother@lodge.com"
-              className="w-full px-3.5 py-2.5 rounded-md text-sm outline-none transition-all"
-              style={{ background: BG, border: `1px solid ${GB2}`, color: TEXT, caretColor: G }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = G)}
-              onBlur={(e) => (e.currentTarget.style.borderColor = GB2)}
-            />
-          </div>
+      <main className="relative z-10 mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-6xl items-center px-4 pb-8 md:px-8 md:pb-12">
+        <div className="grid w-full overflow-hidden rounded-2xl border border-border/70 bg-card/75 shadow-2xl backdrop-blur-sm md:grid-cols-[1.08fr,1fr]">
+          <section className="hidden border-r border-border/60 bg-background/65 p-8 md:flex md:flex-col">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
+              Research Access
+            </p>
+            <h1 className="mt-5 max-w-[15ch] text-3xl font-semibold leading-tight tracking-tight">
+              Secure sign-in for the modern research workspace
+            </h1>
+            <p className="mt-4 max-w-[46ch] text-sm text-muted-foreground">
+              Continue to your canvas, PDF evidence stack, and graph-driven analysis tools with a cleaner,
+              faster authentication flow.
+            </p>
 
-          <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: MUTED }}>
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 pr-10 rounded-md text-sm outline-none transition-all"
-                style={{ background: BG, border: `1px solid ${GB2}`, color: TEXT, caretColor: G }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = G)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = GB2)}
-              />
+            <div className="mt-8 grid gap-3">
+              <article className="rounded-lg border border-border/70 bg-card/80 p-3">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  Session-safe redirects
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">You return exactly to the route you requested after auth.</p>
+              </article>
+              <article className="rounded-lg border border-border/70 bg-card/80 p-3">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <Mail className="h-4 w-4 text-primary" />
+                  Password + magic link
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">Use credentials or switch to one-click email access any time.</p>
+              </article>
+              <article className="rounded-lg border border-border/70 bg-card/80 p-3">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <Lock className="h-4 w-4 text-primary" />
+                  Private by default
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">Workspace routes stay protected until a valid Supabase session exists.</p>
+              </article>
+            </div>
+          </section>
+
+          <section className="p-5 sm:p-7 md:p-8">
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  NaphtalAI Access
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+                  {mode === "signin" ? "Welcome back" : "Create your account"}
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground">Next destination: {nextPath}</p>
+              </div>
+            </div>
+
+            <div className="mb-5 grid grid-cols-2 gap-2 rounded-lg border border-border/70 bg-background/70 p-1">
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-                style={{ color: MUTED }}
-                tabIndex={-1}
+                onClick={() => {
+                  setMode("signin");
+                  clearFeedback();
+                }}
+                className={`h-9 rounded-md text-sm font-medium transition ${
+                  mode === "signin"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
-                {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                Sign in
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("signup");
+                  clearFeedback();
+                }}
+                className={`h-9 rounded-md text-sm font-medium transition ${
+                  mode === "signup"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Create account
               </button>
             </div>
-          </div>
 
-          {/* Error / success */}
-          {error && (
-            <p className="text-xs px-3 py-2 rounded-md" style={{ background: "rgba(185,28,28,0.1)", border: "1px solid rgba(185,28,28,0.3)", color: "#f87171" }}>
-              {error}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="h-10 w-full rounded-md border border-border/80 bg-background px-3 text-sm outline-none transition focus:border-primary"
+                  placeholder="researcher@domain.com"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground" htmlFor="password">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                    required
+                    minLength={8}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="h-10 w-full rounded-md border border-border/80 bg-background px-3 pr-10 text-sm outline-none transition focus:border-primary"
+                    placeholder="Minimum 8 characters"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {activeError ? (
+                <p className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-300" role="alert">
+                  {activeError}
+                </p>
+              ) : null}
+
+              {success ? (
+                <p className="rounded-md border border-primary/35 bg-primary/10 px-3 py-2 text-xs text-primary" role="status">
+                  {success}
+                </p>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loading ? "Processing..." : mode === "signin" ? "Continue to workspace" : "Create account"}
+                {!loading ? <ArrowRight className="h-4 w-4" /> : null}
+              </button>
+            </form>
+
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={handleMagicLink}
+                disabled={magicLinkLoading}
+                className="inline-flex h-10 w-full items-center justify-center rounded-md border border-border/80 bg-background px-4 text-sm font-medium text-foreground transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {magicLinkLoading ? "Sending magic link..." : "Send magic link instead"}
+              </button>
+            </div>
+
+            <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
+              By continuing, you agree to the NaphtalAI terms and privacy expectations for authenticated
+              research workspaces.
             </p>
-          )}
-          {success && (
-            <p className="text-xs px-3 py-2 rounded-md" style={{ background: GD, border: `1px solid ${GB2}`, color: G }}>
-              {success}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 rounded-md font-semibold text-sm transition-all disabled:opacity-60"
-            style={{ background: G, color: "#000" }}
-            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = GB; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = G; }}
-          >
-            {loading ? "Please wait…" : mode === "signin" ? "Enter the Archives" : "Begin Your Journey"}
-          </button>
-        </form>
-
-        <p className="mt-6 text-center text-xs" style={{ color: MUTED }}>
-          By continuing, you agree to our{" "}
-          <a href="#" className="underline" style={{ color: G }}>Terms</a>
-          {" "}and{" "}
-          <a href="#" className="underline" style={{ color: G }}>Privacy Policy</a>.
-        </p>
-      </motion.div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 }
