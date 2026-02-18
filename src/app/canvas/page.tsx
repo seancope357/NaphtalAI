@@ -424,14 +424,14 @@ export default function Home() {
             onAddEntityToCanvas={handleAddEntityToCanvas}
           />
         </Panel>
-        <PanelResizeHandle className="w-2 bg-gray-800 hover:bg-gray-700 transition-colors" />
+        <PanelResizeHandle className="w-1 bg-sidebar-border hover:bg-revelation-gold/60 transition-colors duration-200 cursor-col-resize" />
         <Panel defaultSize={60} minSize={30}>
           <Trestleboard
             onNodeSelect={handleNodeSelect}
             onAnalyzeRequest={handleAnalyzeRequest}
           />
         </Panel>
-        <PanelResizeHandle className="w-2 bg-gray-800 hover:bg-gray-700 transition-colors" />
+        <PanelResizeHandle className="w-1 bg-sidebar-border hover:bg-revelation-gold/60 transition-colors duration-200 cursor-col-resize" />
         <Panel defaultSize={20} minSize={15}>
           <OverseerSidebar onAnalyze={handleAnalyze} />
         </Panel>

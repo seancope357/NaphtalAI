@@ -89,14 +89,14 @@ export default function FloatingToolbar({
   return (
     <TooltipProvider>
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-        <div className="flex items-center gap-0.5 bg-card/95 backdrop-blur-sm border border-border rounded-lg p-1 shadow-lg">
+        <div className="flex items-center gap-0.5 bg-card/95 backdrop-blur-md border border-revelation-gold/20 rounded-lg p-1 shadow-gold shadow-lg">
           {/* Undo/Redo */}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className={cn("h-8 w-8 transition-colors", canUndo() && "text-revelation-gold hover:text-revelation-gold")}
                 onClick={undo}
                 disabled={!canUndo()}
               >
@@ -113,7 +113,7 @@ export default function FloatingToolbar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className={cn("h-8 w-8 transition-colors", canRedo() && "text-revelation-gold hover:text-revelation-gold")}
                 onClick={redo}
                 disabled={!canRedo()}
               >
@@ -149,7 +149,7 @@ export default function FloatingToolbar({
             </PopoverContent>
           </Popover>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Add Note */}
           <Tooltip>
@@ -186,7 +186,7 @@ export default function FloatingToolbar({
             </TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Alignment Tools */}
           <Popover>
@@ -317,7 +317,7 @@ export default function FloatingToolbar({
             </PopoverContent>
           </Popover>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Zoom Controls */}
           <Tooltip>
@@ -368,7 +368,7 @@ export default function FloatingToolbar({
             </TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Grid Toggle */}
           <Tooltip>
@@ -376,7 +376,7 @@ export default function FloatingToolbar({
               <Button
                 variant="ghost"
                 size="icon"
-                className={cn("h-8 w-8", showGrid && "text-primary")}
+                className={cn("h-8 w-8 transition-colors", showGrid && "text-revelation-gold bg-revelation-gold/10")}
                 onClick={() => setShowGrid(!showGrid)}
               >
                 <Grid3X3 className="w-4 h-4" />
@@ -394,8 +394,9 @@ export default function FloatingToolbar({
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "h-8 w-8",
-                  connectionStyle === "red-string" && "text-red-500"
+                  "h-8 w-8 transition-colors",
+                  connectionStyle === "red-string" && "text-red-400 bg-red-500/10",
+                  connectionStyle === "golden-thread" && "text-revelation-gold bg-revelation-gold/10"
                 )}
                 onClick={() =>
                   onConnectionStyleChange(
@@ -403,12 +404,7 @@ export default function FloatingToolbar({
                   )
                 }
               >
-                <Link
-                  className={cn(
-                    "w-4 h-4",
-                    connectionStyle === "golden-thread" && "text-amber-500"
-                  )}
-                />
+                <Link className="w-4 h-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top">
@@ -418,7 +414,7 @@ export default function FloatingToolbar({
             </TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Export */}
           <Tooltip>
@@ -455,7 +451,7 @@ export default function FloatingToolbar({
             </TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-5 bg-border mx-0.5" />
+          <div className="w-px h-5 bg-revelation-gold/20 mx-0.5" />
 
           {/* Keyboard Shortcuts */}
           <Popover open={showShortcuts} onOpenChange={setShowShortcuts}>

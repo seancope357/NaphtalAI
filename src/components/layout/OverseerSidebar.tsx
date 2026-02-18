@@ -151,18 +151,20 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
     <div className="h-full flex flex-col bg-sidebar border-l border-sidebar-border">
       {/* Header */}
       <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2.5">
-            <Eye className="w-5 h-5 text-revelation-gold" />
-            <h2 className="font-display font-semibold text-sidebar-foreground">
+            <div className="w-7 h-7 rounded-md bg-revelation-gold/15 flex items-center justify-center ring-1 ring-revelation-gold/30">
+              <Eye className="w-4 h-4 text-revelation-gold" />
+            </div>
+            <h2 className="font-display font-semibold text-sidebar-foreground tracking-tight">
               NaphtalAI
             </h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <MessageCircleQuestion className="w-4 h-4 text-muted-foreground" />
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-revelation-gold">
+                  <MessageCircleQuestion className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -183,14 +185,17 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 mr-1"
+              className={cn(
+                "h-8 w-8 text-muted-foreground hover:text-revelation-gold transition-colors",
+                showSettings && "text-revelation-gold bg-revelation-gold/10"
+              )}
               onClick={() => setShowSettings(!showSettings)}
             >
-              <Settings className="w-4 h-4 text-muted-foreground" />
+              <Settings className="w-4 h-4" />
             </Button>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-xs text-muted-foreground/70 mt-2 mb-4 pl-9">
           AI-powered analysis and discovery
         </p>
 
@@ -252,20 +257,20 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Context Display */}
       {selectedNodes.length > 0 && (
-        <div className="px-6 py-5 border-b border-sidebar-border bg-muted/20">
+        <div className="px-6 py-4 border-b border-sidebar-border bg-revelation-gold/5">
           <div className="flex items-center gap-2 mb-2.5">
-            <Link2 className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium">Context ({selectedNodes.length} nodes)</span>
+            <Link2 className="w-3.5 h-3.5 text-revelation-gold" />
+            <span className="text-xs font-medium text-revelation-gold">Context · {selectedNodes.length} node{selectedNodes.length !== 1 ? "s" : ""}</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {selectedNodeData.map((node) => (
               <Badge
                 key={node.id}
                 variant="secondary"
-                className="text-xs px-2 py-0.5"
+                className="text-[10px] px-2 py-0.5 border border-revelation-gold/20 bg-revelation-gold/10 text-revelation-gold"
               >
                 {node.data.label.substring(0, 20)}
-                {node.data.label.length > 20 && "..."}
+                {node.data.label.length > 20 && "…"}
               </Badge>
             ))}
           </div>
@@ -273,47 +278,47 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       )}
 
       {/* Quick Actions */}
-      <div className="px-6 py-5 border-b border-sidebar-border">
-        <p className="text-xs text-muted-foreground mb-3">Quick Actions</p>
-        <div className="grid grid-cols-2 gap-3">
+      <div className="px-5 py-4 border-b border-sidebar-border">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium mb-3">Quick Actions</p>
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
-            className="h-9 text-xs justify-start"
+            className="h-8 text-xs justify-start gap-2 pl-3"
             onClick={() => handleQuickAction("extract_entities")}
             disabled={isLoading}
           >
-            <Hash className="w-3 h-3 mr-1.5" />
-            Extract Entities
+            <Hash className="w-3 h-3 shrink-0" />
+            Extract
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-9 text-xs justify-start"
+            className="h-8 text-xs justify-start gap-2 pl-3"
             onClick={() => handleQuickAction("connect")}
             disabled={isLoading}
           >
-            <Link2 className="w-3 h-3 mr-1.5" />
-            Find Connections
+            <Link2 className="w-3 h-3 shrink-0" />
+            Connect
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-9 text-xs justify-start"
+            className="h-8 text-xs justify-start gap-2 pl-3"
             onClick={() => handleQuickAction("analyze_symbol")}
             disabled={isLoading}
           >
-            <Sparkles className="w-3 h-3 mr-1.5" />
-            Analyze Symbol
+            <Sparkles className="w-3 h-3 shrink-0" />
+            Symbol
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-9 text-xs justify-start"
+            className="h-8 text-xs justify-start gap-2 pl-3"
             onClick={() => handleQuickAction("chat")}
             disabled={isLoading}
           >
-            <Eye className="w-3 h-3 mr-1.5" />
+            <Eye className="w-3 h-3 shrink-0" />
             Summarize
           </Button>
         </div>
@@ -323,25 +328,25 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       <ScrollArea className="flex-1 px-5 py-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6">
-              <Bot className="w-8 h-8 text-muted-foreground" />
+            <div className="w-14 h-14 rounded-full bg-revelation-gold/10 ring-1 ring-revelation-gold/25 flex items-center justify-center mb-5">
+              <Bot className="w-7 h-7 text-revelation-gold/70" />
             </div>
-            <p className="text-sm text-muted-foreground font-medium mb-3">
+            <p className="text-sm text-sidebar-foreground font-medium mb-2">
               Ready to Investigate
             </p>
-            <p className="text-xs text-muted-foreground/70 max-w-[200px] leading-relaxed">
-              Select nodes on the canvas and ask questions, or use quick actions to analyze content.
+            <p className="text-xs text-muted-foreground/60 max-w-[180px] leading-relaxed">
+              Select canvas nodes and ask questions, or use quick actions above.
             </p>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-4">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
             {isLoading && (
-              <div className="flex items-center gap-2.5 text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-xs">NaphtalAI is thinking...</span>
+              <div className="flex items-center gap-2.5">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-revelation-gold" />
+                <span className="text-xs text-muted-foreground">Illuminating…</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -350,7 +355,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="px-5 py-5 border-t border-sidebar-border">
+      <div className="px-4 py-4 border-t border-sidebar-border">
         <div className="relative">
           <Textarea
             value={input}
@@ -358,27 +363,27 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             onKeyDown={handleKeyDown}
             placeholder={
               selectedNodes.length > 0
-                ? `Ask about ${selectedNodes.length} selected node(s)...`
-                : "Ask a question..."
+                ? `Ask about ${selectedNodes.length} selected node${selectedNodes.length !== 1 ? "s" : ""}…`
+                : "Ask a question…"
             }
-            className="min-h-[80px] max-h-[140px] pr-12 text-sm resize-none"
+            className="min-h-[76px] max-h-[140px] pr-12 text-sm resize-none focus-visible:ring-revelation-gold/40 focus-visible:border-revelation-gold/50"
             disabled={isLoading}
           />
           <Button
-            variant="neumo"
+            variant="gold"
             size="icon"
-            className="absolute bottom-3 right-3 h-8 w-8"
+            className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-md"
             onClick={handleSendMessage}
             disabled={!input.trim() || isLoading}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Send className="w-4 h-4" />
+              <Send className="w-3.5 h-3.5" />
             )}
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-3 text-center">
+        <p className="text-[10px] text-muted-foreground/50 mt-2 text-center tracking-wide">
           Enter to send · Shift+Enter for new line
         </p>
       </div>
@@ -392,27 +397,27 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   return (
     <div
       className={cn(
-        "flex gap-3",
+        "flex gap-2.5",
         isUser ? "justify-end" : "justify-start"
       )}
     >
       {!isUser && (
-        <div className="w-6 h-6 rounded-full bg-revelation-gold/20 flex items-center justify-center flex-shrink-0">
-          <Eye className="w-3 h-3 text-revelation-gold" />
+        <div className="w-5 h-5 rounded-md bg-revelation-gold/15 ring-1 ring-revelation-gold/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Eye className="w-2.5 h-2.5 text-revelation-gold" />
         </div>
       )}
       <div
         className={cn(
-          "max-w-[85%] rounded-lg p-2.5 text-sm",
+          "max-w-[85%] rounded-lg p-3 text-sm leading-relaxed",
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-card-foreground"
+            ? "bg-revelation-gold/15 text-sidebar-foreground border border-revelation-gold/25"
+            : "bg-muted/60 text-card-foreground border border-sidebar-border border-l-2 border-l-revelation-gold/40"
         )}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
         {message.nodeContext && message.nodeContext.length > 0 && (
-          <div className="flex gap-1 mt-3 pt-3 border-t border-border/50">
-            <Hash className="w-3 h-3 text-muted-foreground" />
+          <div className="flex gap-1 mt-2.5 pt-2.5 border-t border-border/30">
+            <Hash className="w-2.5 h-2.5 text-muted-foreground mt-0.5" />
             <span className="text-[10px] text-muted-foreground">
               {message.nodeContext.length} nodes referenced
             </span>
@@ -420,8 +425,8 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         )}
       </div>
       {isUser && (
-        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-          <User className="w-3 h-3 text-primary" />
+        <div className="w-5 h-5 rounded-md bg-revelation-gold/15 ring-1 ring-revelation-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <User className="w-2.5 h-2.5 text-revelation-gold" />
         </div>
       )}
     </div>

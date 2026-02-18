@@ -40,7 +40,7 @@
     --font-sans: Libre Baskerville, serif;
     --font-serif: Lora, serif;
     --font-mono: IBM Plex Mono, monospace;
-    --radius: 0.25rem;
+    --radius: 0.5rem;
     --shadow-x: 2px;
     --shadow-y: 3px;
     --shadow-blur: 5px;
@@ -58,10 +58,10 @@
     --tracking-normal: 0em;
     --spacing: 0.25rem;
 
-    /* Simple Neumorphism Light Theme (for debugging) */
-    --neumo-bg: #e0e0e0; /* A light grey background color */
-    --neumo-light-shadow: #ffffff; /* For highlights */
-    --neumo-dark-shadow: #a3b1c6; /* For shadows */
+    /* Brand tokens */
+    --revelation-gold: oklch(0.6180 0.0778 65.5444);
+    --lodge-blue: oklch(0.4200 0.1100 240.0000);
+    --shadow-gold: 0 0 16px oklch(0.6180 0.0778 65.5444 / 0.20);
   }
 
   .dark {
@@ -100,7 +100,7 @@
     --font-sans: Libre Baskerville, serif;
     --font-serif: Lora, serif;
     --font-mono: IBM Plex Mono, monospace;
-    --radius: 0.25rem;
+    --radius: 0.5rem;
     --shadow-x: 2px;
     --shadow-y: 3px;
     --shadow-blur: 5px;
@@ -115,6 +115,11 @@
     --shadow-lg: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 4px 6px -1px hsl(28 13% 20% / 0.12);
     --shadow-xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 8px 10px -1px hsl(28 13% 20% / 0.12);
     --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.30);
+
+    /* Brand tokens */
+    --revelation-gold: oklch(0.7264 0.0581 66.6967);
+    --lodge-blue: oklch(0.5000 0.1200 240.0000);
+    --shadow-gold: 0 0 20px oklch(0.7264 0.0581 66.6967 / 0.25);
   }
 }
 
@@ -167,6 +172,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-revelation-gold: var(--revelation-gold);
+  --color-lodge-blue: var(--lodge-blue);
+  --shadow-gold: var(--shadow-gold);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

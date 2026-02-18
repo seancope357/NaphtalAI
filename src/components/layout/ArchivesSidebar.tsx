@@ -138,38 +138,49 @@ export default function ArchivesSidebar({
   return (
     <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
       {/* Header */}
-      <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
-        <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="px-6 pt-6 pb-4 border-b border-sidebar-border">
+        <div className="flex items-center justify-between gap-2 mb-1">
           <div className="flex items-center gap-2.5">
-            <Archive className="w-5 h-5 text-revelation-gold" />
-            <h2 className="font-display font-semibold text-sidebar-foreground">
+            <div className="w-7 h-7 rounded-md bg-revelation-gold/15 flex items-center justify-center ring-1 ring-revelation-gold/30">
+              <Archive className="w-4 h-4 text-revelation-gold" />
+            </div>
+            <h2 className="font-display font-semibold text-sidebar-foreground tracking-tight">
               The Archives
             </h2>
           </div>
           <Link
             href="/landing"
-            className="p-2.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-revelation-gold hover:bg-revelation-gold/10 transition-colors duration-200"
             title="Back to Home"
           >
             <Home className="w-4 h-4" />
           </Link>
         </div>
-        <p className="text-xs text-muted-foreground mb-5">
+        <p className="text-xs text-muted-foreground/70 mt-2 mb-4 pl-9">
           Research materials & entities
         </p>
 
         {/* Tab Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-10">
-            <TabsTrigger value="files" className="text-xs">
+          <TabsList className="grid w-full grid-cols-3 h-9 bg-muted/40 p-0.5">
+            <TabsTrigger
+              value="files"
+              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-revelation-gold data-[state=active]:shadow-sm"
+            >
               <FolderOpen className="w-3 h-3 mr-1.5" />
               Files
             </TabsTrigger>
-            <TabsTrigger value="entities" className="text-xs">
+            <TabsTrigger
+              value="entities"
+              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-revelation-gold data-[state=active]:shadow-sm"
+            >
               <Hash className="w-3 h-3 mr-1.5" />
               Entities
             </TabsTrigger>
-            <TabsTrigger value="search" className="text-xs">
+            <TabsTrigger
+              value="search"
+              className="text-xs data-[state=active]:bg-sidebar data-[state=active]:text-revelation-gold data-[state=active]:shadow-sm"
+            >
               <GitBranch className="w-3 h-3 mr-1.5" />
               Graph
             </TabsTrigger>
@@ -184,14 +195,14 @@ export default function ArchivesSidebar({
           <TabsContent value="files" className="h-full m-0 data-[state=inactive]:hidden">
             <div className="h-full flex flex-col">
               {/* Search */}
-              <div className="px-5 py-4 border-b border-sidebar-border">
+              <div className="px-4 py-3 border-b border-sidebar-border">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
                   <Input
-                    placeholder="Search files..."
+                    placeholder="Search files…"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-9 text-sm bg-sidebar-accent/50"
+                    className="pl-9 h-8 text-xs bg-sidebar-accent/30 border-sidebar-border focus-visible:ring-revelation-gold/40 focus-visible:border-revelation-gold/50"
                   />
                 </div>
               </div>
@@ -199,26 +210,31 @@ export default function ArchivesSidebar({
               {/* Upload Zone */}
               <div
                 className={cn(
-                  "m-5 p-6 border-2 border-dashed rounded-lg transition-colors",
+                  "mx-4 my-3 p-5 border border-dashed rounded-lg transition-all duration-200 cursor-pointer",
                   "flex flex-col items-center justify-center gap-2",
                   isDragging
-                    ? "border-revelation-gold bg-revelation-gold/10"
-                    : "border-border hover:border-primary/50"
+                    ? "border-revelation-gold bg-revelation-gold/8 scale-[1.01]"
+                    : "border-revelation-gold/20 hover:border-revelation-gold/50 hover:bg-revelation-gold/5"
                 )}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onClick={() => fileInputRef.current?.click()}
               >
-                <Upload
-                  className={cn(
-                    "w-5 h-5",
-                    isDragging ? "text-revelation-gold" : "text-muted-foreground"
-                  )}
-                />
-                <p className="text-xs text-muted-foreground text-center">
+                <div className={cn(
+                  "w-8 h-8 rounded-md flex items-center justify-center transition-colors",
+                  isDragging ? "bg-revelation-gold/20" : "bg-muted/60"
+                )}>
+                  <Upload
+                    className={cn(
+                      "w-4 h-4 transition-colors",
+                      isDragging ? "text-revelation-gold" : "text-muted-foreground/60"
+                    )}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground/70 text-center leading-relaxed">
                   Drop files or{" "}
-                  <label className="text-primary cursor-pointer hover:underline">
+                  <label className="text-revelation-gold cursor-pointer hover:underline">
                     browse
                     <Input
                       ref={fileInputRef}
@@ -233,36 +249,36 @@ export default function ArchivesSidebar({
               </div>
 
               {/* File List */}
-              <ScrollArea className="flex-1 px-4">
+              <ScrollArea className="flex-1 px-3">
                 {filteredFiles.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <FolderOpen className="w-10 h-10 text-muted-foreground/50 mb-4" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className="flex flex-col items-center justify-center py-14 text-center">
+                    <div className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center mb-4">
+                      <FolderOpen className="w-5 h-5 text-muted-foreground/50" />
+                    </div>
+                    <p className="text-sm text-muted-foreground/70">
                       {files.length === 0 ? "No files uploaded" : "No matching files"}
                     </p>
-                    <p className="text-xs text-muted-foreground/70 mt-2">
-                      Double-click files to view
+                    <p className="text-xs text-muted-foreground/40 mt-1.5">
+                      Drop files above to begin
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-2 pb-5 pt-1">
+                  <div className="space-y-1.5 pb-4 pt-1">
                     {filteredFiles.map((file) => (
                       <div
                         key={file.id}
                         draggable
                         onDragStart={(e) => handleDragStart(e, file)}
                         className={cn(
-                          "group flex items-start gap-4 p-4 rounded-lg",
-                          "bg-card/50 border border-border/50",
+                          "group flex items-center gap-3 p-3 rounded-lg",
+                          "bg-transparent border border-transparent",
                           "cursor-grab active:cursor-grabbing",
-                          "hover:bg-card hover:border-primary/30 transition-all",
-                          "cursor-pointer"
+                          "hover:bg-card/60 hover:border-revelation-gold/20 transition-all duration-200",
+                          "border-l-2 border-l-transparent hover:border-l-revelation-gold/50"
                         )}
                       >
-                        <GripVertical className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-
                         {/* Thumbnail or Icon */}
-                        <div className="w-10 h-10 rounded bg-muted flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <div className="w-9 h-9 rounded-md bg-muted/60 flex items-center justify-center flex-shrink-0 overflow-hidden border border-border/40">
                           {file.thumbnail ? (
                             <img
                               src={file.thumbnail}
@@ -276,14 +292,13 @@ export default function ArchivesSidebar({
 
                         {/* File Info */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-card-foreground truncate">
+                          <p className="text-xs font-medium text-sidebar-foreground truncate leading-tight">
                             {file.name}
                           </p>
-                          <div className="flex items-center gap-3 mt-2">
-                            <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5 uppercase">
-                              {file.type}
-                            </Badge>
-                            <span className="text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-medium">{file.type}</span>
+                            <span className="text-[9px] text-muted-foreground/40">·</span>
+                            <span className="text-[9px] text-muted-foreground/50">
                               {formatFileSize(file.size)}
                             </span>
                           </div>
@@ -293,13 +308,13 @@ export default function ArchivesSidebar({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/10 hover:text-destructive"
                           onClick={(e) => {
                             e.stopPropagation();
                             removeFile(file.id);
                           }}
                         >
-                          <Trash2 className="w-3.5 h-3.5 text-muted-foreground hover:text-destructive" />
+                          <Trash2 className="w-3 h-3" />
                         </Button>
                       </div>
                     ))}
@@ -308,9 +323,9 @@ export default function ArchivesSidebar({
               </ScrollArea>
 
               {/* Stats Footer */}
-              <div className="px-6 py-4 border-t border-sidebar-border">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{files.length} files</span>
+              <div className="px-5 py-3 border-t border-sidebar-border">
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground/50">
+                  <span>{files.length} file{files.length !== 1 ? "s" : ""}</span>
                   <span>
                     {files.reduce((acc, f) => acc + f.size, 0) > 1024 * 1024
                       ? `${(files.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(1)} MB`
