@@ -102,3 +102,45 @@ Supabase auth is set up (`src/lib/supabaseClient.ts`, `/app/login/`, `/app/auth/
 ### Prisma Schema
 
 Currently minimal (User + Post models on SQLite). Not actively used by the main application — the real persistence is IndexedDB (client) + Supabase (auth).
+
+---
+
+## Gemini Session Summary (February 17, 2026)
+
+This session involved addressing user feedback and attempting UI enhancements.
+
+### 1. File Upload System Fix
+
+-   **Problem**: Files were not being placed in the local "archive" (IndexedDB) after selection, despite a server upload attempt.
+-   **Solution**: Modified `src/components/layout/ArchivesSidebar.tsx`.
+    -   Removed redundant server-side upload logic.
+    -   Implemented logic to read file content and generate thumbnails (for images) using `src/lib/indexedDb.ts` helpers (`readFileContent`, `createThumbnail`).
+    -   Ensured the complete `FileItem` (including content and thumbnail) was saved to IndexedDB via `saveFile` and added to the Zustand `useFileStore`.
+-   **Commit**: `feat: Implement local file storage for ArchivesSidebar` (or similar, this was an earlier commit I made)
+
+### 2. UI Spacing Enhancements (Initial Phase)
+
+-   **Objective**: Standardize padding and margins across the application for a professional, industry-grade look.
+-   **Actions**:
+    -   Applied standardized spacing adjustments (padding, margins, gaps) to `src/components/layout/OverseerSidebar.tsx`, addressing specific feedback on the "Settings" button.
+    -   Applied similar standardized spacing adjustments to `src/components/layout/ArchivesSidebar.tsx`.
+    -   Applied standardized spacing adjustments to `src/components/canvas/NoteNode.tsx`.
+    -   Applied comprehensive spacing adjustments across all sections of `src/app/landing/page.tsx` (Navigation, Hero, Problem/Solution, Features, How It Works, Use Cases, Testimonials, Mission, Stats Banner, FAQ, CTA Banner, Footer).
+-   **Commits**: Multiple commits for spacing adjustments (e.g., `style: Standardize spacing in OverseerSidebar and ArchivesSidebar`, `style: Standardize spacing in NoteNode and further refinements in sidebars`, `style: Standardize spacing across Landing Page sections`).
+
+### 3. Neumorphism UI Enhancement Attempt & Debugging
+
+-   **Objective**: Enhance the UI with modern visuals ("neumorphism") and techniques, ensuring responsiveness and proper spacing.
+-   **Initial Approach**:
+    -   Refactored `oklch` color variables in `src/app/globals.css` into granular L, C, H components to allow dynamic `calc()` for shadow generation.
+    -   Introduced neumorphic background and shadow CSS variables based on these `oklch` calculations.
+    -   Updated `tailwind.config.ts` with `boxShadow` utilities referencing these `oklch` `calc()` variables.
+    -   Added a `neumo` button variant to `src/components/ui/button.tsx`.
+    -   Applied neumorphic styles to `OverseerSidebar.tsx` and `ArchivesSidebar.tsx` (buttons, containers, borders).
+-   **Problem Encountered**: Vercel production build failed with "Error evaluating Node.js code." and "Turbopack build failed."
+-   **Diagnostic & Revert**:
+    -   All UI enhancement changes (spacing and neumorphism from this session) were fully reverted across `src/app/globals.css`, `tailwind.config.ts`, `src/components/ui/button.tsx`, `src/components/layout/OverseerSidebar.tsx`, and `src/components/layout/ArchivesSidebar.tsx` to restore build stability.
+    -   Vercel build passed after revert.
+-   **Current Diagnostic State**:
+    -   Re-introduced a *simplified* neumorphic style for debugging. This involved using fixed hexadecimal color values for neumorphic shadows (instead of `oklch` `calc()`) in `globals.css` (light theme only), updating `tailwind.config.ts` to reference these, re-adding the `neumo` variant in `button.tsx`, and applying it to the "Send" button in `OverseerSidebar.tsx` for a test deployment.
+-   **User Feedback**: User reports "it passed but no visible changers were made" for this simplified neumorphism test.

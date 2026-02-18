@@ -153,8 +153,8 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       <div className="px-6 pt-6 pb-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-revelation-gold/15 flex items-center justify-center ring-1 ring-revelation-gold/30">
-              <Eye className="w-4 h-4 text-revelation-gold" />
+            <div className="w-7 h-7 rounded-md bg-primary/15 flex items-center justify-center ring-1 ring-primary/30">
+              <Eye className="w-4 h-4 text-primary" />
             </div>
             <h2 className="font-display font-semibold text-sidebar-foreground tracking-tight">
               NaphtalAI
@@ -163,7 +163,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
           <div className="flex items-center gap-1">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-revelation-gold">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
                   <MessageCircleQuestion className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
@@ -186,8 +186,8 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               variant="ghost"
               size="icon"
               className={cn(
-                "h-8 w-8 text-muted-foreground hover:text-revelation-gold transition-colors",
-                showSettings && "text-revelation-gold bg-revelation-gold/10"
+                "h-8 w-8 text-muted-foreground hover:text-primary transition-colors",
+                showSettings && "text-primary bg-primary/10"
               )}
               onClick={() => setShowSettings(!showSettings)}
             >
@@ -234,7 +234,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               size="sm"
               className={cn(
                 "flex-1",
-                aiProvider === "openai" && "bg-lodge-blue"
+                aiProvider === "openai" && "bg-primary"
               )}
               onClick={() => setAIProvider("openai")}
             >
@@ -245,7 +245,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               size="sm"
               className={cn(
                 "flex-1",
-                aiProvider === "anthropic" && "bg-lodge-blue"
+                aiProvider === "anthropic" && "bg-primary"
               )}
               onClick={() => setAIProvider("anthropic")}
             >
@@ -257,17 +257,17 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       {/* Context Display */}
       {selectedNodes.length > 0 && (
-        <div className="px-6 py-4 border-b border-sidebar-border bg-revelation-gold/5">
+        <div className="px-6 py-4 border-b border-sidebar-border bg-primary/5">
           <div className="flex items-center gap-2 mb-2.5">
-            <Link2 className="w-3.5 h-3.5 text-revelation-gold" />
-            <span className="text-xs font-medium text-revelation-gold">Context · {selectedNodes.length} node{selectedNodes.length !== 1 ? "s" : ""}</span>
+            <Link2 className="w-3.5 h-3.5 text-primary" />
+            <span className="text-xs font-medium text-primary">Context · {selectedNodes.length} node{selectedNodes.length !== 1 ? "s" : ""}</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {selectedNodeData.map((node) => (
               <Badge
                 key={node.id}
                 variant="secondary"
-                className="text-[10px] px-2 py-0.5 border border-revelation-gold/20 bg-revelation-gold/10 text-revelation-gold"
+                className="text-[10px] px-2 py-0.5 border border-primary/20 bg-primary/10 text-primary"
               >
                 {node.data.label.substring(0, 20)}
                 {node.data.label.length > 20 && "…"}
@@ -328,8 +328,8 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
       <ScrollArea className="flex-1 px-5 py-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
-            <div className="w-14 h-14 rounded-full bg-revelation-gold/10 ring-1 ring-revelation-gold/25 flex items-center justify-center mb-5">
-              <Bot className="w-7 h-7 text-revelation-gold/70" />
+            <div className="w-14 h-14 rounded-full bg-primary/10 ring-1 ring-primary/25 flex items-center justify-center mb-5">
+              <Bot className="w-7 h-7 text-primary/70" />
             </div>
             <p className="text-sm text-sidebar-foreground font-medium mb-2">
               Ready to Investigate
@@ -345,7 +345,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
             ))}
             {isLoading && (
               <div className="flex items-center gap-2.5">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-revelation-gold" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
                 <span className="text-xs text-muted-foreground">Illuminating…</span>
               </div>
             )}
@@ -366,7 +366,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
                 ? `Ask about ${selectedNodes.length} selected node${selectedNodes.length !== 1 ? "s" : ""}…`
                 : "Ask a question…"
             }
-            className="min-h-[76px] max-h-[140px] pr-12 text-sm resize-none focus-visible:ring-revelation-gold/40 focus-visible:border-revelation-gold/50"
+            className="min-h-[76px] max-h-[140px] pr-12 text-sm resize-none focus-visible:ring-primary/40 focus-visible:border-primary/50"
             disabled={isLoading}
           />
           <Button
@@ -402,16 +402,16 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       )}
     >
       {!isUser && (
-        <div className="w-5 h-5 rounded-md bg-revelation-gold/15 ring-1 ring-revelation-gold/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Eye className="w-2.5 h-2.5 text-revelation-gold" />
+        <div className="w-5 h-5 rounded-md bg-primary/15 ring-1 ring-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Eye className="w-2.5 h-2.5 text-primary" />
         </div>
       )}
       <div
         className={cn(
           "max-w-[85%] rounded-lg p-3 text-sm leading-relaxed",
           isUser
-            ? "bg-revelation-gold/15 text-sidebar-foreground border border-revelation-gold/25"
-            : "bg-muted/60 text-card-foreground border border-sidebar-border border-l-2 border-l-revelation-gold/40"
+            ? "bg-primary/15 text-sidebar-foreground border border-primary/25"
+            : "bg-muted/60 text-card-foreground border border-sidebar-border border-l-2 border-l-primary/40"
         )}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
@@ -425,8 +425,8 @@ function MessageBubble({ message }: { message: ChatMessage }) {
         )}
       </div>
       {isUser && (
-        <div className="w-5 h-5 rounded-md bg-revelation-gold/15 ring-1 ring-revelation-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <User className="w-2.5 h-2.5 text-revelation-gold" />
+        <div className="w-5 h-5 rounded-md bg-primary/15 ring-1 ring-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <User className="w-2.5 h-2.5 text-primary" />
         </div>
       )}
     </div>

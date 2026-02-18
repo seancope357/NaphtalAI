@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Lora, IBM_Plex_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const libreBaskerville = Libre_Baskerville({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const lora = Lora({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -51,12 +39,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+      </head>
       <body
-        className={`${libreBaskerville.variable} ${lora.variable} ${ibmPlexMono.variable} antialiased bg-background text-foreground font-sans`}
+        className={`${jetbrainsMono.variable} antialiased bg-background text-foreground font-sans`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

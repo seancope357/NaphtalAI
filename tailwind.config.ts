@@ -61,8 +61,6 @@ const config: Config = {
   				border: 'var(--sidebar-border)',
   				ring: 'var(--sidebar-ring)',
   			},
-  			'revelation-gold': 'var(--revelation-gold)',
-  			'lodge-blue': 'var(--lodge-blue)',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -75,9 +73,6 @@ const config: Config = {
   			mono: ['var(--font-mono)'],
   			display: ['var(--font-serif)'],
   		},
-        boxShadow: {
-          'gold': 'var(--shadow-gold)',
-        }
   	}
   },
   plugins: [tailwindcssAnimate],
