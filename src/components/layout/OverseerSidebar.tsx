@@ -9,9 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   BotMessageSquare,
+  FileText,
   Fingerprint,
   Loader2,
   MessageCircleQuestionMark,
+  Presentation,
   ScanEye,
   SendHorizontal,
   Settings2,
@@ -28,11 +30,12 @@ import { useToast } from "@/hooks/use-toast";
 
 interface OverseerSidebarProps {
   onAnalyze: (
-    mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation" | string,
+    mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation" | "report" | string,
     nodeIds?: string[],
     provider?: "openai" | "anthropic",
     openAIKey?: string,
-    anthropicKey?: string
+    anthropicKey?: string,
+    customQuery?: string
   ) => Promise<void>;
 }
 
@@ -51,9 +54,18 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
   const { selectedNodes, getNodesByIds } = useCanvasStore();
   const [input, setInput] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [workspaceMode, setWorkspaceMode] = useState<"assistant" | "studio">("assistant");
   const [feedback, setFeedback] = useState("");
   const [openAIKey, setOpenAIKey] = useState("");
   const [anthropicKey, setAnthropicKey] = useState("");
+  const [studioOutput, setStudioOutput] = useState<"presentation" | "report">("presentation");
+  const [studioGoal, setStudioGoal] = useState("");
+  const [studioAudience, setStudioAudience] = useState("Research team and decision makers");
+  const [studioTone, setStudioTone] = useState("Scholarly and concise");
+  const [studioDepth, setStudioDepth] = useState<"brief" | "standard" | "deep">("standard");
+  const [studioSlideCount, setStudioSlideCount] = useState("10");
+  const [studioSectionCount, setStudioSectionCount] = useState("6");
+  const [studioFollowUp, setStudioFollowUp] = useState("");
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -84,7 +96,7 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
       // Call the AI analysis
       const { openAIKey, anthropicKey } = useChatStore.getState();
-      await onAnalyze("chat", selectedNodes, aiProvider, openAIKey, anthropicKey);
+      await onAnalyze("chat", selectedNodes, aiProvider, openAIKey, anthropicKey, input.trim());
     } catch (error) {
       console.error("Error sending message:", error);
       addMessage({
@@ -144,7 +156,74 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
 
     setLoading(true);
     try {
-      await onAnalyze(action, selectedNodes);
+      const { openAIKey, anthropicKey } = useChatStore.getState();
+      await onAnalyze(action, selectedNodes, aiProvider, openAIKey, anthropicKey);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStudioGenerate = async () => {
+    if (selectedNodes.length === 0) {
+      addMessage({
+        role: "assistant",
+        content: "Select at least one node on the canvas before running Studio Mode generation.",
+      });
+      return;
+    }
+
+    const mode = studioOutput === "presentation" ? "presentation" : "report";
+    const quantityInstruction =
+      studioOutput === "presentation"
+        ? `Target slides: ${studioSlideCount || "10"}.`
+        : `Target report sections: ${studioSectionCount || "6"}.`;
+
+    const depthInstruction =
+      studioDepth === "brief"
+        ? "Keep output compact and executive-ready."
+        : studioDepth === "deep"
+        ? "Provide deep analytical detail, explicit assumptions, and alternative interpretations."
+        : "Provide balanced strategic depth with clear evidence flow.";
+
+    const studioPrompt = [
+      `Studio brief: ${studioGoal.trim() || "Synthesize selected canvas research into a polished deliverable."}`,
+      `Audience: ${studioAudience}.`,
+      `Tone: ${studioTone}.`,
+      `Depth: ${studioDepth}.`,
+      quantityInstruction,
+      depthInstruction,
+      "Use connection edges as hard reasoning constraints.",
+      "Cite source nodes and supporting edges for every substantive claim.",
+    ].join("\n");
+
+    addMessage(
+      createUserMessage(
+        `Studio Mode (${studioOutput === "presentation" ? "Deck" : "Report"})\n${studioPrompt}`,
+        selectedNodes
+      )
+    );
+
+    setLoading(true);
+    try {
+      const { openAIKey: currentOpenAIKey, anthropicKey: currentAnthropicKey } = useChatStore.getState();
+      await onAnalyze(mode, selectedNodes, aiProvider, currentOpenAIKey, currentAnthropicKey, studioPrompt);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStudioFollowUp = async () => {
+    if (!studioFollowUp.trim() || selectedNodes.length === 0 || isLoading) return;
+
+    const mode = studioOutput === "presentation" ? "presentation" : "report";
+    const query = `Studio follow-up request:\n${studioFollowUp.trim()}\n\nKeep all conclusions tied to node and edge citations.`;
+
+    addMessage(createUserMessage(`Studio follow-up\n${studioFollowUp.trim()}`, selectedNodes));
+    setStudioFollowUp("");
+    setLoading(true);
+    try {
+      const { openAIKey: currentOpenAIKey, anthropicKey: currentAnthropicKey } = useChatStore.getState();
+      await onAnalyze(mode, selectedNodes, aiProvider, currentOpenAIKey, currentAnthropicKey, query);
     } finally {
       setLoading(false);
     }
@@ -260,6 +339,27 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         </div>
       )}
 
+      <div className="px-4 py-3 border-b border-sidebar-border/80">
+        <div className="grid grid-cols-2 gap-2 rounded-lg border border-sidebar-border/80 bg-background/70 p-1">
+          <Button
+            variant={workspaceMode === "assistant" ? "default" : "ghost"}
+            size="sm"
+            className="h-8 text-[11px]"
+            onClick={() => setWorkspaceMode("assistant")}
+          >
+            Assistant
+          </Button>
+          <Button
+            variant={workspaceMode === "studio" ? "default" : "ghost"}
+            size="sm"
+            className="h-8 text-[11px]"
+            onClick={() => setWorkspaceMode("studio")}
+          >
+            Studio
+          </Button>
+        </div>
+      </div>
+
       {/* Context Display */}
       {selectedNodes.length > 0 && (
         <div className="px-4 py-3 border-b border-sidebar-border/80 bg-primary/5">
@@ -282,62 +382,178 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         </div>
       )}
 
-      {/* Quick Actions */}
-      <div className="px-4 py-3 border-b border-sidebar-border/80">
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium mb-3">Quick Actions</p>
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
-            onClick={() => handleQuickAction("extract_entities")}
-            disabled={isLoading}
-          >
-            <Fingerprint className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-            Extract
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
-            onClick={() => handleQuickAction("connect")}
-            disabled={isLoading}
-          >
-            <Waypoints className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-            Connect
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
-            onClick={() => handleQuickAction("analyze_symbol")}
-            disabled={isLoading}
-          >
-            <WandSparkles className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-            Symbol
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
-            onClick={() => handleQuickAction("chat")}
-            disabled={isLoading}
-          >
-            <ScanEye className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-            Summarize
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
-            onClick={() => handleQuickAction("presentation")}
-            disabled={isLoading}
-          >
-            <BotMessageSquare className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-            Deck
-          </Button>
+      {workspaceMode === "assistant" ? (
+        <div className="px-4 py-3 border-b border-sidebar-border/80">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium mb-3">Quick Actions</p>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
+              onClick={() => handleQuickAction("extract_entities")}
+              disabled={isLoading}
+            >
+              <Fingerprint className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              Extract
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
+              onClick={() => handleQuickAction("connect")}
+              disabled={isLoading}
+            >
+              <Waypoints className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              Connect
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
+              onClick={() => handleQuickAction("analyze_symbol")}
+              disabled={isLoading}
+            >
+              <WandSparkles className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              Symbol
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-[30px] text-[11px] justify-start gap-2 pl-2.5"
+              onClick={() => handleQuickAction("chat")}
+              disabled={isLoading}
+            >
+              <ScanEye className="w-3 h-3 shrink-0" strokeWidth={2.2} />
+              Summarize
+            </Button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="px-4 py-3 border-b border-sidebar-border/80 space-y-3 bg-muted/20">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">
+              Studio Mode
+            </p>
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+              Notebook-style
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 rounded-lg border border-sidebar-border/80 bg-background/70 p-1">
+            <Button
+              variant={studioOutput === "presentation" ? "default" : "ghost"}
+              size="sm"
+              className="h-8 text-[11px] justify-start gap-2"
+              onClick={() => setStudioOutput("presentation")}
+            >
+              <Presentation className="w-3.5 h-3.5" strokeWidth={2.2} />
+              Slide Deck
+            </Button>
+            <Button
+              variant={studioOutput === "report" ? "default" : "ghost"}
+              size="sm"
+              className="h-8 text-[11px] justify-start gap-2"
+              onClick={() => setStudioOutput("report")}
+            >
+              <FileText className="w-3.5 h-3.5" strokeWidth={2.2} />
+              Report
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">Generation Brief</Label>
+            <Textarea
+              value={studioGoal}
+              onChange={(e) => setStudioGoal(e.target.value)}
+              placeholder="What should this deliverable accomplish?"
+              className="min-h-[72px] text-xs"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">Audience</Label>
+              <Input
+                value={studioAudience}
+                onChange={(e) => setStudioAudience(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">Tone</Label>
+              <Input
+                value={studioTone}
+                onChange={(e) => setStudioTone(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant={studioDepth === "brief" ? "secondary" : "outline"}
+              size="sm"
+              className="h-7 text-[10px]"
+              onClick={() => setStudioDepth("brief")}
+            >
+              Brief
+            </Button>
+            <Button
+              variant={studioDepth === "standard" ? "secondary" : "outline"}
+              size="sm"
+              className="h-7 text-[10px]"
+              onClick={() => setStudioDepth("standard")}
+            >
+              Standard
+            </Button>
+            <Button
+              variant={studioDepth === "deep" ? "secondary" : "outline"}
+              size="sm"
+              className="h-7 text-[10px]"
+              onClick={() => setStudioDepth("deep")}
+            >
+              Deep
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            {studioOutput === "presentation" ? (
+              <div className="space-y-1">
+                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">Slides</Label>
+                <Input
+                  value={studioSlideCount}
+                  onChange={(e) => setStudioSlideCount(e.target.value)}
+                  className="h-8 text-xs"
+                />
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <Label className="text-[10px] uppercase tracking-wide text-muted-foreground">Sections</Label>
+                <Input
+                  value={studioSectionCount}
+                  onChange={(e) => setStudioSectionCount(e.target.value)}
+                  className="h-8 text-xs"
+                />
+              </div>
+            )}
+            <div className="flex items-end">
+              <Button
+                variant="gold"
+                className="w-full h-8 text-[11px]"
+                onClick={handleStudioGenerate}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                ) : (
+                  <WandSparkles className="w-3.5 h-3.5 mr-1.5" strokeWidth={2.2} />
+                )}
+                Generate {studioOutput === "presentation" ? "Deck" : "Report"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Messages */}
       <ScrollArea className="flex-1 px-4 py-3.5">
@@ -347,10 +563,12 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
               <BotMessageSquare className="w-7 h-7 text-primary/70" strokeWidth={2.2} />
             </div>
             <p className="text-sm text-sidebar-foreground font-medium mb-2">
-              Ready to Investigate
+              {workspaceMode === "studio" ? "Studio Ready" : "Ready to Investigate"}
             </p>
             <p className="text-xs text-muted-foreground/60 max-w-[180px] leading-relaxed">
-              Select canvas nodes and ask questions, or use quick actions above.
+              {workspaceMode === "studio"
+                ? "Select canvas nodes, set a brief, and generate a deck or report."
+                : "Select canvas nodes and ask questions, or use quick actions above."}
             </p>
           </div>
         ) : (
@@ -369,39 +587,77 @@ export default function OverseerSidebar({ onAnalyze }: OverseerSidebarProps) {
         )}
       </ScrollArea>
 
-      {/* Input */}
-      <div className="px-4 py-3 border-t border-sidebar-border/80">
-        <div className="relative">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              selectedNodes.length > 0
-                ? `Ask about ${selectedNodes.length} selected node${selectedNodes.length !== 1 ? "s" : ""}…`
-                : "Ask a question…"
-            }
-            className="min-h-[76px] max-h-[140px] pr-12 text-sm resize-none focus-visible:ring-primary/40 focus-visible:border-primary/50"
-            disabled={isLoading}
-          />
-          <Button
-            variant="gold"
-            size="icon"
-            className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-md"
-            onClick={handleSendMessage}
-            disabled={!input.trim() || isLoading}
-          >
-            {isLoading ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <SendHorizontal className="w-3.5 h-3.5" strokeWidth={2.2} />
-            )}
-          </Button>
+      {workspaceMode === "assistant" ? (
+        <div className="px-4 py-3 border-t border-sidebar-border/80">
+          <div className="relative">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={
+                selectedNodes.length > 0
+                  ? `Ask about ${selectedNodes.length} selected node${selectedNodes.length !== 1 ? "s" : ""}…`
+                  : "Ask a question…"
+              }
+              className="min-h-[76px] max-h-[140px] pr-12 text-sm resize-none focus-visible:ring-primary/40 focus-visible:border-primary/50"
+              disabled={isLoading}
+            />
+            <Button
+              variant="gold"
+              size="icon"
+              className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-md"
+              onClick={handleSendMessage}
+              disabled={!input.trim() || isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <SendHorizontal className="w-3.5 h-3.5" strokeWidth={2.2} />
+              )}
+            </Button>
+          </div>
+          <p className="text-[10px] text-muted-foreground/50 mt-2 text-center tracking-wide">
+            Enter to send · Shift+Enter for new line
+          </p>
         </div>
-        <p className="text-[10px] text-muted-foreground/50 mt-2 text-center tracking-wide">
-          Enter to send · Shift+Enter for new line
-        </p>
-      </div>
+      ) : (
+        <div className="px-4 py-3 border-t border-sidebar-border/80 bg-muted/20">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium mb-2">
+            Studio Follow-Up
+          </p>
+          <div className="relative">
+            <Textarea
+              value={studioFollowUp}
+              onChange={(e) => setStudioFollowUp(e.target.value)}
+              placeholder="Refine the draft: ask for slide changes, tighter narrative, different report structure..."
+              className="min-h-[72px] max-h-[120px] pr-12 text-sm resize-none focus-visible:ring-primary/40 focus-visible:border-primary/50"
+              disabled={isLoading || selectedNodes.length === 0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleStudioFollowUp();
+                }
+              }}
+            />
+            <Button
+              variant="gold"
+              size="icon"
+              className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-md"
+              onClick={handleStudioFollowUp}
+              disabled={!studioFollowUp.trim() || isLoading || selectedNodes.length === 0}
+            >
+              {isLoading ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <SendHorizontal className="w-3.5 h-3.5" strokeWidth={2.2} />
+              )}
+            </Button>
+          </div>
+          <p className="text-[10px] text-muted-foreground/50 mt-2 text-center tracking-wide">
+            Follow-ups stay citation-bound to selected graph nodes
+          </p>
+        </div>
+      )}
     </div>
   );
 }

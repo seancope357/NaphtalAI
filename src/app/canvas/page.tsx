@@ -192,7 +192,14 @@ export default function Home() {
 
   // Handle AI analysis from the Overseer sidebar
   const handleAnalyze = useCallback(
-    async (mode: string, nodeIds?: string[], provider?: "openai" | "anthropic", openAIKey?: string, anthropicKey?: string) => {
+    async (
+      mode: string,
+      nodeIds?: string[],
+      provider?: "openai" | "anthropic",
+      openAIKey?: string,
+      anthropicKey?: string,
+      customQuery?: string
+    ) => {
       if (!nodeIds || nodeIds.length === 0) return;
 
       setLoading(true);
@@ -249,22 +256,26 @@ export default function Home() {
             sourceHandle: edge.sourceHandle || undefined,
             targetHandle: edge.targetHandle || undefined,
           }));
+        const resolvedQuery =
+          customQuery?.trim() ||
+          (mode === "extract_entities"
+            ? "Extract all named entities from these documents."
+            : mode === "connect"
+            ? "Find connections between these documents."
+            : mode === "analyze_symbol"
+            ? "Identify and analyze any symbolic references."
+            : mode === "presentation"
+            ? "Create a source-cited slide deck outline from this graph-constrained research context."
+            : mode === "report"
+            ? "Create a source-cited research report from this graph-constrained research context."
+            : "Provide a summary and analysis.");
 
         const response = await fetch("/api/ai", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             context: contexts,
-            query:
-              mode === "extract_entities"
-                ? "Extract all named entities from these documents."
-                : mode === "connect"
-                ? "Find connections between these documents."
-                : mode === "analyze_symbol"
-                ? "Identify and analyze any symbolic references."
-                : mode === "presentation"
-                ? "Create a source-cited slide deck outline from this graph-constrained research context."
-                : "Provide a summary and analysis.",
+            query: resolvedQuery,
             mode,
             graph: {
               nodes: graphNodes,

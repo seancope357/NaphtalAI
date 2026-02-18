@@ -61,7 +61,7 @@ export interface EdgeData {
 export interface AIRequest {
   context: string[];
   query: string;
-  mode: 'chat' | 'connect' | 'analyze_symbol' | 'extract_entities' | 'presentation';
+  mode: 'chat' | 'connect' | 'analyze_symbol' | 'extract_entities' | 'presentation' | 'report';
   graph?: {
     nodes: Array<{
       id: string;

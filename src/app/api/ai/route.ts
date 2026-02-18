@@ -4,7 +4,7 @@ import ZAI from "z-ai-web-dev-sdk";
 interface AIRequest {
   context: string[];
   query: string;
-  mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation";
+  mode: "chat" | "connect" | "analyze_symbol" | "extract_entities" | "presentation" | "report";
   provider?: "openai" | "anthropic";
   openAIKey?: string;
   anthropicKey?: string;
@@ -121,6 +121,11 @@ function buildGraphConstraintBlock(
 - source node citation in [N:<nodeId>] format
 - supporting edge citation in [E:<edgeId>] format when relationship-based
 - a confidence note if confidence < 0.75`
+      : mode === "report"
+      ? `When creating reports, each key claim must include:
+- source node citation in [N:<nodeId>] format
+- supporting edge citation in [E:<edgeId>] format when relationship-based
+- explicit "Known / Hypothesis" labeling for uncertain links`
       : `Use graph edges as inference constraints. Prefer relationship claims that are explicitly represented in edges.`;
 
   return `\n\nGraph constraints (authoritative):\n${graphJson}\n\nRules:\n- Treat edges as explicit relationship constraints.\n- Do not invent unsupported links between nodes.\n- Mark uncertain inferences as hypotheses.\n${modeSpecificInstruction}`;
@@ -200,6 +205,12 @@ export async function POST(request: NextRequest) {
         messages.push({
           role: "user",
           content: `Create a slide presentation outline from this research context.\n\nContext:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nRequirements:\n1. Provide 8-12 slides.\n2. Each slide includes: title, key points, suggested visual, and speaker notes.\n3. Every substantive claim must cite supporting node(s) as [N:<nodeId>].\n4. Relationship-based claims must also cite edge(s) as [E:<edgeId>].\n5. Include a final "Sources & Evidence Trail" slide.\n6. Prefer high-confidence edges and mark uncertain edges as hypotheses.\n\nOutput as clear markdown with sections per slide.`,
+        });
+        break;
+      case "report":
+        messages.push({
+          role: "user",
+          content: `Create a research report from this graph-constrained context.\n\nContext:\n${context.join("\n\n---\n\n")}${graphConstraints}\n\nRequirements:\n1. Output sections: Executive Summary, Key Findings, Relationship Analysis, Risks & Unknowns, Recommendations, Sources & Evidence Trail.\n2. Every substantive claim cites [N:<nodeId>] and relationship claims also cite [E:<edgeId>].\n3. Explicitly label uncertain claims as Hypothesis.\n4. Keep writing professional and presentation-ready.\n\nOutput as polished markdown with clear section headers.`,
         });
         break;
 
