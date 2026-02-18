@@ -106,12 +106,12 @@ export default function LandingExperience() {
           </p>
 
           <h1 className="mx-auto mt-5 max-w-[18ch] text-4xl font-semibold leading-tight tracking-tight text-balance md:text-6xl">
-            We are not chasing evidence. We are pursuing knowledge and light.
+            Turn scattered sources into living knowledge and clear illumination.
           </h1>
 
           <p className="mx-auto mt-5 max-w-[65ch] text-sm text-muted-foreground md:text-base">
-            NaphtalAI transforms fragmented archives into a navigable knowledge graph. Study source
-            material, connect ideas, and work with AI to illuminate meaning with clarity and rigor.
+            NaphtalAI helps you move from collection to comprehension. Build a structured knowledge
+            graph, connect ideas with intent, and use AI to surface the meaning behind the material.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -119,7 +119,7 @@ export default function LandingExperience() {
               href="/login?next=/canvas"
               className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
             >
-              Begin the Search for Light
+              Enter the Knowledge Workspace
               <ArrowRightFromLine className="h-4 w-4" strokeWidth={2.2} />
             </Link>
             <Link
@@ -217,9 +217,9 @@ export default function LandingExperience() {
         <div className="mx-auto mt-14 h-px w-full max-w-6xl bg-border/60" />
 
         <section className="mx-auto mt-14 max-w-4xl rounded-2xl border border-border/70 bg-card/70 p-6 text-center shadow-xl md:p-8">
-          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to build knowledge in the light?</h2>
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Ready to research for understanding, not noise?</h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-sm text-muted-foreground md:text-base">
-            Sign in to enter the full canvas workspace and turn raw material into structured understanding.
+            Sign in to use the full workspace and convert raw source material into structured, usable knowledge.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link
