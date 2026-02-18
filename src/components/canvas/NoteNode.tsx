@@ -67,25 +67,49 @@ function NoteNode({ data, selected }: NodeProps) {
         type="target"
         position={Position.Left}
         id="left"
-        className="!w-3 !h-3 !bg-primary/70 !border-2 !border-background !left-[-7px]"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !left-[-7px] !top-[38%]"
+      />
+      <Handle
+        type="source"
+        position={Position.Left}
+        id="left-source"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !left-[-7px] !top-[62%]"
       />
       <Handle
         type="source"
         position={Position.Right}
         id="right"
-        className="!w-3 !h-3 !bg-primary/70 !border-2 !border-background !right-[-7px]"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !right-[-7px] !top-[38%]"
+      />
+      <Handle
+        type="target"
+        position={Position.Right}
+        id="right-target"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !right-[-7px] !top-[62%]"
       />
       <Handle
         type="target"
         position={Position.Top}
         id="top"
-        className="!w-3 !h-3 !bg-primary/70 !border-2 !border-background"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !top-[-7px] !left-[38%]"
+      />
+      <Handle
+        type="source"
+        position={Position.Top}
+        id="top-source"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !top-[-7px] !left-[62%]"
       />
       <Handle
         type="source"
         position={Position.Bottom}
         id="bottom"
-        className="!w-3 !h-3 !bg-primary/70 !border-2 !border-background"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !bottom-[-7px] !left-[38%]"
+      />
+      <Handle
+        type="target"
+        position={Position.Bottom}
+        id="bottom-target"
+        className="!w-3 !h-3 !bg-blue-500 dark:!bg-red-500 !border-2 !border-background !bottom-[-7px] !left-[62%]"
       />
 
       {/* Header */}
