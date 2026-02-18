@@ -5,14 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import {
-  ArrowLeft,
-  ArrowRight,
+  ArrowRightFromLine,
   Eye,
   EyeOff,
-  Lock,
-  Mail,
-  ShieldCheck,
-  Sparkles,
+  Fingerprint,
+  Gem,
+  LockKeyhole,
+  MailCheck,
+  MoveLeft,
 } from "lucide-react";
 
 import type { Database } from "@/database.types";
@@ -174,7 +174,7 @@ export default function LoginPage() {
           href="/"
           className="inline-flex items-center gap-2 rounded-md border border-border/70 bg-background/75 px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:border-border hover:text-foreground"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
+          <MoveLeft className="h-3.5 w-3.5" strokeWidth={2.2} />
           Back to landing
         </Link>
       </header>
@@ -196,21 +196,21 @@ export default function LoginPage() {
             <div className="mt-8 grid gap-3">
               <article className="rounded-lg border border-border/70 bg-card/80 p-3">
                 <div className="flex items-center gap-2 text-sm font-semibold">
-                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  <Fingerprint className="h-4 w-4 text-primary" strokeWidth={2.2} />
                   Session-safe redirects
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">You return exactly to the route you requested after auth.</p>
               </article>
               <article className="rounded-lg border border-border/70 bg-card/80 p-3">
                 <div className="flex items-center gap-2 text-sm font-semibold">
-                  <Mail className="h-4 w-4 text-primary" />
+                  <MailCheck className="h-4 w-4 text-primary" strokeWidth={2.2} />
                   Password + magic link
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">Use credentials or switch to one-click email access any time.</p>
               </article>
               <article className="rounded-lg border border-border/70 bg-card/80 p-3">
                 <div className="flex items-center gap-2 text-sm font-semibold">
-                  <Lock className="h-4 w-4 text-primary" />
+                  <LockKeyhole className="h-4 w-4 text-primary" strokeWidth={2.2} />
                   Private by default
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">Workspace routes stay protected until a valid Supabase session exists.</p>
@@ -222,7 +222,7 @@ export default function LoginPage() {
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Gem className="h-3.5 w-3.5" strokeWidth={2.2} />
                   NaphtalAI Access
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -302,7 +302,11 @@ export default function LoginPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" strokeWidth={2.2} />
+                    ) : (
+                      <Eye className="h-4 w-4" strokeWidth={2.2} />
+                    )}
                   </button>
                 </div>
               </div>
@@ -325,7 +329,7 @@ export default function LoginPage() {
                 className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {loading ? "Processing..." : mode === "signin" ? "Continue to workspace" : "Create account"}
-                {!loading ? <ArrowRight className="h-4 w-4" /> : null}
+                {!loading ? <ArrowRightFromLine className="h-4 w-4" strokeWidth={2.2} /> : null}
               </button>
             </form>
 

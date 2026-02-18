@@ -1,50 +1,50 @@
 import Link from "next/link";
 import {
-  ArrowRight,
-  Brain,
-  FileSearch,
-  GitBranch,
-  Lock,
-  Network,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Workflow,
+  ArrowRightFromLine,
+  BotMessageSquare,
+  Crosshair,
+  Diamond,
+  FileStack,
+  Fingerprint,
+  LockKeyhole,
+  PanelsTopLeft,
+  ScanSearch,
+  Waypoints,
 } from "lucide-react";
 
 const featureCards = [
   {
-    icon: Network,
+    icon: PanelsTopLeft,
     title: "Visual Research Canvas",
     description:
       "Map documents, notes, and entities on a structured infinite canvas with strict connection rules and semantic links.",
   },
   {
-    icon: Brain,
+    icon: BotMessageSquare,
     title: "Agentic Analysis",
     description:
       "Run guided analysis modes that extract entities, connect evidence, and generate readable findings from selected context.",
   },
   {
-    icon: FileSearch,
+    icon: FileStack,
     title: "Scalable PDF Workflow",
     description:
       "Open and inspect PDFs as first-class assets with zoom, page navigation, and pin-to-canvas composition.",
   },
   {
-    icon: GitBranch,
+    icon: Waypoints,
     title: "Structured Link Logic",
     description:
       "Connections are validated and enriched with semantic metadata so downstream report generation stays grounded.",
   },
   {
-    icon: Search,
+    icon: ScanSearch,
     title: "Knowledge Retrieval",
     description:
       "Search entities and graph context quickly, then pull any result back into the workspace for deeper analysis.",
   },
   {
-    icon: Workflow,
+    icon: Crosshair,
     title: "Production-Ready UX",
     description:
       "Dense, modern workspace ergonomics with responsive paneling, consistent card systems, and interaction-first controls.",
@@ -78,7 +78,7 @@ export default function LandingExperience() {
         <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-2.5">
             <div className="grid h-7 w-7 place-items-center rounded-md border border-border bg-card shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <Diamond className="h-3.5 w-3.5 text-primary" strokeWidth={2.2} />
             </div>
             <span className="text-sm font-semibold tracking-tight">NaphtalAI</span>
           </div>
@@ -121,7 +121,7 @@ export default function LandingExperience() {
               className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
             >
               Start Investigating
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRightFromLine className="h-4 w-4" strokeWidth={2.2} />
             </Link>
             <Link
               href="/login"
@@ -133,11 +133,11 @@ export default function LandingExperience() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              <Fingerprint className="h-3.5 w-3.5 text-primary" strokeWidth={2.2} />
               Private by default
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5 text-primary" />
+              <LockKeyhole className="h-3.5 w-3.5 text-primary" strokeWidth={2.2} />
               Auth-gated workspace
             </span>
           </div>
@@ -186,7 +186,7 @@ export default function LandingExperience() {
                   className="group rounded-xl border border-border/70 bg-card/70 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-xl"
                 >
                   <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background">
-                    <Icon className="h-4 w-4 text-primary" />
+                    <Icon className="h-4 w-4 text-primary" strokeWidth={2.2} />
                   </div>
                   <h3 className="text-sm font-semibold tracking-tight">{feature.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
