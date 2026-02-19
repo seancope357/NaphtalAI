@@ -12,6 +12,22 @@ export type ConnectionStyle = 'red-string' | 'golden-thread';
 // AI Provider
 export type AIProvider = 'openai' | 'anthropic';
 
+// Draw Mode
+export type DrawMode = 'select' | 'draw' | 'erase';
+
+// Note font size
+export type NoteFontSize = 'sm' | 'md' | 'lg';
+
+// Freehand drawing stroke on canvas
+export interface Stroke {
+  id: string;
+  color: string;
+  strokeWidth: number; // in flow coordinates
+  opacity: number;
+  points: Array<{ x: number; y: number }>;
+  createdAt: number;
+}
+
 // Node Data Model
 export interface NodeData {
   [key: string]: any;
@@ -29,6 +45,8 @@ export interface NodeData {
     fileType?: FileType;
     entityType?: 'person' | 'location' | 'date' | 'symbol' | 'organization';
     isPinned?: boolean;
+    noteColor?: string;          // hex accent color chosen by user
+    noteFontSize?: NoteFontSize; // user-chosen font size for note content
   };
 }
 
@@ -69,6 +87,7 @@ export interface AIRequest {
       label: string;
       source?: string;
       tags?: string[];
+      color?: string;    // note accent color (visual grouping signal for AI)
     }>;
     edges: Array<{
       id: string;
@@ -82,6 +101,10 @@ export interface AIRequest {
       targetHandle?: string;
     }>;
     selectedNodeIds?: string[];
+    annotations?: {
+      strokeCount: number;
+      colors: string[]; // distinct annotation colors used
+    };
   };
 }
 

@@ -9,7 +9,9 @@ import {
   FileChartColumn,
   FileJson,
   FileScan,
+  Hand,
   ImagePlay,
+  Lock,
   MapPinned,
   ScanSearch,
   X,
@@ -28,6 +30,7 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
   const [pdfSource, setPdfSource] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageInput, setPageInput] = useState("1");
+  const [interactivePdf, setInteractivePdf] = useState(false);
   const fileType = nodeData.metadata.fileType || inferFileTypeFromName(nodeData.label);
   const isPdf = fileType === "pdf";
 
@@ -144,10 +147,10 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
         height: typeof size.height === "number" ? `${size.height}px` : size.height,
       }}
     >
-      {/* Resize Handles */}
-      <ResizeHandle onMouseDown={handleMouseDown} direction="se" />
-      <ResizeHandle onMouseDown={handleMouseDown} direction="e" />
-      <ResizeHandle onMouseDown={handleMouseDown} direction="s" />
+      {/* Resize Handles — always slightly visible so users know they can resize */}
+      <ResizeHandle onMouseDown={handleMouseDown} direction="se" className="!opacity-30 group-hover:!opacity-100" />
+      <ResizeHandle onMouseDown={handleMouseDown} direction="e"  className="!opacity-30 group-hover:!opacity-100" />
+      <ResizeHandle onMouseDown={handleMouseDown} direction="s"  className="!opacity-30 group-hover:!opacity-100" />
 
       {/* Handles for connections */}
       <Handle
@@ -239,6 +242,22 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
               >
                 <CircleChevronRight className="w-3 h-3" strokeWidth={2.2} />
               </Button>
+              {/* Toggle interactive / locked PDF scroll */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "h-6 w-6",
+                  interactivePdf ? "text-primary" : "text-muted-foreground"
+                )}
+                onClick={() => setInteractivePdf((v) => !v)}
+                title={interactivePdf ? "Lock PDF (stop scroll)" : "Interact with PDF (scroll/zoom)"}
+              >
+                {interactivePdf
+                  ? <Hand className="w-3 h-3" strokeWidth={2.2} />
+                  : <Lock className="w-3 h-3" strokeWidth={2.2} />
+                }
+              </Button>
             </div>
           )}
           <Button
@@ -284,7 +303,10 @@ function DocumentNode({ data, selected, width, height }: NodeProps<{ [key: strin
               <iframe
                 src={buildPdfViewerUrl(resolvedPdfSource, pageNumber, 100, "Fit")}
                 title={`${nodeData.label} page ${pageNumber}`}
-                className="w-full h-full border-0 pointer-events-none bg-white"
+                className={cn(
+                  "w-full h-full border-0 bg-white",
+                  interactivePdf ? "pointer-events-auto" : "pointer-events-none"
+                )}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">

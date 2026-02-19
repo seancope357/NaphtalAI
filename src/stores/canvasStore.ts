@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
-import type { CanvasNode, CanvasEdge, NodeData, EdgeData, ConnectionStyle } from "@/types";
+import type { CanvasNode, CanvasEdge, NodeData, EdgeData, ConnectionStyle, DrawMode, Stroke } from "@/types";
 import { WORKSPACE_GRID, NODE_DIMENSIONS } from "@/lib/workspaceConstraints";
 import { inferFileTypeFromName } from "@/lib/fileContent";
 
@@ -29,7 +29,19 @@ interface CanvasState {
   snapToGrid: boolean;
   gridSize: number;
   showGrid: boolean;
-  
+
+  // Drawing / annotation
+  strokes: Stroke[];
+  drawMode: DrawMode;
+  drawColor: string;
+  drawSize: number;
+  addStroke: (stroke: Stroke) => void;
+  deleteStroke: (id: string) => void;
+  clearStrokes: () => void;
+  setDrawMode: (mode: DrawMode) => void;
+  setDrawColor: (color: string) => void;
+  setDrawSize: (size: number) => void;
+
   // Node Actions
   addNode: (node: CanvasNode) => void;
   addNodes: (nodes: CanvasNode[]) => void;
@@ -96,6 +108,12 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   snapToGrid: true,
   gridSize: WORKSPACE_GRID.defaultSize,
   showGrid: true,
+
+  // Drawing
+  strokes: [],
+  drawMode: "select",
+  drawColor: "#e8622a",
+  drawSize: 3,
   
   // Helper to save history
   pushHistory: (action: string) => {
@@ -227,6 +245,14 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
   setSnapToGrid: (snap) => set({ snapToGrid: snap }),
   setGridSize: (size) => set({ gridSize: size }),
   setShowGrid: (show) => set({ showGrid: show }),
+
+  // Drawing actions
+  addStroke: (stroke) => set((state) => ({ strokes: [...state.strokes, stroke] })),
+  deleteStroke: (id) => set((state) => ({ strokes: state.strokes.filter((s) => s.id !== id) })),
+  clearStrokes: () => set({ strokes: [] }),
+  setDrawMode: (mode) => set({ drawMode: mode }),
+  setDrawColor: (color) => set({ drawColor: color }),
+  setDrawSize: (size) => set({ drawSize: size }),
   
   // History Actions
   undo: () => {
@@ -454,7 +480,9 @@ export function createDocumentNode(
 // Helper function to create a note node
 export function createNoteNode(
   position: { x: number; y: number },
-  content: string = ""
+  content: string = "",
+  color?: string,
+  fontSize?: 'sm' | 'md' | 'lg'
 ): CanvasNode {
   const nodeId = uuidv4();
   return {
@@ -472,6 +500,8 @@ export function createNoteNode(
         date: new Date().toISOString(),
         tags: [],
         isPinned: false,
+        noteColor: color,
+        noteFontSize: fontSize,
       },
     },
   };

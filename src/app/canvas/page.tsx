@@ -38,6 +38,7 @@ export default function Home() {
     getNodesByIds,
     showGrid,
     setShowGrid,
+    strokes,
   } = useCanvasStore();
 
   const { addMessage, setLoading } = useChatStore();
@@ -241,6 +242,8 @@ export default function Home() {
             label: node.data.label,
             source: node.data.metadata?.source,
             tags: node.data.metadata?.tags || [],
+            // Include note color so AI understands visual grouping intent
+            color: node.data.metadata?.noteColor,
           }));
 
         const graphEdges = edges
@@ -281,6 +284,10 @@ export default function Home() {
               nodes: graphNodes,
               edges: graphEdges,
               selectedNodeIds: nodeIds,
+              // Surface canvas annotation activity to AI (count + colors used)
+              annotations: strokes.length > 0
+                ? { strokeCount: strokes.length, colors: [...new Set(strokes.map((s) => s.color))] }
+                : undefined,
             },
             provider,
             openAIKey,
